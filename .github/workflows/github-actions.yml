@@ -1,0 +1,39 @@
+name: CI Pipeline
+
+# 워크플로우 실행 조건
+on: [push]
+
+# 작업 정의
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 소스 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Node.js 버전 설정
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 캐시 설정 (Yarn 캐시)
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: front-end/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('front-end/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # 의존성 설치
+      - name: Install dependencies
+        working-directory: front-end
+        run: yarn install
+
+      # 린트 검사
+      - name: Run ESLint
+        working-directory: front-end
+        run: yarn lint
