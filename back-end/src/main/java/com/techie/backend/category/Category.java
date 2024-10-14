@@ -1,6 +1,5 @@
-package com.techie.backend.playlist.entity;
+package com.techie.backend.category;
 
-import com.techie.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "playlists")
-public class Playlist {
+@Table(name = "categories")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +16,4 @@ public class Playlist {
 
     @Column(nullable = false)
     private String name;
-
-    @JoinColumn(name  = "user_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
 }

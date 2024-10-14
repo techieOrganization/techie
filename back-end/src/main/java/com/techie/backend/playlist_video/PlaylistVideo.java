@@ -1,7 +1,7 @@
-package com.techie.backend.playlist_video.entity;
+package com.techie.backend.playlist_video;
 
-import com.techie.backend.playlist.entity.Playlist;
-import com.techie.backend.video.entity.Video;
+import com.techie.backend.playlist.Playlist;
+import com.techie.backend.video.Video;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

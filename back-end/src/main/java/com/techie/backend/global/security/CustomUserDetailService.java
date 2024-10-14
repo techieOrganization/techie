@@ -3,7 +3,7 @@ package com.techie.backend.global.security;
 
 import com.techie.backend.global.exception.user.UserNotFoundException;
 import com.techie.backend.user.dto.UserRequest;
-import com.techie.backend.user.entity.User;
+import com.techie.backend.user.User;
 import com.techie.backend.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,11 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
-        Optional<User> optionalUserEntity = userRepository.findByNickname(nickname);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> optionalUserEntity = userRepository.findByUsername(username);
         User userEntity = optionalUserEntity.orElseThrow(UserNotFoundException::new);
         UserRequest resultUser = new UserRequest();
-        resultUser.setNickname(userEntity.getNickname());
+        resultUser.setUsername(userEntity.getUsername());
         resultUser.setPassword(userEntity.getPassword());
 
         return new CustomUserDetails(resultUser);
