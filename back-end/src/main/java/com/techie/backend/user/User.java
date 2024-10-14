@@ -1,11 +1,11 @@
-package com.techie.backend.user.entity;
+package com.techie.backend.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Getter
@@ -18,6 +18,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false)
     private String nickname;
 
@@ -28,10 +31,10 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 
     @Column(nullable = false)
-    private LocalDateTime modifiedDate;
+    private LocalDate modifiedDate;
 
 
 }

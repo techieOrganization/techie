@@ -1,22 +1,24 @@
-package com.techie.backend.user.controller;
+package com.techie.backend.user;
 
+import com.techie.backend.user.dto.UserRequest;
 import com.techie.backend.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "getApi", description = "test")
+@Tag(name = "사용자 인증 API", description = "사용자 인증 및 로그아웃 관련 API 엔드포인트")
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
+
+    @PostMapping("/register")
+    public ResponseEntity<Boolean> register(@RequestBody UserRequest userRequest) {
+        return ResponseEntity.ok(userService.register(userRequest));
+    }
 
     @GetMapping("/authFail")
     public ResponseEntity<String> authFail() {

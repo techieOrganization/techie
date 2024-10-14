@@ -1,7 +1,7 @@
-package com.techie.backend.memo.entity;
+package com.techie.backend.memo;
 
-import com.techie.backend.user.entity.User;
-import com.techie.backend.video.entity.Video;
+import com.techie.backend.user.User;
+import com.techie.backend.video.Video;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

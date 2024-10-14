@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Component
-public class UserRequest {
+public class UserResponse {
 
     private Long id;
     private String username;
