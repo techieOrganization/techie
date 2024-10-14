@@ -1,8 +1,11 @@
 package com.techie.backend.video.repository;
 
-import org.springframework.stereotype.Repository;
+import com.techie.backend.video.domain.Category;
+import com.techie.backend.video.domain.Video;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class VideoRepository {
+import java.util.Optional;
 
+public interface VideoRepository extends JpaRepository<Video, Long> {
+    Optional<Video> findByCategory(Category category);
 }

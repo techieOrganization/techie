@@ -1,5 +1,8 @@
 package com.techie.backend.video.service;
 
+import com.techie.backend.video.domain.Category;
+import com.techie.backend.video.domain.Video;
+import com.techie.backend.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
-import java.util.Arrays;
-import java.util.List;
+
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,16 +21,19 @@ public class YoutubeService {
     private String apiKey;
 
     private final RestClient restClient;
+    private final VideoRepository videoRepository;
 
-    private List<String> videoIds = Arrays.asList("wtJuf2TGD8c&ab", "Ks-_Mh1QhMc", "c0KYU2j0TM4", "eIho2S0ZahI");  // 예시 ID
 
-    public String getVideoIdsAsString() {
-        return String.join(",", videoIds);
+    public String getVideoIdsAsString(Category category) {
+        return  videoRepository.findByCategory(category).stream()
+                .map(Video::getVideoId)
+                .collect(Collectors.joining(","));
     }
 
-    public String callAPI() {
+    public String listVideos(Category category) {
+
         log.info("apiKey: {}", apiKey);
-        String ids = getVideoIdsAsString();
+        String ids = getVideoIdsAsString(category);
         String url = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("www.googleapis.com")
