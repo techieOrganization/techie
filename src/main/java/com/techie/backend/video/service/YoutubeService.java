@@ -25,14 +25,14 @@ public class YoutubeService {
 
 
     public String getVideoIdsAsString(Category category) {
-        return  videoRepository.findByCategory(category).stream()
+        String videoIds = videoRepository.findByCategory(category).stream()
                 .map(Video::getVideoId)
                 .collect(Collectors.joining(","));
+        log.info("videoIDs: {}", videoIds);
+        return videoIds;
     }
 
     public String listVideos(Category category) {
-
-        log.info("apiKey: {}", apiKey);
         String ids = getVideoIdsAsString(category);
         String url = UriComponentsBuilder.newInstance()
                 .scheme("https")
