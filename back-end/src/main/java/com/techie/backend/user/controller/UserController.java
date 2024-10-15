@@ -1,4 +1,4 @@
-package com.techie.backend.user;
+package com.techie.backend.user.controller;
 
 import com.techie.backend.user.dto.UserRequest;
 import com.techie.backend.user.service.UserService;

@@ -1,7 +1,7 @@
-package com.techie.backend.memo;
+package com.techie.backend.memo.domain;
 
-import com.techie.backend.user.User;
-import com.techie.backend.video.Video;
+import com.techie.backend.user.domain.User;
+import com.techie.backend.video.domain.Video;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

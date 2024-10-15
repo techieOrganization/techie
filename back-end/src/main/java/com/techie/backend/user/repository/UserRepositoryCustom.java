@@ -1,6 +1,6 @@
 package com.techie.backend.user.repository;
 
-import com.techie.backend.user.User;
+import com.techie.backend.user.domain.User;
 
 import java.util.Optional;
 
