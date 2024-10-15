@@ -1,0 +1,62 @@
+[
+  {
+    "name": "⚙️ Setup",
+    "color": "e3dede",
+    "description": "개발 환경 설정 작업"
+  },
+  {
+    "name": "✨ Feature",
+    "color": "a2eeef",
+    "description": "신규 기능 개발"
+  },
+  {
+    "name": "🚀 Deploy",
+    "color": "C2E0C6",
+    "description": "배포 관련 작업"
+  },
+  {
+    "name": "🎨 UI",
+    "color": "FEF2C0",
+    "description": "마크업 및 스타일링 작업"
+  },
+  {
+    "name": "🐛 Bug",
+    "color": "d73a4a",
+    "description": "문제가 있는 기능 수정"
+  },
+  {
+    "name": "🌐 Cross-Browser",
+    "color": "C5DEF5",
+    "description": "브라우저 간 호환성 문제 해결"
+  },
+  {
+    "name": "📄 Docs",
+    "color": "1D76DB",
+    "description": "문서 작성 및 갱신 (e.g., README 등)"
+  },
+  {
+    "name": "🔗 API",
+    "color": "D4C5F9",
+    "description": "서버와의 API 통신"
+  },
+  {
+    "name": "🔧 Refactor",
+    "color": "f29a4e",
+    "description": "코드 개선 및 최적화 작업"
+  },
+  {
+    "name": "❓ Question",
+    "color": "9ED447",
+    "description": "추가 정보 요청"
+  },
+  {
+    "name": "♿ Accessibility",
+    "color": "facfcf",
+    "description": "웹 접근성 관련 작업"
+  },
+  {
+    "name": "🧪 Test",
+    "color": "ccffc4",
+    "description": "테스트 작성 및 실행 (예: Storybook, Jest 등)"
+  }
+]
