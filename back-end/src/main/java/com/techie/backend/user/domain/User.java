@@ -1,4 +1,4 @@
-package com.techie.backend.user;
+package com.techie.backend.user.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

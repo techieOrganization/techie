@@ -1,8 +1,8 @@
 package com.techie.backend.user.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.techie.backend.user.QUser;
-import com.techie.backend.user.User;
+import com.techie.backend.user.domain.QUser;
+import com.techie.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

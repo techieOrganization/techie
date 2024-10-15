@@ -1,6 +1,6 @@
-package com.techie.backend.gpt_history;
+package com.techie.backend.gpt_history.domain;
 
-import com.techie.backend.user.User;
+import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

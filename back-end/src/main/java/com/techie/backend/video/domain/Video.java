@@ -1,4 +1,4 @@
-package com.techie.backend.video;
+package com.techie.backend.video.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package com.techie.backend.global.security;
 
 import com.techie.backend.global.exception.user.UserNotFoundException;
 import com.techie.backend.user.dto.UserRequest;
-import com.techie.backend.user.User;
+import com.techie.backend.user.domain.User;
 import com.techie.backend.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

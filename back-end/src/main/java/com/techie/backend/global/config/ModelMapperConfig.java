@@ -1,7 +1,7 @@
 package com.techie.backend.global.config;
 
 import com.techie.backend.user.dto.UserRequest;
-import com.techie.backend.user.User;
+import com.techie.backend.user.domain.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;

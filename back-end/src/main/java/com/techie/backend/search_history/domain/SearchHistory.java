@@ -1,16 +1,17 @@
-package com.techie.backend.watch_history;
+package com.techie.backend.search_history.domain;
 
-import com.techie.backend.user.User;
-import com.techie.backend.video.Video;
+import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "watch_histories")
-public class WatchHistory {
+@Table(name = "search_histories")
+public class SearchHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,9 @@ public class WatchHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn(name = "video_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Video video;
+    @Column(nullable = false)
+    private String query;
+
+    @Column(nullable = false)
+    private LocalDateTime searchDate;
 }

@@ -2,7 +2,7 @@ package com.techie.backend.user.service;
 
 import com.techie.backend.global.exception.user.InvalidEmailFormatException;
 import com.techie.backend.global.exception.user.UserAlreadyExistsException;
-import com.techie.backend.user.User;
+import com.techie.backend.user.domain.User;
 import com.techie.backend.user.dto.UserRequest;
 import com.techie.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
