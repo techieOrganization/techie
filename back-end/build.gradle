@@ -45,6 +45,9 @@ dependencies {
 	implementation 'com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0'
 	implementation 'com.google.http-client:google-http-client-jackson2:1.39.2'
 	// ---------------------
+	implementation 'p6spy:p6spy:3.9.1'
+	implementation 'com.github.gavlyukovskiy:datasource-decorator-spring-boot-autoconfigure:1.9.0'
+
 }
 
 def generated = 'build/generated'
