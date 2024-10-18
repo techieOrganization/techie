@@ -8,6 +8,7 @@ import com.techie.backend.video.domain.Video;
 import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class VideoService {
     @Value("${youtube.api.key}")
     private String apiKey;
@@ -32,9 +34,7 @@ public class VideoService {
 
 
     public String getVideoIdsAsString(Category category) {
-        return videoRepository.findByCategory(category).stream()
-                .map(Video::getVideoId)
-                .collect(Collectors.joining(","));
+        return getVideoIds(videoRepository.findByCategory(category));
     }
 
     public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
@@ -50,15 +50,19 @@ public class VideoService {
                 .toUriString();
 
 
-        ResponseEntity<String> response = restClient.get()
+        ResponseEntity<String> response = getYoutubeResponse(url);
+
+
+        return convertJsonToVideoDTO(response.getBody());
+    }
+
+    private ResponseEntity<String> getYoutubeResponse(String url) {
+        return restClient.get()
                 .uri(url)
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .retrieve()
                 .toEntity(String.class);
-
-
-        return convertJsonToVideoDTO(response.getBody());
     }
 
     public List<VideoResponse> convertJsonToVideoDTO(String jsonResponse) throws JsonProcessingException {
@@ -78,6 +82,27 @@ public class VideoService {
         }
 
         return videoResponses;
+    }
+
+    public List<VideoResponse> videoSearch(String query) throws JsonProcessingException {
+        List<Video> findVideos = videoRepository.findByTitleContaining(query);
+        String ids = getVideoIds(findVideos);
+        String url = UriComponentsBuilder.newInstance()
+                .scheme("https")
+                .host("www.googleapis.com")
+                .path("/youtube/v3/videos")
+                .queryParam("part", "snippet,contentDetails")
+                .queryParam("id", ids)
+                .queryParam("key", apiKey)
+                .build()
+                .toUriString();
+
+        ResponseEntity<String> response = getYoutubeResponse(url);
+        return convertJsonToVideoDTO(response.getBody());
+    }
+
+    private static String getVideoIds(List<Video> findVideos) {
+        return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
     }
 
 }
