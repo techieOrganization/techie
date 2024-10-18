@@ -1,0 +1,22 @@
+.login_container {
+  .login_button {
+    color: #fff;
+    background: #97a9fc;
+    border-radius: 0.5rem;
+    padding: 1.2rem 1rem;
+    font-size: 1.7rem;
+    margin-top: 2rem;
+    cursor: pointer;
+  }
+  .signup_button {
+    color: #97a9fc !important;
+    background: #fff !important;
+    margin: 0 !important;
+    border-radius: 0.5rem;
+    padding: 1.2rem 1rem;
+    font-size: 1.7rem;
+    cursor: pointer;
+    border: 1px solid #97a9fc;
+  }
+}
+

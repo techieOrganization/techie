@@ -1,0 +1,48 @@
+header {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 1rem 0;
+  background: #fff;
+
+  .inner {
+    display: flex;
+    gap: 4rem;
+  }
+
+  .logo {
+    a {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+  }
+
+  .header_menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  
+    .menu_list {
+      display: flex;
+      gap: 3rem;
+
+      a {
+        font-weight: 500;
+        color: #4a4a4a;
+      }
+    }
+
+    .search_box {
+      width: 50%;
+      height: 85%;
+
+      input {
+        border: 1px solid rgb(0 0 0 / 20%);
+        border-radius: 0.5rem;
+        width: 100%;
+        height: 100%;
+        padding: 0 1rem;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,56 @@
+h2 {
+  font-size: 4rem;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: -0.2rem;
+}
+p {
+  text-align: center;
+}
+form {
+  background: #fff;
+  box-shadow: 1rem 1rem 1.5rem 0.5rem rgba(52, 85, 157, 0.1);
+  max-width: 70rem;
+  margin: 0 auto;
+  border-radius: 1rem;
+  padding: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+
+  .form_group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .form_label {
+      font-size: 1.7rem;
+    }
+
+    .form_input {
+      border: 1px solid #d8dde6;
+      color: #444c56;
+      font-weight: 400;
+      border-radius: 0.5rem;
+      padding: 0.8rem 1rem;
+
+      &::placeholder {
+        color: #d8dde6;
+      }
+    }
+
+ 
+  }
+
+  .signup_button {
+    color: #fff;
+    background: #97a9fc;
+    border-radius: 0.5rem;
+    padding: 1.2rem 1rem;
+    font-size: 1.7rem;
+    margin-top: 2rem;
+    cursor: pointer;
+  }
+}
+
