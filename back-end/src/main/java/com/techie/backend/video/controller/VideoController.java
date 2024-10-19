@@ -23,7 +23,7 @@ public class VideoController {
     }
 
     @GetMapping
-    public List<VideoResponse> searchVideo(@RequestParam String q) throws JsonProcessingException {
-        return videoService.videoSearch(q);
+    public List<VideoResponse> searchVideo(@RequestParam String query) throws JsonProcessingException {
+        return videoService.videoSearch(query);
     }
 }
