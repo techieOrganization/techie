@@ -1,25 +1,60 @@
+'use client';
+
 import React from 'react';
-import Link from 'next/link';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import '@/styles/pages/home/home.scss';
 
 export default function Home() {
   return (
-    <div>
-      <h2>메인 페이지</h2>
-      <div>
-        <Link href="/playlists">재생목록</Link>
-      </div>
-      <div>
-        <Link href="/watch-histories">시청기록</Link>
-      </div>
-      <div>
-        <Link href="/gpt-histories">GPT기록</Link>
-      </div>
-      <div>
-        <Link href="/search-histories">검색기록</Link>
-      </div>
-      <div>
-        <Link href="/memo">메모</Link>
-      </div>
-    </div>
+    <>
+      <section className='section sec01'>
+        <Swiper
+          pagination={{
+            type: 'fraction',
+          }}
+          navigation={true}
+          modules={[Pagination, Navigation, Autoplay]}
+          autoplay={{
+            delay: 2500, 
+            disableOnInteraction: false,
+          }}
+          loop={true}
+          className="mySwiper"
+        >
+          <SwiperSlide>
+            <div className="slide-content">
+              <h2>Slide 1</h2>
+              <p>This is the first slide content</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="slide-content">
+              <h2>Slide 2</h2>
+              <p>This is the second slide content</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="slide-content">
+              <h2>Slide 3</h2>
+              <p>This is the third slide content</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="slide-content">
+              <h2>Slide 4</h2>
+              <p>This is the fourth slide content</p>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </section>
+
+      <section className='section sec02'></section>
+      <section className='section sec03'></section>
+      <section className='section sec04'></section>
+    </>
   );
 }
