@@ -1,0 +1,103 @@
+/*반응형 화면 크기*/
+$pc: 1921px;
+$pc_1800: 1800px;
+$pc_1550: 1550px;
+$pc_1440: 1440px;
+$pc_1280: 1280px;
+$tablet: 1024px;
+$mo_989: 989px;
+$mo_600: 600px;
+$mo: 767px;
+$mo_500: 500px;
+$mo_350: 350px;
+
+/* pc 사이즈만 */
+@mixin only_pc {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+/* 1920px 이상일때 */
+@mixin pc_1920 {
+  @media (min-width: $pc) {
+    @content;
+  }
+}
+
+/* 1800px 이상일때 */
+@mixin pc_1800 {
+  @media (max-width: $pc_1800) {
+    @content;
+  }
+}
+
+/* 1550px 이상일때 */
+@mixin pc_1550 {
+  @media (max-width: $pc_1550) {
+    @content;
+  }
+}
+
+/* 1440px 이상일때 */
+@mixin pc_1440 {
+  @media (max-width: $pc_1440) {
+    @content;
+  }
+}
+
+/* 1280px 이상일때 */
+@mixin pc_1280 {
+  @media (max-width: $pc_1280) {
+    @content;
+  }
+}
+
+/* 1024px 이상일때 */
+@mixin tablet {
+  @media (max-width: $tablet) {
+    @content;
+  }
+}
+
+/* 989px 이상일때 */
+@mixin mo_989 {
+  @media (max-width: $mo_989) {
+    @content;
+  }
+}
+
+/* 600px 이상일때 */
+@mixin mo_600 {
+  @media (max-width: $mo_600) {
+    @content;
+  }
+}
+
+/* 767px 이상일때 */
+@mixin mo {
+  @media (max-width: $mo) {
+    @content;
+  }
+}
+
+/* 500px 이상일때 */
+@mixin mo_500 {
+  @media (max-width: $mo_500) {
+    @content;
+  }
+}
+
+/* 330px 이상일때 */
+@mixin mo_330 {
+  @media (max-width: $mo_330) {
+    @content;
+  }
+}
+
+/*넓이, 높이 자동 계산함수*/
+@mixin square($size) {
+  $calculated: 32px * $size;
+  width: $calculated;
+  height: $calculated;
+}
