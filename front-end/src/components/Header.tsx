@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FiSearch } from 'react-icons/fi';
 
 const Header = () => {
   return (
@@ -21,7 +21,7 @@ const Header = () => {
         </div>
         <div className="search_box">
           <input type="text" placeholder="검색어를 입력하세요" />
-          <button type="submit"></button>
+          <button type="button"><FiSearch size={20} /></button>
         </div>
         <div className="auth_box">
           <ul className="auth_list">

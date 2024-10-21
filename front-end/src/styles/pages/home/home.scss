@@ -5,3 +5,51 @@
     background: var(--gradient-bg);
   }
 }
+
+.sec02 {
+  .inner {
+    padding: 7rem 0;
+  }
+  .dev_list {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5rem;
+    gap: 2rem;
+
+    li {
+      a {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1rem 3rem;
+        border-radius: 1rem;
+        transition: all 0.5s;
+        &:hover {
+          background: var(--bg-color);
+        }
+        
+        span {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  .search_box {
+    position: relative;
+    width: 50%;
+    margin: 0 auto;
+    input {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+    button {
+      position: absolute;
+      top: calc(50% + 3px);
+      transform: translateY(-50%);
+      right: 2rem;
+    }
+  }
+}

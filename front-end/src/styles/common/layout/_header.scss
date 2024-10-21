@@ -52,12 +52,20 @@
 
   .search_box {
     width: 50%;
+    position: relative;
     input {
       width: 100%;
       height: 100%;
       border-radius: 1rem;
       border: 1px solid #ccc;
       padding: 0 1rem;
+      
+    }
+    button {
+      position: absolute;
+      top: calc(50% - -3px);
+      transform: translateY(-50%);
+      right: 2rem;
     }
   }
 }
