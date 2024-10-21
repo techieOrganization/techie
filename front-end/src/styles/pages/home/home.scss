@@ -13,7 +13,7 @@
       background: var(--gradient-bg);
     }
   }
-  
+
   &.sec02 {
     .inner {
       padding: 7rem 0;
@@ -23,7 +23,7 @@
       justify-content: center;
       margin-bottom: 5rem;
       gap: 2rem;
-  
+
       li {
         a {
           display: flex;
@@ -39,7 +39,7 @@
           img {
             margin: 0 auto;
           }
-          
+
           span {
             font-weight: 500;
           }
@@ -64,7 +64,7 @@
       }
     }
   }
-  
+
   &.sec03 {
     background: var(--bg-color);
     .inner {
@@ -227,12 +227,11 @@
   }
 }
 
-
 @keyframes scroll-horizontal {
   0% {
-    transform: translateX(100%); /* 리스트가 오른쪽에서 시작 */
+    transform: translateX(100%);
   }
   100% {
-    transform: translateX(-100%); /* 리스트가 왼쪽으로 끝없이 이동 */
+    transform: translateX(-100%);
   }
 }

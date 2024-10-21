@@ -7,8 +7,8 @@ const Header = () => {
     <header id="header">
       <div className="inner">
         <div className="header_menu">
-          <h1 className='logo'>
-            <Link href='/'>TECHIE</Link>
+          <h1 className="logo">
+            <Link href="/">TECHIE</Link>
           </h1>
           <ul className="menu_list">
             <li className="menu_item">
@@ -21,7 +21,9 @@ const Header = () => {
         </div>
         <div className="search_box">
           <input type="text" placeholder="검색어를 입력하세요" />
-          <button type="button"><FiSearch size={20} /></button>
+          <button type="button">
+            <FiSearch size={20} />
+          </button>
         </div>
         <div className="auth_box">
           <ul className="auth_list">

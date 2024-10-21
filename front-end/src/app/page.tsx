@@ -25,11 +25,10 @@ export default function Home() {
     getVideos();
   }, []);
 
-
   return (
     <>
-      <section className='section sec01'>
-        <h2 className='dn'>메인 슬라이드 화면</h2>
+      <section className="section sec01">
+        <h2 className="dn">메인 슬라이드 화면</h2>
         <Swiper
           pagination={{
             type: 'fraction',
@@ -37,7 +36,7 @@ export default function Home() {
           navigation={true}
           modules={[Pagination, Navigation, Autoplay]}
           autoplay={{
-            delay: 2500, 
+            delay: 2500,
             disableOnInteraction: false,
           }}
           loop={true}
@@ -66,9 +65,9 @@ export default function Home() {
         </Swiper>
       </section>
       <section className="section sec02">
-        <h2 className='dn'>강의 목록</h2>
+        <h2 className="dn">강의 목록</h2>
         <div className="inner">
-          <ul className='dev_list'>
+          <ul className="dev_list">
             <li>
               <Link href="#">
                 <Image src="/assets/images/main/dev_01.png" alt="언어" width={50} height={50} />
@@ -95,7 +94,12 @@ export default function Home() {
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_05.png" alt="프론트엔드" width={50} height={50} />
+                <Image
+                  src="/assets/images/main/dev_05.png"
+                  alt="프론트엔드"
+                  width={50}
+                  height={50}
+                />
                 <span>프론트엔드</span>
               </Link>
             </li>
@@ -126,11 +130,13 @@ export default function Home() {
           </ul>
           <div className="search_box">
             <input type="text" placeholder="검색어를 입력하세요" />
-            <button type="button"><FiSearch size={20} /></button>
+            <button type="button">
+              <FiSearch size={20} />
+            </button>
           </div>
         </div>
       </section>
-      <section className='section sec03'>
+      <section className="section sec03">
         <div className="inner">
           <h2>최신 등록 강의</h2>
           <Swiper
@@ -154,7 +160,7 @@ export default function Home() {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
-                <div className='vid_info'>
+                <div className="vid_info">
                   <h3>{video.snippet.title}</h3>
                   <p>{video.snippet.channelTitle}</p>
                 </div>
@@ -163,10 +169,10 @@ export default function Home() {
           </Swiper>
         </div>
       </section>
-      <section className='section sec04'>
+      <section className="section sec04">
         <div className="inner">
           <h2>강사 리스트</h2>
-          <ul className='instructor_list'>
+          <ul className="instructor_list">
             {/* <li>
               <Link href="#">
                 <Image src="/assets/images/main/logo01.jpg" alt="강사" width={100} height={100} />
@@ -183,8 +189,8 @@ export default function Home() {
               <Link href="#">
                 <Image src="/assets/images/main/logo03.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
-                <span>조코딩</span>
-                <p>주로 파이썬, 데이터 분석, AI 관련 강좌</p>
+                  <span>조코딩</span>
+                  <p>주로 파이썬, 데이터 분석, AI 관련 강좌</p>
                 </div>
               </Link>
             </li>
@@ -192,8 +198,8 @@ export default function Home() {
               <Link href="#">
                 <Image src="/assets/images/main/logo04.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
-                <span>코딩 알려주는 누나</span>
-                <p>초보자들을 위한 다양한 프로그래밍 강좌</p>
+                  <span>코딩 알려주는 누나</span>
+                  <p>초보자들을 위한 다양한 프로그래밍 강좌</p>
                 </div>
               </Link>
             </li>
@@ -201,49 +207,46 @@ export default function Home() {
               <Link href="#">
                 <Image src="/assets/images/main/logo05.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
-                <span>애플코딩</span>
-                <p>iOS 개발자를 위한 Swift와 다양한 앱 개발 강좌를 제공</p>
+                  <span>애플코딩</span>
+                  <p>iOS 개발자를 위한 Swift와 다양한 앱 개발 강좌를 제공</p>
                 </div>
               </Link>
             </li>
           </ul>
         </div>
       </section>
-      <section className='section sec05'>
+      <section className="section sec05">
         <h2>수강생 리스트</h2>
-          <Swiper
-            spaceBetween={20}
-            slidesPerView={'auto'}
-            loop={true}
-            autoplay={{
-              delay: 0,
-              disableOnInteraction: false,
-            }}
-            speed={3000} 
-            modules={[Autoplay]}
-            className='personaSwiper'
-          >
-            {studentData.map((student, index) => (
-              <SwiperSlide key={index} className='persona_slide'>
-                <li>
-                  <div className="img_box">
+        <Swiper
+          spaceBetween={20}
+          slidesPerView={'auto'}
+          loop={true}
+          autoplay={{
+            delay: 0,
+            disableOnInteraction: false,
+          }}
+          speed={3000}
+          modules={[Autoplay]}
+          className="personaSwiper"
+        >
+          {studentData.map((student, index) => (
+            <SwiperSlide key={index} className="persona_slide">
+              <li>
+                <div className="img_box"></div>
+                <div className="student_info">
+                  <span className="student_job">{student.title}</span>
+                  <strong>{student.title_desc}</strong>
+                  <span>{student.rating}</span>
+                  <div className="student_details">
+                    <span className="student_name">{student.name}</span>
+                    <span className="student_age">{student.age}</span>
                   </div>
-                  <div className="student_info">
-                    <span className='student_job'>{student.title}</span>
-                    <strong>{student.title_desc}</strong>
-                    <span>{student.rating}</span>
-                    <div className="student_details">
-                      <span className='student_name'>{student.name}</span>
-                      <span className='student_age'>{student.age}</span>
-                    </div>
-                  </div>
-                </li>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                </div>
+              </li>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </section>
-
-
     </>
   );
 }
