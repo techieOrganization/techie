@@ -69,55 +69,55 @@ export default function Home() {
           <ul className='dev_list'>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_01.png" alt="언어" width={60} height={60} />
+                <Image src="/assets/images/main/dev_01.png" alt="언어" width={50} height={50} />
                 <span>언어</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_02.png" alt="게임개발" width={60} height={60} />
+                <Image src="/assets/images/main/dev_02.png" alt="게임개발" width={50} height={50} />
                 <span>게임개발</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_03.png" alt="백엔드" width={60} height={60} />
+                <Image src="/assets/images/main/dev_03.png" alt="백엔드" width={50} height={50} />
                 <span>백엔드</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_04.png" alt="모바일" width={60} height={60} />
+                <Image src="/assets/images/main/dev_04.png" alt="모바일" width={50} height={50} />
                 <span>모바일</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_05.png" alt="프론트엔드" width={60} height={60} />
+                <Image src="/assets/images/main/dev_05.png" alt="프론트엔드" width={50} height={50} />
                 <span>프론트엔드</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_06.png" alt="데이터" width={60} height={60} />
+                <Image src="/assets/images/main/dev_06.png" alt="데이터" width={50} height={50} />
                 <span>데이터</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_07.png" alt="인공지능" width={60} height={60} />
+                <Image src="/assets/images/main/dev_07.png" alt="인공지능" width={50} height={50} />
                 <span>인공지능</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_08.png" alt="보안" width={60} height={60} />
+                <Image src="/assets/images/main/dev_08.png" alt="보안" width={50} height={50} />
                 <span>보안</span>
               </Link>
             </li>
             <li>
               <Link href="#">
-                <Image src="/assets/images/main/dev_09.png" alt="CS" width={60} height={60} />
+                <Image src="/assets/images/main/dev_09.png" alt="CS" width={50} height={50} />
                 <span>CS</span>
               </Link>
             </li>
@@ -161,9 +161,52 @@ export default function Home() {
           </Swiper>
         </div>
       </section>
-
-
-      <section className='section sec04'></section>
+      <section className='section sec04'>
+        <div className="inner">
+          <h2>강사 리스트</h2>
+          <ul className='instructor_list'>
+            {/* <li>
+              <Link href="#">
+                <Image src="/assets/images/main/logo01.jpg" alt="강사" width={100} height={100} />
+                <span>생활코딩</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="#">
+                <Image src="/assets/images/main/logo02.jpg" alt="강사" width={100} height={100} />
+                <span>드림코딩</span>
+              </Link>
+            </li> */}
+            <li>
+              <Link href="#">
+                <Image src="/assets/images/main/logo03.jpg" alt="강사" width={100} height={100} />
+                <div className="txt_box">
+                <span>조코딩</span>
+                <p>주로 파이썬, 데이터 분석, AI 관련 강좌</p>
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link href="#">
+                <Image src="/assets/images/main/logo04.jpg" alt="강사" width={100} height={100} />
+                <div className="txt_box">
+                <span>코딩 알려주는 누나</span>
+                <p>초보자들을 위한 다양한 프로그래밍 강좌</p>
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link href="#">
+                <Image src="/assets/images/main/logo05.jpg" alt="강사" width={100} height={100} />
+                <div className="txt_box">
+                <span>애플코딩</span>
+                <p>iOS 개발자를 위한 Swift와 다양한 앱 개발 강좌를 제공</p>
+                </div>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </section>
     </>
   );
 }

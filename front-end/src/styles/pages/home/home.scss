@@ -36,6 +36,9 @@
           &:hover {
             background: var(--bg-color);
           }
+          img {
+            margin: 0 auto;
+          }
           
           span {
             font-weight: 500;
@@ -102,6 +105,44 @@
     }
     .swiper-pagination {
       bottom: 1rem;
+    }
+  }
+
+  &.sec04 {
+    .inner {
+      padding: 10rem 0;
+    }
+    .instructor_list {
+      display: flex;
+      gap: 2rem;
+
+      li {
+        border: 1px solid #ccc;
+        border-radius: 1rem;
+        width: 100%;
+        padding: 3rem 1.5rem;
+
+        a {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 2rem;
+
+          img {
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            width: 15rem;
+            height: 15rem;
+          }
+        }
+
+        .txt_box {
+          span {
+            font-size: 1.8rem;
+            font-weight: 700;
+          }
+        }
+      }
     }
   }
 }
