@@ -1,4 +1,9 @@
-import './globals.css';
+import '@/styles/common/common.scss';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 export default function RootLayout({
   children,
@@ -7,7 +12,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
