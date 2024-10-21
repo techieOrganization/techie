@@ -120,13 +120,13 @@
         border: 1px solid #ccc;
         border-radius: 1rem;
         width: 100%;
-        padding: 3rem 1.5rem;
 
         a {
           display: flex;
           flex-direction: row;
           align-items: center;
           gap: 2rem;
+          padding: 3rem 1.5rem;
 
           img {
             border-radius: 50%;
@@ -138,11 +138,101 @@
 
         .txt_box {
           span {
+            display: block;
             font-size: 1.8rem;
             font-weight: 700;
+            margin-bottom: 0.5rem;
+          }
+          p {
+            line-height: 1.5;
           }
         }
       }
     }
+  }
+
+  &.sec05 {
+    background: var(--bg-color);
+    padding: 10rem 0;
+
+    .personaSwiper {
+      width: 100%;
+    }
+    .persona_slide {
+      width: auto;
+
+      li {
+        width: 50rem;
+        height: 25rem;
+        margin-right: 20px;
+        list-style: none;
+        border: 1px solid var(--sub-btn-color);
+        border-radius: 1rem;
+        padding: 2rem;
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        background: #fff;
+
+        .img_box {
+          border-radius: 50%;
+          min-width: 18rem;
+          height: 18rem;
+          background: var(--gradient-bg);
+        }
+
+        .student_info {
+          .student_job {
+            background: var(--sub-btn-color);
+            border-radius: 1rem;
+            padding: 0.3rem 1rem;
+            color: #fff;
+            font-size: 1.2rem;
+          }
+          strong {
+            display: block;
+            font-size: 1.7rem;
+            margin: 1rem 0;
+            font-weight: 500;
+            line-height: 1.5;
+            letter-spacing: -1.2px;
+          }
+          .student_details {
+            text-align: right;
+            span {
+              font-size: 1.3rem;
+              color: #999;
+              margin-right: 1rem;
+              position: relative;
+              &:last-child {
+                &:after {
+                  display: none;
+                }
+              }
+              &:after {
+                content: '';
+                position: absolute;
+                right: -5px;
+                top: calc(50% + 1px);
+                transform: translateY(-50%);
+                width: 1px;
+                height: 60%;
+                background: #999;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(100%); /* 리스트가 오른쪽에서 시작 */
+  }
+  100% {
+    transform: translateX(-100%); /* 리스트가 왼쪽으로 끝없이 이동 */
   }
 }

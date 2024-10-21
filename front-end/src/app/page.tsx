@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
 import { fetchPlaylistVideos } from '@/libs/api/youtubeAPI';
+import studentData from '@/data/studentData';
 
 export default function Home() {
   const [videos, setVideos] = useState([]);
@@ -23,6 +24,7 @@ export default function Home() {
 
     getVideos();
   }, []);
+
 
   return (
     <>
@@ -207,6 +209,41 @@ export default function Home() {
           </ul>
         </div>
       </section>
+      <section className='section sec05'>
+        <h2>수강생 리스트</h2>
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={'auto'}
+            loop={true}
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+            }}
+            speed={3000} 
+            modules={[Autoplay]}
+            className='personaSwiper'
+          >
+            {studentData.map((student, index) => (
+              <SwiperSlide key={index} className='persona_slide'>
+                <li>
+                  <div className="img_box">
+                  </div>
+                  <div className="student_info">
+                    <span className='student_job'>{student.title}</span>
+                    <strong>{student.title_desc}</strong>
+                    <span>{student.rating}</span>
+                    <div className="student_details">
+                      <span className='student_name'>{student.name}</span>
+                      <span className='student_age'>{student.age}</span>
+                    </div>
+                  </div>
+                </li>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+      </section>
+
+
     </>
   );
 }
