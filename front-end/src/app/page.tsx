@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -10,8 +10,20 @@ import '@/styles/pages/home/home.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
+import { fetchPlaylistVideos } from '@/libs/api/youtubeAPI';
 
 export default function Home() {
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    const getVideos = async () => {
+      const data = await fetchPlaylistVideos();
+      setVideos(data);
+    };
+
+    getVideos();
+  }, []);
+
   return (
     <>
       <section className='section sec01'>
@@ -32,25 +44,21 @@ export default function Home() {
           <SwiperSlide>
             <div className="slide-content">
               <h2>Slide 1</h2>
-              <p>This is the first slide content</p>
             </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="slide-content">
               <h2>Slide 2</h2>
-              <p>This is the second slide content</p>
             </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="slide-content">
               <h2>Slide 3</h2>
-              <p>This is the third slide content</p>
             </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="slide-content">
               <h2>Slide 4</h2>
-              <p>This is the fourth slide content</p>
             </div>
           </SwiperSlide>
         </Swiper>
@@ -120,7 +128,41 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className='section sec03'></section>
+      <section className='section sec03'>
+        <div className="inner">
+          <h2>최신 등록 강의</h2>
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={5}
+            navigation={true}
+            pagination={{ clickable: true }}
+            loop={true}
+            grabCursor={true}
+            modules={[Navigation, Pagination]}
+            className="mySwiper"
+          >
+            {videos.map((video, index) => (
+              <SwiperSlide key={index}>
+                <iframe
+                  width="560"
+                  height="315"
+                  src={`https://www.youtube.com/embed/${video.snippet.resourceId.videoId}`}
+                  title={video.snippet.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+                <div className='vid_info'>
+                  <h3>{video.snippet.title}</h3>
+                  <p>{video.snippet.channelTitle}</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
+
+
       <section className='section sec04'></section>
     </>
   );
