@@ -33,7 +33,8 @@ public class VideoService {
     private final ObjectMapper objectMapper;
 
     public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
-        String ids = getVideoIdsAsString(category);
+        List<Video> findVideos = videoRepository.findByCategory(category);
+        String ids = getVideoIds(findVideos);
         String url = getUrl(ids);
         ResponseEntity<String> response = getYoutubeResponse(url);
         return convertJsonToVideoDTO(response.getBody());
@@ -46,9 +47,9 @@ public class VideoService {
         ResponseEntity<String> response = getYoutubeResponse(url);
         return convertJsonToVideoDTO(response.getBody());
     }
-
-    public String getVideoIdsAsString(Category category) {
-        return getVideoIds(videoRepository.findByCategory(category));
+    
+    private static String getVideoIds(List<Video> findVideos) {
+        return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
     }
 
     private String getUrl(String ids) {
@@ -87,8 +88,5 @@ public class VideoService {
         return videoResponses;
     }
 
-    private static String getVideoIds(List<Video> findVideos) {
-        return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
-    }
 
 }
