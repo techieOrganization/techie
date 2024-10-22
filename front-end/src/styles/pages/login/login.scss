@@ -62,10 +62,14 @@
         span{
           display: flex;
           cursor: pointer;
-          font-size: 1rem;
+          font-size: 1.2rem;
           width: 33%;
           justify-content: center;
           color: var(--border-color);
+          a{
+            font-size: inherit;
+            color: inherit;
+          }
         }
         span:hover{
           color: black;
