@@ -1,0 +1,30 @@
+.vid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  button {
+    background: var(--btn-color);
+    color: #fff;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -1px;
+  }
+}
+.vid_cont {
+  display: flex;
+  gap: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
