@@ -32,28 +32,32 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final ObjectMapper objectMapper;
 
+    public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
+        String ids = getVideoIdsAsString(category);
+        String url = getUrl(ids);
+        ResponseEntity<String> response = getYoutubeResponse(url);
+        return convertJsonToVideoDTO(response.getBody());
+    }
+
+    public List<VideoResponse> fetchVideosByQuery(String query) throws JsonProcessingException {
+        List<Video> findVideos = videoRepository.findByTitleContaining(query);
+        String ids = getVideoIds(findVideos);
+        String url = getUrl(ids);
+        ResponseEntity<String> response = getYoutubeResponse(url);
+        return convertJsonToVideoDTO(response.getBody());
+    }
 
     public String getVideoIdsAsString(Category category) {
         return getVideoIds(videoRepository.findByCategory(category));
     }
 
-    public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
-        String ids = getVideoIdsAsString(category);
-        String url = UriComponentsBuilder.newInstance()
-                .scheme("https")
-                .host("www.googleapis.com")
-                .path("/youtube/v3/videos")
+    private String getUrl(String ids) {
+        return UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/videos")
                 .queryParam("part", "snippet,contentDetails")
                 .queryParam("id", ids)
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
-
-
-        ResponseEntity<String> response = getYoutubeResponse(url);
-
-
-        return convertJsonToVideoDTO(response.getBody());
     }
 
     private ResponseEntity<String> getYoutubeResponse(String url) {
@@ -80,25 +84,7 @@ public class VideoService {
                 videoResponses.add(videoResponse);
             }
         }
-
         return videoResponses;
-    }
-
-    public List<VideoResponse> videoSearch(String query) throws JsonProcessingException {
-        List<Video> findVideos = videoRepository.findByTitleContaining(query);
-        String ids = getVideoIds(findVideos);
-        String url = UriComponentsBuilder.newInstance()
-                .scheme("https")
-                .host("www.googleapis.com")
-                .path("/youtube/v3/videos")
-                .queryParam("part", "snippet,contentDetails")
-                .queryParam("id", ids)
-                .queryParam("key", apiKey)
-                .build()
-                .toUriString();
-
-        ResponseEntity<String> response = getYoutubeResponse(url);
-        return convertJsonToVideoDTO(response.getBody());
     }
 
     private static String getVideoIds(List<Video> findVideos) {
