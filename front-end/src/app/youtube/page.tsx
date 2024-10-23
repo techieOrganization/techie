@@ -1,6 +1,6 @@
 import React from 'react';
-import YouTubeVideoList from './YouTubeVideoList';
 import { fetchVideosByIds } from '@/libs/api/youtubeService';
+import YouTubeVideoList from './YouTubeVideoList';
 import '@/styles/pages/youtube/youtube.scss';
 
 const YoutubePage: React.FC = () => {
@@ -9,7 +9,7 @@ const YoutubePage: React.FC = () => {
   return (
     <div>
       <div className="inner">
-        <h2 className='title'>유튜브 비디오 리스트</h2>
+        <h2 className="title">유튜브 비디오 리스트</h2>
         <YouTubeVideoList videoIds={videoIds} />
       </div>
     </div>

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'next/navigation';
@@ -29,7 +29,7 @@ const VideoDetailPage: React.FC = () => {
   const playerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!videoId) return; 
+    if (!videoId) return;
 
     window.onYouTubeIframeAPIReady = () => {
       playerRef.current = new window.YT.Player('youtube-player', {
@@ -54,17 +54,15 @@ const VideoDetailPage: React.FC = () => {
 
   const handleNoteClick = () => {
     if (playerRef.current && playerRef.current.getCurrentTime) {
-      const currentTime = playerRef.current.getCurrentTime(); 
+      const currentTime = playerRef.current.getCurrentTime();
       const minutes = Math.floor(currentTime / 60);
       const seconds = Math.floor(currentTime % 60);
       const formattedTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
       setNoteTime(formattedTime);
       setNoteTimeInSeconds(currentTime);
-    } else {
-
     }
   };
-  
+
   const handleSaveNote = () => {
     const newNote: Note = {
       time: noteTime!,
@@ -88,19 +86,19 @@ const VideoDetailPage: React.FC = () => {
   }
 
   return (
-    <div className='vid'>
+    <div className="vid">
       <div className="inner">
-        <h2 className='title'>강의 상세</h2>
+        <h2 className="title">강의 상세</h2>
         <div id="youtube-player"></div>
 
-        <button onClick={handleNoteClick} disabled={!playerReady}>메모하기</button>
+        <button onClick={handleNoteClick} disabled={!playerReady}>
+          메모하기
+        </button>
 
         {noteTime && (
           <div className="note-editor">
             <FlexContainer>
-              <TimeLabel>
-                {noteTime}
-              </TimeLabel>
+              <TimeLabel>{noteTime}</TimeLabel>
               <FlexItem>
                 <textarea
                   value={note}
@@ -126,9 +124,7 @@ const VideoDetailPage: React.FC = () => {
             notes.map((noteItem, index) => (
               <NoteItem key={index}>
                 <NoteItemContent>
-                  <NoteTime
-                    onClick={() => handleSeekTo(noteItem.timeInSeconds)}
-                  >
+                  <NoteTime onClick={() => handleSeekTo(noteItem.timeInSeconds)}>
                     {noteItem.time}
                   </NoteTime>
                   <div>{noteItem.content}</div>
@@ -138,7 +134,9 @@ const VideoDetailPage: React.FC = () => {
           )}
         </NoteList>
 
-        <Link href='/youtube' className='list_btn'>목록으로 돌아가기</Link>
+        <Link href="/youtube" className="list_btn">
+          목록으로 돌아가기
+        </Link>
       </div>
     </div>
   );
