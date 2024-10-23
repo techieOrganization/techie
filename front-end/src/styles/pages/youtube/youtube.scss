@@ -3,6 +3,10 @@
   flex-direction: column;
   gap: 2rem;
 
+  .inner {
+    padding: 10rem 0;
+  }
+
   button {
     background: var(--btn-color);
     color: #fff;
@@ -27,4 +31,14 @@
   &:hover {
     transform: scale(1.05);
   }
+}
+.note-list {
+  margin-bottom: 5rem;
+}
+.list_btn {
+  background: var(--btn-color);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
 }
