@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { fetchVideosByIds } from '@/libs/api/youtubeService';
 import Image from 'next/image';
+import { fetchVideosByIds } from '@/libs/api/youtubeService';
 
 interface VideoItem {
   id: string;
