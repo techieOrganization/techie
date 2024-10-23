@@ -26,13 +26,13 @@ const VideoDetailPage: React.FC = () => {
   const [note, setNote] = useState<string>('');
   const [notes, setNotes] = useState<Note[]>([]);
   const [playerReady, setPlayerReady] = useState(false);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YT.Player | null>(null);
 
   useEffect(() => {
     if (!videoId) return;
 
     window.onYouTubeIframeAPIReady = () => {
-      playerRef.current = new window.YT.Player('youtube-player', {
+      playerRef.current = new YT.Player('youtube-player', {
         videoId: videoId,
         events: {
           onReady: () => {

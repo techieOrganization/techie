@@ -1,5 +1,4 @@
 import React from 'react';
-import { fetchVideosByIds } from '@/libs/api/youtubeService';
 import YouTubeVideoList from './YouTubeVideoList';
 import '@/styles/pages/youtube/youtube.scss';
 
