@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.api-client:google-api-client:1.33.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.google.api-client" artifactId="google-api-client" version="1.33.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/1.33.0/fe86fc26f8c140a691460660d684a33f17212d21/google-api-client-1.33.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

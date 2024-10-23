@@ -17,8 +17,10 @@ public class Video {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String videoId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
-
 }
