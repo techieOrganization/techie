@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 declare global {
   interface Window {
-    YT: any;
+    YT: typeof YT;
     onYouTubeIframeAPIReady: () => void;
   }
 }

@@ -10,6 +10,7 @@ interface VideoItem {
   snippet: {
     title: string;
     channelTitle: string;
+    publishedAt: string;
     thumbnails: {
       high: {
         url: string;
@@ -52,13 +53,17 @@ const YouTubeVideoList: React.FC<YouTubeVideoListProps> = ({ videoIds }) => {
     <div className="vid">
       {videos.map((video) => (
         <div key={video.id}>
-          <Link href={`/youtube/${video.id}`} className="vid_cont">
-          <Image 
-              src={video.snippet.thumbnails.maxres ? video.snippet.thumbnails.maxres.url : video.snippet.thumbnails.high.url} 
-              alt={video.snippet.title} 
+          <Link href={`/youtube/${video.id}`}>
+            <Image
+              src={
+                video.snippet.thumbnails.maxres
+                  ? video.snippet.thumbnails.maxres.url
+                  : video.snippet.thumbnails.high.url
+              }
+              alt={video.snippet.title}
               width={320}
               height={180}
-              layout="responsive" 
+              layout="responsive"
             />
             <h3>{video.snippet.title}</h3>
             <p>채널: {video.snippet.channelTitle}</p>
