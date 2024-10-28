@@ -51,10 +51,7 @@ public class VideoService {
     }
 
     private String getUrl(String videoIds) {
-        return UriComponentsBuilder.newInstance()
-                .scheme("https")
-                .host("www.googleapis.com")
-                .path("/youtube/v3/videos")
+        return UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/videos")
                 .queryParam("part", "snippet,contentDetails")
                 .queryParam("id", videoIds)
                 .queryParam("key", apiKey)
