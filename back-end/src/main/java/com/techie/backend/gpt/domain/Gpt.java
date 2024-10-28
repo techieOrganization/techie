@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "gpt")
 public class Gpt {
@@ -26,4 +25,17 @@ public class Gpt {
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    public void updateRequest(String request) {
+        this.request = request;
+    }
+
+    public void updateResponse(String response) {
+        this.response = response;
+    }
+
+    public void assignUser(User user) {
+        this.user = user;
+    }
+
 }
