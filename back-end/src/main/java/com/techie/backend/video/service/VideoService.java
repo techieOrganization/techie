@@ -71,12 +71,13 @@ public class VideoService {
     public List<VideoResponse> convertJsonToVideoDTO(String jsonResponse) throws JsonProcessingException {
         JsonNode rootNode = objectMapper.readTree(jsonResponse);
         JsonNode itemsNode = rootNode.get("items");
+        log.info("rootNode: {}", rootNode.toPrettyString());
         List<VideoResponse> videoResponses = new ArrayList<>();
         if (itemsNode.isArray()) {
             for (JsonNode itemNode : itemsNode) {
                 JsonNode snippetNode = itemNode.get("snippet");
                 VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
-                String duration = itemsNode.get("contentDetails").get("duration").asText();
+                String duration = itemNode.get("contentDetails").get("duration").asText();
                 videoResponse.setDuration(duration);
                 videoResponses.add(videoResponse);
             }
