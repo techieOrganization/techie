@@ -34,22 +34,22 @@ public class VideoService {
 
 
     public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
-        String ids = getVideoIds(videoRepository.findByCategory(category));
-        String url = UriComponentsBuilder.newInstance()
+        String videoIds = getVideoIds(videoRepository.findByCategory(category));
+        String url = getUrl(videoIds);
+        ResponseEntity<String> response = getYoutubeResponse(url);
+        return convertJsonToVideoDTO(response.getBody());
+    }
+
+    private String getUrl(String videoIds) {
+        return UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("www.googleapis.com")
                 .path("/youtube/v3/videos")
                 .queryParam("part", "snippet,contentDetails")
-                .queryParam("id", ids)
+                .queryParam("id", videoIds)
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
-
-
-        ResponseEntity<String> response = getYoutubeResponse(url);
-
-
-        return convertJsonToVideoDTO(response.getBody());
     }
 
     private ResponseEntity<String> getYoutubeResponse(String url) {
@@ -81,18 +81,8 @@ public class VideoService {
     }
 
     public List<VideoResponse> videoSearch(String query) throws JsonProcessingException {
-        List<Video> findVideos = videoRepository.findByTitleContaining(query);
-        String ids = getVideoIds(findVideos);
-        String url = UriComponentsBuilder.newInstance()
-                .scheme("https")
-                .host("www.googleapis.com")
-                .path("/youtube/v3/videos")
-                .queryParam("part", "snippet,contentDetails")
-                .queryParam("id", ids)
-                .queryParam("key", apiKey)
-                .build()
-                .toUriString();
-
+        String videoIds = getVideoIds(videoRepository.findByTitleContaining(query));
+        String url = getUrl(videoIds);
         ResponseEntity<String> response = getYoutubeResponse(url);
         return convertJsonToVideoDTO(response.getBody());
     }
