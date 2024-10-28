@@ -33,12 +33,8 @@ public class VideoService {
     private final ObjectMapper objectMapper;
 
 
-    public String getVideoIdsAsString(Category category) {
-        return getVideoIds(videoRepository.findByCategory(category));
-    }
-
     public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
-        String ids = getVideoIdsAsString(category);
+        String ids = getVideoIds(videoRepository.findByCategory(category));
         String url = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("www.googleapis.com")
