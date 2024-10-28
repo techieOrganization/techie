@@ -29,10 +29,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
-                                .requestMatchers("/api/users/**").permitAll()
                                 .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/log.png").permitAll()
+                                .requestMatchers("/api/users/**").permitAll()
+                                .requestMatchers("/api/users/getUser/**").authenticated()
                                 .requestMatchers("/api/videos/**").permitAll()
+                                .requestMatchers("/api/gpt/**").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin((form) ->
                         form

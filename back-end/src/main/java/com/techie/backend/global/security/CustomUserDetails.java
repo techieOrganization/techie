@@ -9,9 +9,9 @@ import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final UserRequest user;
+    private final UserRequest.Login user;
 
-    public CustomUserDetails(UserRequest request) {
+    public CustomUserDetails(UserRequest.Login request) {
         this.user = request;
     }
 
@@ -22,7 +22,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override
