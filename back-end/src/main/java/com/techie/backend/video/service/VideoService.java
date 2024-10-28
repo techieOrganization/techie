@@ -75,9 +75,8 @@ public class VideoService {
         if (itemsNode.isArray()) {
             for (JsonNode itemNode : itemsNode) {
                 JsonNode snippetNode = itemNode.get("snippet");
-                JsonNode contentDetailsNode = itemNode.get("contentDetails");
-                VideoResponse videoResponse = objectMapper.readValue(snippetNode.toPrettyString(), VideoResponse.class);
-                String duration = contentDetailsNode.get("duration").asText();
+                VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
+                String duration = itemsNode.get("contentDetails").get("duration").asText();
                 videoResponse.setDuration(duration);
                 videoResponses.add(videoResponse);
             }
