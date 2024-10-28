@@ -32,12 +32,22 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final ObjectMapper objectMapper;
 
-
     public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
         String videoIds = getVideoIds(videoRepository.findByCategory(category));
         String url = getUrl(videoIds);
         ResponseEntity<String> response = getYoutubeResponse(url);
         return convertJsonToVideoDTO(response.getBody());
+    }
+
+    public List<VideoResponse> fetchVideosByQuery(String query) throws JsonProcessingException {
+        String videoIds = getVideoIds(videoRepository.findByTitleContaining(query));
+        String url = getUrl(videoIds);
+        ResponseEntity<String> response = getYoutubeResponse(url);
+        return convertJsonToVideoDTO(response.getBody());
+    }
+
+    private String getVideoIds(List<Video> findVideos) {
+        return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
     }
 
     private String getUrl(String videoIds) {
@@ -64,7 +74,6 @@ public class VideoService {
     public List<VideoResponse> convertJsonToVideoDTO(String jsonResponse) throws JsonProcessingException {
         JsonNode rootNode = objectMapper.readTree(jsonResponse);
         JsonNode itemsNode = rootNode.get("items");
-
         List<VideoResponse> videoResponses = new ArrayList<>();
         if (itemsNode.isArray()) {
             for (JsonNode itemNode : itemsNode) {
@@ -76,19 +85,7 @@ public class VideoService {
                 videoResponses.add(videoResponse);
             }
         }
-
         return videoResponses;
-    }
-
-    public List<VideoResponse> videoSearch(String query) throws JsonProcessingException {
-        String videoIds = getVideoIds(videoRepository.findByTitleContaining(query));
-        String url = getUrl(videoIds);
-        ResponseEntity<String> response = getYoutubeResponse(url);
-        return convertJsonToVideoDTO(response.getBody());
-    }
-
-    private static String getVideoIds(List<Video> findVideos) {
-        return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
     }
 
 }
