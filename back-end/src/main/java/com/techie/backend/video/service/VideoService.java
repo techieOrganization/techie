@@ -9,6 +9,7 @@ import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,17 +33,15 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final ObjectMapper objectMapper;
 
-    public List<VideoResponse> fetchVideosByCategory(Category category) throws JsonProcessingException {
+    public List<VideoResponse> fetchVideosByCategory(Category category) {
         String videoIds = getVideoIds(videoRepository.findByCategory(category));
-        String url = getUrl(videoIds);
-        ResponseEntity<String> response = getYoutubeResponse(url);
+        ResponseEntity<String> response = getYoutubeResponse(videoIds);
         return convertJsonToVideoDTO(response.getBody());
     }
 
-    public List<VideoResponse> fetchVideosByQuery(String query) throws JsonProcessingException {
+    public List<VideoResponse> fetchVideosByQuery(String query) {
         String videoIds = getVideoIds(videoRepository.findByTitleContaining(query));
-        String url = getUrl(videoIds);
-        ResponseEntity<String> response = getYoutubeResponse(url);
+        ResponseEntity<String> response = getYoutubeResponse(videoIds);
         return convertJsonToVideoDTO(response.getBody());
     }
 
@@ -50,38 +49,44 @@ public class VideoService {
         return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
     }
 
-    private String getUrl(String videoIds) {
-        return UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/videos")
+    private ResponseEntity<String> getYoutubeResponse(String videoIds) {
+        String uri = UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/videos")
                 .queryParam("part", "snippet,contentDetails")
                 .queryParam("id", videoIds)
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
-    }
 
-    private ResponseEntity<String> getYoutubeResponse(String url) {
         return restClient.get()
-                .uri(url)
+                .uri(uri)
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, (request, response) -> {
+                    throw new RuntimeException("Failed to fetch youtube videos. Status code: " + response.getStatusCode());
+                })
                 .toEntity(String.class);
     }
 
-    public List<VideoResponse> convertJsonToVideoDTO(String jsonResponse) throws JsonProcessingException {
-        JsonNode rootNode = objectMapper.readTree(jsonResponse);
-        JsonNode itemsNode = rootNode.get("items");
-        log.info("rootNode: {}", rootNode.toPrettyString());
+    public List<VideoResponse> convertJsonToVideoDTO(String jsonResponse) {
         List<VideoResponse> videoResponses = new ArrayList<>();
-        if (itemsNode.isArray()) {
-            for (JsonNode itemNode : itemsNode) {
-                JsonNode snippetNode = itemNode.get("snippet");
-                VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
-                String duration = itemNode.get("contentDetails").get("duration").asText();
-                videoResponse.setDuration(duration);
-                videoResponses.add(videoResponse);
+
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            JsonNode itemsNode = rootNode.get("items");
+            if (itemsNode.isArray()) {
+                for (JsonNode itemNode : itemsNode) {
+                    JsonNode snippetNode = itemNode.get("snippet");
+                    VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
+                    String duration = itemNode.get("contentDetails").get("duration").asText();
+                    videoResponse.setDuration(duration);
+                    videoResponses.add(videoResponse);
+                }
             }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert itemNode to VideoResponse: " + e.getMessage());
         }
+
         return videoResponses;
     }
 
