@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="backend:main" external.linked.project.path="$MODULE_DIR$/../../back-end" external.root.project.path="$MODULE_DIR$/../../back-end" external.system.id="GRADLE" external.system.module.group="com.techie" external.system.module.type="sourceSet" external.system.module.version="0.0.1-SNAPSHOT" type="JAVA_MODULE" version="4">
-  <component name="AdditionalModuleElements">
-    <content url="file://$MODULE_DIR$/../../back-end/build/generated">
-      <sourceFolder url="file://$MODULE_DIR$/../../back-end/build/generated" isTestSource="false" generated="true" />
-    </content>
-  </component>
-</module>
