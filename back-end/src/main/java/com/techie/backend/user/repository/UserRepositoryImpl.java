@@ -19,7 +19,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         QUser user = QUser.user;
         User foundUser = queryFactory
                 .selectFrom(user)
-                .where(user.username.eq(username))
+                .where(user.email.eq(username))
                 .fetchOne();
         return Optional.ofNullable(foundUser);
     }
