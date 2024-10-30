@@ -139,7 +139,7 @@ export default function Home() {
       <section className="section sec03">
         <div className="inner">
           <h2>따끈따끈한 최신 강의 모음🏫</h2>
-          <p className='sub_title'>최신 트렌드와 함께 배우세요.</p>
+          <p className="sub_title">최신 트렌드와 함께 배우세요.</p>
           <Swiper
             spaceBetween={20}
             slidesPerView={5}
@@ -173,7 +173,7 @@ export default function Home() {
       <section className="section sec04">
         <div className="inner">
           <h2>당신의 멘토가 될 강사님들을 소개합니다🥳</h2>
-          <p className='sub_title'>각 분야의 멘토와 함께 실력을 쌓아 보세요!</p>
+          <p className="sub_title">각 분야의 멘토와 함께 실력을 쌓아 보세요!</p>
           <ul className="instructor_list">
             <li>
               <Link href="#">
@@ -225,7 +225,7 @@ export default function Home() {
       </section>
       <section className="section sec05">
         <h2>성장한 수강생들의 진솔한 후기✍️</h2>
-        <p className='sub_title'>함께 이룬 성장을 자랑스럽게 소개합니다.</p>
+        <p className="sub_title">함께 이룬 성장을 자랑스럽게 소개합니다.</p>
         <Swiper
           spaceBetween={20}
           slidesPerView={'auto'}
@@ -242,8 +242,8 @@ export default function Home() {
             <SwiperSlide key={index} className="persona_slide">
               <li>
                 <div className="img_box">
-                <Image
-                    className='memoji'
+                  <Image
+                    className="memoji"
                     src={student.img}
                     alt={`${student.name}'s profile picture`}
                     width={150}
