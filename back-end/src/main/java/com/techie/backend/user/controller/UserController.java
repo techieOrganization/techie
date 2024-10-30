@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "사용자 인증 API", description = "사용자 인증 및 로그아웃 관련 API 엔드포인트")
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Boolean> register(@RequestBody UserRequest.Register userRequest) {
-        return ResponseEntity.ok(userService.register(userRequest));
+    public ResponseEntity<UserResponse.Information> register(@RequestBody UserRequest.Register userRequest) {
+        UserResponse.Information userInfo = userService.register(userRequest);
+        return ResponseEntity.ok(userInfo);
     }
 
     @GetMapping("/me")
