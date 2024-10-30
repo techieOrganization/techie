@@ -5,7 +5,6 @@ import '@/styles/pages/register/register.scss';
 import { fetchRegisterUser } from '@/libs/api/registerUserApi';
 
 const Signup = () => {
-  const [name, setName] = useState('')
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,9 +13,6 @@ const Signup = () => {
   const onChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
-  const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  }
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -32,7 +28,7 @@ const Signup = () => {
     e.preventDefault()
 
     try{
-      await fetchRegisterUser({name,email,password,nickname})
+      await fetchRegisterUser({email,password,nickname})
       alert('회원가입 완료')
 
     }
@@ -47,12 +43,6 @@ const Signup = () => {
         <h2>회원가입</h2>
       </div>
       <form className="register-wrapper" onSubmit={handelSubmit}>
-        <span>이름</span>
-        <input type="text"
-        className='input'
-        placeholder='이름' 
-        onChange={onChangeName}
-        value={name}/>
         <span>닉네임</span>
         <input
           type="text"
