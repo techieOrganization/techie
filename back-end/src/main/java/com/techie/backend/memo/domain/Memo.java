@@ -33,4 +33,7 @@ public class Memo {
     @JoinColumn(name = "video_id", nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     private Video video;
+
+    @Column(nullable = true)
+    private String noteTime;
 }
