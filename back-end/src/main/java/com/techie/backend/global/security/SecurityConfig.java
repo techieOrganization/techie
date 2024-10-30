@@ -33,7 +33,10 @@ public class SecurityConfig {
                                 .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/log.png").permitAll()
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/api/users/**").permitAll()
+                                .requestMatchers("/api/gpt/**").permitAll()
                                 .requestMatchers("/api/videos/**").permitAll()
+                                .requestMatchers("/api/users/me/**").authenticated()
                                 .anyRequest().authenticated())
                 .formLogin((form) ->
                         form
