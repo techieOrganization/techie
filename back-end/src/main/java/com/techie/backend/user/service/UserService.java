@@ -5,7 +5,8 @@ import com.techie.backend.user.dto.UserResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserService {
-    Boolean register(UserRequest.Register userRequest);
+
+    UserResponse.Information register(UserRequest.Register userRequest);
 
     UserResponse.Information getLoggedInUser(UserDetails userDetails);
 
