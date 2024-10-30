@@ -1,6 +1,7 @@
 package com.techie.backend.memo.controller;
 
 import com.techie.backend.memo.dto.MemoRequest;
+import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,8 @@ public class MemoController {
     private final MemoService memoService;
 
     @PostMapping
-    public ResponseEntity<String> createMemo(@RequestBody MemoRequest memoRequest, @AuthenticationPrincipal UserDetails userDetails) {
-        memoService.createMemo(memoRequest, userDetails);
-        return new ResponseEntity<>("memo created", HttpStatus.CREATED);
+    public ResponseEntity<MemoResponse> createMemo(@RequestBody MemoRequest memoRequest, @AuthenticationPrincipal UserDetails userDetails) {
+        return memoService.createMemo(memoRequest, userDetails);
     }
 
 }

@@ -36,4 +36,8 @@ public class Memo {
 
     @Column(nullable = true)
     private String noteTime;
+
+    public void assignUser(User user) {
+        this.user = user;
+    }
 }

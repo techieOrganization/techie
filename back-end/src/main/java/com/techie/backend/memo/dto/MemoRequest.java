@@ -6,4 +6,5 @@ import lombok.Data;
 public class MemoRequest {
     private String content;
     private String noteTime;
+    private Long videoId;
 }
