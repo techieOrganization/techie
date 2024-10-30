@@ -15,16 +15,12 @@ public class ModelMapperConfig {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        modelMapper.typeMap(User.class, UserRequest.class)
+        modelMapper.typeMap(User.class, UserRequest.Login.class)
                 .addMappings(mapper -> {
-                    mapper.skip(UserRequest::setEmail);
-                    mapper.skip(UserRequest::setNickname);
-                    mapper.skip(UserRequest::setCreatedDate);
-                    mapper.skip(UserRequest::setModifiedDate);
+                    mapper.skip(UserRequest.Login::setEmail);
+                    mapper.skip(UserRequest.Login::setPassword);
                 });
 
         return modelMapper;
     }
-
-
 }
