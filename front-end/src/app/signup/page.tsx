@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import '@/styles/pages/register/register.scss';
 import { fetchRegisterUser } from '@/libs/api/registerUserApi';
+import { setDefaultHighWaterMark } from 'stream';
 
 const Signup = () => {
   const [nickname, setNickname] = useState('');
@@ -23,19 +24,16 @@ const Signup = () => {
     setConfirmPassword(e.target.value);
   };
 
+  const handelSubmit = async (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
 
-  const handelSubmit = async (e: React.FormEvent<HTMLElement>) =>{
-    e.preventDefault()
-
-    try{
-      await fetchRegisterUser({email,password,nickname})
-      alert('회원가입 완료')
-
+    try {
+      await fetchRegisterUser({ email, password, nickname });
+      alert('회원가입 완료');
+    } catch (error) {
+      console.error(error);
     }
-    catch(error){
-      console.error(error)
-    }
-  }
+  };
 
   return (
     <div className="register-container">
@@ -79,10 +77,12 @@ const Signup = () => {
           value={confirmPassword}
         />
         <div className="button-wrapper">
-          <button className="register_button" type='submit'>가입하기</button>
-      </div>
+          <button className="register_button" type="submit">
+            가입하기
+          </button>
+        </div>
       </form>
-
+      ,
     </div>
   );
 };
