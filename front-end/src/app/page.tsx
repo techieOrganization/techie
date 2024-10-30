@@ -232,7 +232,15 @@ export default function Home() {
           {studentData.map((student, index) => (
             <SwiperSlide key={index} className="persona_slide">
               <li>
-                <div className="img_box"></div>
+                <div className="img_box">
+                <Image
+                    className='memoji'
+                    src={student.img}
+                    alt={`${student.name}'s profile picture`}
+                    width={150}
+                    height={150}
+                  />
+                </div>
                 <div className="student_info">
                   <span className="student_job">{student.title}</span>
                   <strong>{student.title_desc}</strong>

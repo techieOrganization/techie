@@ -178,7 +178,15 @@
           border-radius: 50%;
           min-width: 18rem;
           height: 18rem;
-          background: var(--gradient-bg);
+          background: linear-gradient(120deg, #6a83ff77, #6ab5ff75);
+          position: relative;
+          
+          .memoji {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
         }
 
         .student_info {
