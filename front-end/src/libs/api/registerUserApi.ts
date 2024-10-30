@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
 import axios from 'axios';
+
+dotenv.config();
 
 interface RegisterUserParams {
   nickname: string;
@@ -8,7 +11,7 @@ interface RegisterUserParams {
 
 export const fetchRegisterUser = async (params: RegisterUserParams): Promise<void> => {
   try {
-    const response = await axios.post(`/api/users/register`, {
+    const response = await axios.post(process.env.REGISTER_USER!, {
       nickname: params.nickname,
       password: params.password,
       email: params.email,
