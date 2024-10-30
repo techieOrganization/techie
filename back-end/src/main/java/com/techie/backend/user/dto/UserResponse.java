@@ -1,5 +1,6 @@
 package com.techie.backend.user.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,12 +9,12 @@ import java.time.LocalDateTime;
 public class UserResponse {
 
     @Data
+    @Builder
     public static class Information {
         private String email;
         private String nickname;
         private LocalDateTime createdDate;
         private LocalDateTime modifiedDate;
     }
-
 
 }

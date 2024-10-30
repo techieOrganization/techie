@@ -38,14 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/videos/**").permitAll()
                                 .requestMatchers("/api/users/me/**").authenticated()
                                 .anyRequest().authenticated())
-                .formLogin((form) ->
-                        form
-                                .usernameParameter("username")
-                                .passwordParameter("password")
-                                .loginProcessingUrl("/api/users/auth")
-                                .defaultSuccessUrl("/api/home", true)
-                                .permitAll()
-                                .failureForwardUrl("/api/users/authFail"))
+                .formLogin(AbstractHttpConfigurer::disable)
                 .logout((logout) ->
                         logout
                                 .logoutUrl("/api/users/logOut")

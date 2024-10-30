@@ -19,8 +19,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Boolean> register(@RequestBody UserRequest.Register userRequest) {
-        return ResponseEntity.ok(userService.register(userRequest));
+    public ResponseEntity<UserResponse.Information> register(@RequestBody UserRequest.Register userRequest) {
+        UserResponse.Information userInfo = userService.register(userRequest);
+        return ResponseEntity.ok(userInfo);
     }
 
     @GetMapping("/me")

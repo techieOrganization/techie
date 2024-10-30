@@ -25,6 +25,4 @@ public class UserRequest {
         private String currentPassword;
         private String newPassword;
     }
-
-
 }
