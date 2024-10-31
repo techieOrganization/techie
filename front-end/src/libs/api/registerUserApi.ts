@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
+import { request } from 'http';
 
 dotenv.config();
 
@@ -18,7 +19,19 @@ export const fetchRegisterUser = async (params: RegisterUserParams): Promise<voi
     });
     return response.data;
   } catch (error) {
-    console.error('error', error);
-    throw new Error('Api error');
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          throw new Error('404 오류');
+        }
+        throw new Error(`${error.response.status} 오류`);
+      } else if (error.request) {
+        throw new Error('request 오류');
+      } else {
+        throw new Error('request 설정 오류');
+      }
+    } else {
+      console.error('Error', error);
+    }
   }
 };
