@@ -1,0 +1,9 @@
+# techie/.husky/pre-commit
+
+# Only run lint-staged if changes are in the front-end folder
+if git diff --cached --name-only | grep -q '^front-end/'; then
+  cd front-end
+  npx lint-staged
+else
+  echo "No changes in front-end folder, skipping lint-staged."
+fi
