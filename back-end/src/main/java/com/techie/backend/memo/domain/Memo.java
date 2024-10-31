@@ -5,6 +5,8 @@ import com.techie.backend.video.domain.Video;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -20,10 +22,15 @@ public class Memo {
     @Column(columnDefinition = "TEXT", nullable = true)
     private String content;
 
+    @Column(nullable = true)
+    private String title;
+
     @Column(nullable = false)
+    @CreatedDate
     private LocalDateTime createDate;
 
     @Column(nullable = false)
+    @LastModifiedDate
     private LocalDateTime modifyDate;
 
     @JoinColumn(name = "user_id", nullable = false)

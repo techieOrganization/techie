@@ -1,5 +1,6 @@
 package com.techie.backend.memo.controller;
 
+import com.techie.backend.global.security.CustomUserDetails;
 import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.service.MemoService;
@@ -21,8 +22,8 @@ public class MemoController {
     private final MemoService memoService;
 
     @PostMapping
-    public ResponseEntity<MemoResponse> createMemo(@RequestBody MemoRequest memoRequest, @AuthenticationPrincipal UserDetails userDetails) {
-        return memoService.createMemo(memoRequest, userDetails);
+    public ResponseEntity<MemoResponse> createMemo(@RequestBody MemoRequest memoRequest, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return memoService.createMemo(memoRequest, userDetails.getUsername());
     }
 
 }
