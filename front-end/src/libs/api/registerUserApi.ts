@@ -1,6 +1,5 @@
-import dotenv from 'dotenv';
 import axios from 'axios';
-import { request } from 'http';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
