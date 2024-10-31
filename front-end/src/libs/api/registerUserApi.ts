@@ -11,7 +11,7 @@ interface RegisterUserParams {
 
 export const fetchRegisterUser = async (params: RegisterUserParams): Promise<void> => {
   try {
-    const response = await axios.post(process.env.REGISTER_USER!, {
+    const response = await axios.post(process.env.NEXT_PUBLIC_REGISTER_USER!, {
       nickname: params.nickname,
       password: params.password,
       email: params.email,
