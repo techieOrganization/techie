@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 @Service
@@ -27,23 +28,31 @@ public class UserServiceImpl implements UserService {
     );
 
     @Override
-    public Boolean register(UserRequest.Register userRequest) {
+    public UserResponse.Information register(UserRequest.Register userRequest) {
 
         if (!VALID_EMAIL_ADDRESS_REGEX.matcher(userRequest.getEmail()).matches()) {
             throw new InvalidEmailFormatException();
         }
 
-        if (userRepository.findByUsername(userRequest.getEmail()).isPresent() ||
-                userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException();
         }
 
-        userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        User user = User.builder()
+                .email(userRequest.getEmail())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
+                .nickname(userRequest.getNickname())
+                .build();
 
-        User user = modelMapper.map(userRequest, User.class);
         userRepository.save(user);
 
-        return true;
+        // 저장된 User 엔티티를 UserResponse.Information DTO로 변환하여 반환
+        return UserResponse.Information.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .createdDate(user.getCreatedDate())
+                .modifiedDate(user.getModifiedDate())
+                .build();
     }
 
     @Override
@@ -60,21 +69,28 @@ public class UserServiceImpl implements UserService {
         String email = userDetails.getUsername();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (updateUserRequest.getNickname() != null) {
-            user.setNickname(updateUserRequest.getNickname());
-        }
-        if (updateUserRequest.getEmail() != null && VALID_EMAIL_ADDRESS_REGEX.matcher(updateUserRequest.getEmail()).matches()) {
-            user.setEmail(updateUserRequest.getEmail());
-        } else if (updateUserRequest.getEmail() != null) {
-            throw new InvalidEmailFormatException();
-        }
+        String newEmail = updateUserRequest.getEmail() != null && VALID_EMAIL_ADDRESS_REGEX.matcher(updateUserRequest.getEmail()).matches()
+                ? updateUserRequest.getEmail() : user.getEmail();
+
+        String newNickname = updateUserRequest.getNickname() != null ? updateUserRequest.getNickname() : user.getNickname();
+
+        String newPassword = user.getPassword();
         if (updateUserRequest.getCurrentPassword() != null && updateUserRequest.getNewPassword() != null) {
             if (!passwordEncoder.matches(updateUserRequest.getCurrentPassword(), user.getPassword())) {
                 throw new IllegalArgumentException("Current password does not match password");
             }
-            user.setPassword(passwordEncoder.encode(updateUserRequest.getCurrentPassword()));
+            newPassword = passwordEncoder.encode(updateUserRequest.getNewPassword());
         }
-        userRepository.save(user);
+
+        User updatedUser = User.builder()
+                .email(newEmail)
+                .password(newPassword)
+                .nickname(newNickname)
+                .createdDate(user.getCreatedDate()) // 기존 생성일 유지
+                .modifiedDate(LocalDateTime.now())  // 수정일 갱신
+                .build();
+
+        userRepository.save(updatedUser);
         return true;
     }
 
@@ -85,5 +101,4 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
         return true;
     }
-
 }
