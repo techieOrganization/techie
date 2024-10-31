@@ -23,7 +23,7 @@ const Signup = () => {
     setConfirmPassword(e.target.value);
   };
 
-  const handelSubmit = async (e: React.FormEvent<HTMLElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
 
     try {
@@ -39,7 +39,7 @@ const Signup = () => {
       <div className="title-wrapper">
         <h2>회원가입</h2>
       </div>
-      <form className="register-wrapper" onSubmit={handelSubmit}>
+      <form className="register-wrapper" onSubmit={handleSubmit}>
         <span>닉네임</span>
         <input
           type="text"
