@@ -8,9 +8,9 @@ public interface UserService {
 
     UserResponse.Information register(UserRequest.Register userRequest);
 
-    UserResponse.Information getLoggedInUser(UserDetails userDetails);
-
-    Boolean updateUser(UserDetails userDetails, UserRequest.Update userRequest);
-
-    Boolean deleteUser(UserDetails userDetails);
+//    UserResponse.Information getLoggedInUser(UserDetails userDetails);
+//
+//    Boolean updateUser(UserDetails userDetails, UserRequest.Update userRequest);
+//
+//    Boolean deleteUser(UserDetails userDetails);
 }

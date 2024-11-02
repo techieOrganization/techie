@@ -24,20 +24,20 @@ public class UserController {
         return ResponseEntity.ok(userInfo);
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserResponse.Information> getLoggedInUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(userService.getLoggedInUser(userDetails));
-    }
-
-    @PutMapping("/me")
-    public ResponseEntity<Boolean> updateUserInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UserRequest.Update userRequest) {
-        return ResponseEntity.ok(userService.updateUser(userDetails, userRequest));
-    }
-
-    @DeleteMapping("/me")
-    public ResponseEntity<Boolean> deleteUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(userService.deleteUser(userDetails));
-    }
+//    @GetMapping("/me")
+//    public ResponseEntity<UserResponse.Information> getLoggedInUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+//        return ResponseEntity.ok(userService.getLoggedInUser(userDetails));
+//    }
+//
+//    @PutMapping("/me")
+//    public ResponseEntity<Boolean> updateUserInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UserRequest.Update userRequest) {
+//        return ResponseEntity.ok(userService.updateUser(userDetails, userRequest));
+//    }
+//
+//    @DeleteMapping("/me")
+//    public ResponseEntity<Boolean> deleteUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+//        return ResponseEntity.ok(userService.deleteUser(userDetails));
+//    }
 
     @GetMapping("/authFail")
     public ResponseEntity<String> authFail() {

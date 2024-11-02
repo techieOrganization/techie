@@ -1,18 +1,23 @@
 package com.techie.backend.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@Getter
 @Entity
 @Table(name = "users")
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,23 +37,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime modifiedDate;
 
-    @Builder
-    public User(String email, String password, String nickname, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
+    @Column(nullable = false)
+    private Role role;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdDate = LocalDateTime.now();
-        this.modifiedDate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.modifiedDate = LocalDateTime.now();
-    }
 }

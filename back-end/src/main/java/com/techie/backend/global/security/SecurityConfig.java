@@ -1,6 +1,5 @@
 package com.techie.backend.global.security;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,35 +18,48 @@ public class SecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder encoder() {
+
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CustomUserDetailService userDetailService) throws Exception {
-        httpSecurity
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomUserDetailService customUserDetailService) throws Exception {
+        http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
-                                .requestMatchers("/static/**").permitAll()
-                                .requestMatchers("/log.png").permitAll()
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/api/users/**").permitAll()
-                                .requestMatchers("/api/gpt/**").permitAll()
-                                .requestMatchers("/api/videos/**").permitAll()
-                                .requestMatchers("/api/users/me/**").authenticated()
-                                .anyRequest().authenticated())
-                .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**").permitAll()
+                        .requestMatchers("/static/**").permitAll()
+                        .requestMatchers("/log.png").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/gpt/**").permitAll()
+                        .requestMatchers("/api/videos/**").permitAll()
+                        .requestMatchers("/api/users/me/**").authenticated()
+                        .anyRequest().authenticated())
+                .formLogin((form) ->
+                        form
+                                .usernameParameter("email")
+                                .passwordParameter("password")
+                                .loginProcessingUrl("/api/user/auth")
+                                .successForwardUrl("/api/user/authSuccess")
+                                .failureForwardUrl("/api/user/authFail")
+                                .defaultSuccessUrl("/"))
                 .logout((logout) ->
                         logout
-                                .logoutUrl("/api/users/logOut")
-                                .logoutSuccessUrl("/api/users/logOutSuccess")
+                                .logoutSuccessUrl("/login")
+                                .logoutSuccessUrl("/api/user/logOutSuccess")
                                 .clearAuthentication(true)
                                 .deleteCookies("JSESSIONID"))
-                .userDetailsService(userDetailService);
+                .userDetailsService(customUserDetailService);
+        http.addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        httpSecurity.addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class);
-        return httpSecurity.build();
+        return http.build();
     }
 
     @Bean
