@@ -5,12 +5,12 @@ import com.techie.backend.user.dto.UserResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserService {
+    
+    Boolean joinProcess(UserRequest.Register request);
 
-    UserResponse.Information register(UserRequest.Register userRequest);
+//    UserResponse.Information getLoggedInUser(UserDetails userDetails);
 
-    UserResponse.Information getLoggedInUser(UserDetails userDetails);
+//    Boolean updateUser(UserDetails userDetails, UserRequest.Update userRequest);
 
-    Boolean updateUser(UserDetails userDetails, UserRequest.Update userRequest);
-
-    Boolean deleteUser(UserDetails userDetails);
+//    Boolean deleteUser(UserDetails userDetails);
 }

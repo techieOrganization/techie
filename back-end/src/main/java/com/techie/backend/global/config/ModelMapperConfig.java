@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ModelMapperConfig {
 
-    @Bean
-    public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-        modelMapper.typeMap(User.class, UserRequest.Login.class)
-                .addMappings(mapper -> {
-                    mapper.skip(UserRequest.Login::setEmail);
-                    mapper.skip(UserRequest.Login::setPassword);
-                });
-
-        return modelMapper;
-    }
+//    @Bean
+//    public ModelMapper modelMapper() {
+//        ModelMapper modelMapper = new ModelMapper();
+//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//
+//        modelMapper.typeMap(User.class, UserRequest.Login.class)
+//                .addMappings(mapper -> {
+//                    mapper.skip(UserRequest.Login::setEmail);
+//                    mapper.skip(UserRequest.Login::setPassword);
+//                });
+//
+//        return modelMapper;
+//    }
 }

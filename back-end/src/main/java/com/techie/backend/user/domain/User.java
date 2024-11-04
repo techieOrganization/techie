@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@Getter
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
 
@@ -26,29 +28,13 @@ public class User {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate;
-
     @Column(nullable = false)
-    private LocalDateTime modifiedDate;
+    private String role;
 
-    @Builder
-    public User(String email, String password, String nickname, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
+//    @Column(nullable = false)
+//    private LocalDate createDate;
+//
+//    @Column(nullable = false)
+//    private LocalDate updateDate;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdDate = LocalDateTime.now();
-        this.modifiedDate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.modifiedDate = LocalDateTime.now();
-    }
 }
