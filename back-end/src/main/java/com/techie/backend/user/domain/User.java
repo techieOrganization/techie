@@ -1,17 +1,13 @@
 package com.techie.backend.user.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.*;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -31,10 +27,11 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-//    @Column(nullable = false)
-//    private LocalDate createDate;
-//
-//    @Column(nullable = false)
-//    private LocalDate updateDate;
+    public User(String email, String password, String nickname, String role) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.role = role;
+    }
 
 }

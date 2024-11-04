@@ -16,18 +16,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<Boolean> join (@RequestBody UserRequest.Register request) {
+    public ResponseEntity<Boolean> register(@RequestBody UserRequest.Register request) {
         return ResponseEntity.ok(userService.joinProcess(request));
-    }
-
-    @GetMapping("/main")
-    public ResponseEntity<String> index() {
-        return ResponseEntity.ok("hello user !! ");
-    }
-
-    @GetMapping("/admin")
-    public ResponseEntity<String> admin() {
-        return ResponseEntity.ok("hello admin !! ");
     }
 
 //    @GetMapping("/me")

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceCustom implements UserDetailsService {
     private final UserRepository userRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User userData = userRepository.findByEmail(email);
