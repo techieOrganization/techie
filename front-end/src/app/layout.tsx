@@ -4,6 +4,8 @@ import Footer from '@/components/Footer';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import '@/styles/pages/chatbot/chatbot.scss';
+import ChatbotLayout from '@/components/ChatbotLayout';
 
 export default function RootLayout({
   children,
@@ -15,6 +17,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <ChatbotLayout />
         <Footer />
       </body>
     </html>

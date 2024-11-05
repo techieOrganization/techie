@@ -2,13 +2,6 @@
 
 import React, { useState } from 'react';
 import '@/styles/pages/login/login.scss';
-// interface User {
-//   id: string;
-//   nickname: string;
-//   createdDate: string;
-//   modifiedDate: string;
-//   email: string;
-// }
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -35,10 +28,10 @@ const Login = () => {
           <span>비밀번호</span>
           <input type="password" onChange={onChangePassword} value={password} />
         </div>
+        <div className="button-wrapper">
+          <button type="submit">로그인</button>
+        </div>
       </form>
-      <div className="button-wrapper">
-        <button>로그인</button>
-      </div>
     </div>
   );
 };
