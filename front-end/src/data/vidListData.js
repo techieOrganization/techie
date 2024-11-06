@@ -1,4 +1,5 @@
 const vidListData = [
+  { id: 'all', title: '전체', img: '/assets/images/main/dev_10.png' },
   { id: 'language', title: '언어', img: '/assets/images/main/dev_01.png' },
   { id: 'gameDev', title: '게임개발', img: '/assets/images/main/dev_02.png' },
   { id: 'backend', title: '백엔드', img: '/assets/images/main/dev_03.png' },
