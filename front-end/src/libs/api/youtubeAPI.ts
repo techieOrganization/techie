@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const YOUTUBE_API_KEY = 'AIzaSyCvUYwoHL7TEB_VC5_YN3dUujxEgItvs58';
+const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const PLAYLIST_ID = 'PL5uS0BZeM8zXcxj2pLybOFj8xMFGIjvfo';
 
 export const fetchPlaylistVideos = async () => {

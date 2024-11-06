@@ -173,7 +173,7 @@ export default function Home() {
           <p className="sub_title">각 분야의 멘토와 함께 실력을 쌓아 보세요!</p>
           <ul className="instructor_list">
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/생활코딩">
                 <Image src="/assets/images/main/logo01.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>생활코딩</span>
@@ -182,7 +182,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/드림코딩">
                 <Image src="/assets/images/main/logo02.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>드림코딩</span>
@@ -191,7 +191,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/조코딩">
                 <Image src="/assets/images/main/logo03.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>조코딩</span>
@@ -200,7 +200,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/코딩 알려주는 누나">
                 <Image src="/assets/images/main/logo04.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>코딩 알려주는 누나</span>
@@ -209,7 +209,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/애플코딩">
                 <Image src="/assets/images/main/logo05.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>애플코딩</span>
