@@ -8,9 +8,28 @@
     text-align: center;
     padding: 4rem 0;
     border-bottom: 1px solid #ccc;
+    gap: 1rem;
+
+    &.teacher {
+      li {
+        span {
+          display: block;
+          width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          text-align: center;
+        }
+        img {
+          border-radius: 50%;
+          border: 1px solid #ccc;
+        }
+      }
+      
+    }
 
     li {
-      width: 10rem;
+      width: 12rem;
       border-radius: 1rem;
       transition: all 0.3s;
       cursor: pointer;
@@ -56,11 +75,14 @@
       img {
         border-radius: 0.5rem;
         margin-bottom: 1rem;
+        border: 1px solid #ccc;
         transition: all 0.3s;
       }
       .title {
         font-size: 1.5rem;
         font-weight: 500;
+        line-height: 1.5;
+        margin-bottom: 1rem;
       }
       .channel_title {
         font-size: 1.3rem;

@@ -12,10 +12,13 @@ const Header = () => {
           </h1>
           <ul className="menu_list">
             <li className="menu_item">
-              <Link href="/playlists">강의 목록</Link>
+              <Link href="/playlists">강의 탐색 🔍</Link>
             </li>
             <li className="menu_item">
-              <Link href="/community">커뮤니티</Link>
+              <Link href="/teacher-lists">성장 멘토 🌱</Link>
+            </li>
+            <li className="menu_item">
+              <Link href="/community">커뮤니티 💬</Link>
             </li>
           </ul>
         </div>
