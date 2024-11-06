@@ -1,0 +1,44 @@
+.playlists_container {
+  .inner {
+    // padding: 10rem 0;
+  }
+  .dev_list {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 0;
+    // background: var(--bg-color);
+
+    li {
+      width: 10rem;
+      border-radius: 1rem;
+      transition: all 0.3s;
+      cursor: pointer;
+      
+      &:hover{
+        background: var(--bg-color);
+      }
+      &.active {
+        background: var(--bg-color);
+      }
+      button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        padding: 1.5rem 0;
+        cursor: pointer; 
+        gap: 0.5rem;
+
+        img {
+          margin: 0 auto;
+        }
+        span {
+          display: block;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

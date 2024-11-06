@@ -1,25 +1,24 @@
-import Link from 'next/link';
-import React from 'react';
+'use client';
 
-interface Playlists {
-  id: string;
-  name: string;
-}
-const playlists: Playlists[] = [
-  { id: '1', name: '재생목록 1' },
-  { id: '2', name: '재생목록 2' },
-];
+import Image from 'next/image';
+import '@/styles/pages/playlist/playlist.scss';
+import vidListData from '@/data/vidListData';
 
 const Playlists = () => {
   return (
-    <div>
-      <h2>재생목록</h2>
-      <div>
-        {playlists.map((playlist) => (
-          <div key={playlist.id}>
-            <Link href={`/playlists/${playlist.id}`}>{playlist.name}</Link>
-          </div>
-        ))}
+    <div className="playlists_container">
+      <div className="inner">
+        <h2 className="dn">재생목록</h2>
+        <ul className="dev_list">
+          {vidListData.map((tab) => (
+            <li key={tab.id}>
+              <button type="button">
+                <Image src={tab.img} alt={tab.title} width={40} height={40} />
+                <span>{tab.title}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
