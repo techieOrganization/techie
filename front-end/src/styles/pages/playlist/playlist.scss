@@ -66,6 +66,8 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 5rem 1.6rem;
     padding: 5rem 0;
+    margin-bottom: 2rem;
+
     .video_item {
       &:hover {
         img {
@@ -91,6 +93,76 @@
         color: #444;
         font-size: 1.25rem;
       }
+    }
+  }
+}
+.video_player_container {
+  padding: 5rem;
+  .inner {
+    padding: 5rem 0;
+  }
+  .video_content{
+    .video_title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      letter-spacing: -1.2px;
+    }
+  }
+  .video_frame_and_memo {
+    display: flex;
+    // gap: 2rem;
+
+    iframe {
+      width: 100%;
+      height: 60rem;
+    }
+    .memo_container {
+      width: 80%;
+      padding: 0 5rem;
+    }
+    .save_button {
+      background: var(--sub-btn-color);
+      border-radius: 1rem;
+      color: #fff;
+    }
+    button {
+      width: 8rem;
+      padding: 0.5rem;
+      border-radius: 1rem;
+      border: 1px solid #ccc;
+      margin-right: 1rem;
+      font-size: 1.4rem;
+    }
+    .memo_input {
+      width: 100%;
+      resize: none;
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px solid #ccc;
+    }
+    .save_memo_title {
+      font-size: 2rem;
+      font-weight: 500;
+      border: none;
+    }
+    .memo_time {
+      font-size: 1.5rem;
+      color: var(--sub-btn-color);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .memo_save_content {
+      .memo_item {
+        border-bottom: 1px solid #ddd;
+        padding: 1rem 0;
+      }
+    }
+    .memo_bottom_content {
+      padding: 1rem 0;
+    }
+    .memo_content {
+      margin-bottom: 2rem;
     }
   }
 }

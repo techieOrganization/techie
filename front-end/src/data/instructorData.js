@@ -15,7 +15,7 @@ const instructorData = [
     name: '드림코딩',
     description: '초보자를 위한 친절한 강의로 웹 개발 전반을 배울 수 있어요',
     img: '/assets/images/main/logo02.jpg',
-    playlistId: 'PLRmsbBgKJUGDO1R9EHKV9_Q_81np54lCy',
+    playlistId: 'PLv2d7VI9OotTVOL4QmPfvJWPJvkmv6h-2',
   },
   {
     name: '조코딩',

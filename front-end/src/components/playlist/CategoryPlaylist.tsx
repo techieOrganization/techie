@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { fetchVideosByCategory } from '@/libs/api/videoAPI';
 import { Video } from '@/types/video';
@@ -46,11 +47,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
             {videos.length > 0 ? (
               videos.map((video, index) => (
                 <li key={index} className="video_item">
-                  <a
-                    href={`https://www.youtube.com/watch?v=${video.videoId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Link href={`/playlists/${category}/${video.videoId}`}>
                     <Image
                       src={video.thumbnails.medium.url}
                       alt={video.title}
@@ -60,7 +57,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
                     <h3 className="title">{video.title}</h3>
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
-                  </a>
+                  </Link>
                 </li>
               ))
             ) : (
