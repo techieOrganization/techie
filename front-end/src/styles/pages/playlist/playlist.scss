@@ -41,4 +41,33 @@
       }
     }
   }
+  .video_list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5rem 1.6rem;
+    padding: 5rem 0;
+    .video_item {
+      &:hover {
+        img {
+          transform: translateY(-10px);
+        }
+      }
+      img {
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s;
+      }
+      .title {
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+      .channel_title {
+        font-size: 1.3rem;
+      }
+      .date {
+        color: #444;
+        font-size: 1.25rem;
+      }
+    }
+  }
 }

@@ -41,10 +41,10 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
             </li>
           ))}
         </ul>
-        <div className="video_list">
+        <ul className="video_list">
           {videos.length > 0 ? (
             videos.map((video, index) => (
-              <div key={index} className="video_item">
+              <li key={index} className="video_item">
                 <a
                   href={`https://www.youtube.com/watch?v=${video.videoId}`}
                   target="_blank"
@@ -56,16 +56,16 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
                     width={video.thumbnails.medium.width}
                     height={video.thumbnails.medium.height}
                   />
-                  <h3>{video.title}</h3>
-                  <p>{video.channelTitle}</p>
-                  <p>{new Date(video.publishedAt).toLocaleDateString()}</p>
+                  <h3 className="title">{video.title}</h3>
+                  <p className="channel_title">{video.channelTitle}</p>
+                  <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
                 </a>
-              </div>
+              </li>
             ))
           ) : (
             <p>해당 카테고리의 영상을 불러오는 중입니다...</p>
           )}
-        </div>
+        </ul>
       </div>
     </div>
   );
