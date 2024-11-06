@@ -1,4 +1,3 @@
-// src/libs/api/videoAPI.ts
 import axios from 'axios';
 
 const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;

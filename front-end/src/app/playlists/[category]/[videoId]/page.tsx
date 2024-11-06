@@ -1,110 +1,199 @@
-// app/playlists/[category]/[videoId]/page.tsx
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { fetchVideoDetails } from '@/libs/api/videoAPI2';
+import { fetchVideoDetails } from '@/libs/api/videoAPIDetail';
+// import { saveMemo, updateMemo, deleteMemo, getMemo, getAllMemos } from '@/libs/api/memoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
-interface Memo {
-  time: string;
-  content: string;
-  id?: string;
+interface VideoDetails {
+  title: string;
+  channelTitle: string;
 }
 
-declare global {
-  interface Window {
-    YT: typeof YT;
-    onYouTubeIframeAPIReady: () => void;
-  }
+interface Memo {
+  id?: string;
+  time: string;
+  content: string;
 }
+
+const loadYouTubeAPI = (onReady: () => void) => {
+  if (!window.YT) {
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    document.body.appendChild(script);
+
+    window.onYouTubeIframeAPIReady = onReady;
+  } else {
+    onReady();
+  }
+};
 
 const VideoPlayerPage: React.FC = () => {
   const { videoId } = useParams();
-  const [videoDetails, setVideoDetails] = useState<{ title: string; channelTitle: string } | null>(
-    null,
-  );
+  const [videoDetails, setVideoDetails] = useState<VideoDetails | null>(null);
+  const [isYouTubeAPIReady, setIsYouTubeAPIReady] = useState(false);
   const [memoText, setMemoText] = useState('');
   const [memos, setMemos] = useState<Memo[]>([]);
-  const [currentTime, setCurrentTime] = useState('0:00');
+  const [memoTime, setMemoTime] = useState<string | null>(null);
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [isAddingMemo, setIsAddingMemo] = useState(false);
+
   const playerRef = useRef<YT.Player | null>(null);
+  const isAddingMemoRef = useRef(isAddingMemo);
 
-  // 유튜브 API 로드 및 플레이어 초기화
+  // YouTube API 초기화 및 로드
   useEffect(() => {
-    const loadYouTubeAPI = () => {
-      const script = document.createElement('script');
-      script.src = 'https://www.youtube.com/iframe_api';
-      script.onload = () => {
-        window.onYouTubeIframeAPIReady = initializePlayer;
-      };
-      document.body.appendChild(script);
-    };
+    loadYouTubeAPI(() => setIsYouTubeAPIReady(true));
+  }, []);
 
-    const initializePlayer = () => {
+  // API가 로드된 후 YouTube Player 초기화
+
+  useEffect(() => {
+    isAddingMemoRef.current = isAddingMemo;
+  }, [isAddingMemo]);
+
+  const handlePlayerStateChange = useCallback((event: YT.OnStateChangeEvent) => {
+    if (!isAddingMemoRef.current && event.data === YT.PlayerState.PAUSED && playerRef.current) {
+      setMemoTime(formatTime(Math.floor(playerRef.current.getCurrentTime())));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isYouTubeAPIReady && videoId && !playerRef.current) {
       playerRef.current = new window.YT.Player('youtube-player', {
         videoId: videoId as string,
-        events: {
-          onStateChange: handlePlayerStateChange,
-        },
+        events: { onStateChange: handlePlayerStateChange },
       });
-    };
-
-    loadYouTubeAPI();
-  }, [videoId]);
-
-  // 유튜브 동영상 상태 변경 핸들러
-  const handlePlayerStateChange = (event: YT.OnStateChangeEvent) => {
-    if (event.data === YT.PlayerState.PAUSED && playerRef.current) {
-      const timeInSeconds = Math.floor(playerRef.current.getCurrentTime());
-      setCurrentTime(formatTime(timeInSeconds));
     }
-  };
+  }, [isYouTubeAPIReady, videoId, handlePlayerStateChange]);
 
-  // 시간 형식 변환 함수 (초 -> 분:초)
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    const date = new Date(0);
+    date.setSeconds(seconds);
+    return date.toISOString().substr(14, 5);
   };
 
-  // 메모 저장 핸들러
-  const handleSaveMemo = () => {
-    if (memoText.trim()) {
-      if (editIndex !== null) {
-        // 수정 모드
-        const updatedMemos = [...memos];
-        updatedMemos[editIndex] = { time: currentTime, content: memoText };
-        setMemos(updatedMemos);
-        setEditIndex(null);
-      } else {
-        // 새로운 메모 추가
-        setMemos((prevMemos) => [...prevMemos, { time: currentTime, content: memoText }]);
-      }
-      setMemoText('');
+  const resetMemo = () => {
+    setMemoText('');
+    setIsAddingMemo(false);
+    setMemoTime(null);
+    setEditIndex(null);
+  };
+
+  // 메모 추가 핸들러
+  const handleAddMemo = async () => {
+    if (playerRef.current) {
+      const timeInSeconds = Math.floor(playerRef.current.getCurrentTime());
+      setMemoTime(formatTime(timeInSeconds));
+      setIsAddingMemo(true);
     }
   };
 
-  // 메모 수정 핸들러
+  const handleTimeClick = (time: string) => {
+    if (playerRef.current) {
+      const [minutes, seconds] = time.split(':').map(Number); // "분:초" 형식의 시간을 분리
+      const timeInSeconds = minutes * 60 + seconds; // 분과 초를 합쳐서 초 단위로 변환
+      playerRef.current.seekTo(timeInSeconds, true); // YouTube 플레이어의 해당 시간으로 이동
+    }
+  };
+
+  const handleSaveMemo = async () => {
+    if (!memoText.trim() || !memoTime) return;
+
+    const newMemo = { time: memoTime, content: memoText };
+
+    if (editIndex !== null) {
+      /*
+      if (memoId) {
+        try {
+        //⭐ 메모 수정시, 백엔드 전달 정보
+          await updateMemo(memoId, { noteTime: memoTime, content: memoText }); // memoAPI에서 PUT 사용
+          setMemos((prevMemos) =>
+            prevMemos.map((memo, idx) => (idx === editIndex ? { ...memo, ...newMemo } : memo))
+          );
+        } catch (error) {
+          console.error("Failed to update memo:", error);
+        }
+      }
+      */
+
+      setMemos((prevMemos) =>
+        prevMemos.map((memo, idx) => (idx === editIndex ? { ...memo, ...newMemo } : memo)),
+      );
+    } else {
+      /*
+      try {
+      //⭐ 메모 추가시, 백엔드 전달 정보
+        const response = await saveMemo({
+          title: 무슨 제목이 들어와야할까요?🌻,
+          content: memoText,
+          noteTime: memoTime,
+        }); 
+        const savedMemo = response.data;
+        setMemos((prevMemos) => [...prevMemos, { ...newMemo, id: savedMemo.id }]);
+      } catch (error) {
+        console.error("Failed to add memo:", error);
+      }
+      */
+
+      setMemos((prevMemos) => [...prevMemos, newMemo]);
+    }
+
+    resetMemo();
+  };
+
   const handleEditMemo = (index: number) => {
     setMemoText(memos[index].content);
     setEditIndex(index);
+    setIsAddingMemo(true);
+    setMemoTime(memos[index].time);
   };
 
-  // 메모 삭제 핸들러
-  const handleDeleteMemo = (index: number) => {
+  const handleDeleteMemo = async (index: number) => {
+    // const memoId = memos[index].id;
+
+    /*
+    if (memoId) {
+      try {
+        await deleteMemo(memoId); // memoAPI에서 DELETE 사용
+        setMemos((prevMemos) => prevMemos.filter((_, i) => i !== index));
+      } catch (error) {
+        console.error("Failed to delete memo:", error);
+      }
+    }
+    */
+
     setMemos((prevMemos) => prevMemos.filter((_, i) => i !== index));
   };
 
-  // 시간 클릭 시 해당 시간으로 이동
-  const handleTimeClick = (time: string) => {
-    const [minutes, seconds] = time.split(':').map(Number);
-    const timeInSeconds = minutes * 60 + seconds;
-    playerRef.current?.seekTo(timeInSeconds, true);
-    playerRef.current?.playVideo();
-  };
+  // const handleFetchMemo = async (memoId: string) => {
+  //   /*
+  //   try {
+  //     const response = await getMemo(memoId); // memoAPI에서 GET 사용
+  //     const memo = response.data;
+  //     // 필요 시 memo를 처리하는 추가 로직
+  //   } catch (error) {
+  //     console.error("Failed to fetch memo:", error);
+  //   }
+  //   */
+  // };
 
-  // 비디오 세부 정보 불러오기
+  // const fetchAllMemos = async () => {
+  //   /*
+  //   try {
+  //     const response = await getAllMemos(); // memoAPI에서 전체 메모 GET 사용
+  //     setMemos(response.data);
+  //   } catch (error) {
+  //     console.error("Failed to fetch all memos:", error);
+  //   }
+  //   */
+  // };
+
+  // useEffect(() => {
+  //   fetchAllMemos();
+  // }, []);
+
   useEffect(() => {
     const loadVideoDetails = async () => {
       if (videoId) {
@@ -122,10 +211,11 @@ const VideoPlayerPage: React.FC = () => {
         <div className="video_frame_and_memo">
           <div id="youtube-player"></div>
           <div className="memo_container">
-            <h4 className="save_memo_title">저장된 메모</h4>
+            <h4 className="save_memo_title">내 노트</h4>
+            <p>메모 추가를 누르면 수업 내용을 간단히 메모할 수 있습니다.✏️</p>
             <div className="memo_save_content">
               {memos.map((memo, index) => (
-                <div key={index} className="memo_item">
+                <div key={memo.id || index} className="memo_item">
                   <span className="memo_time" onClick={() => handleTimeClick(memo.time)}>
                     {memo.time}
                   </span>
@@ -140,23 +230,29 @@ const VideoPlayerPage: React.FC = () => {
                   </div>
                 </div>
               ))}
-              <div className="memo_bottom_content">
-                <div className="timer">{currentTime}</div>
-                <textarea
-                  className="memo_input"
-                  placeholder="메모를 입력하세요..."
-                  value={memoText}
-                  onChange={(e) => setMemoText(e.target.value)}
-                ></textarea>
-                <div className="actions">
-                  <button className="cancel_button" onClick={() => setMemoText('')}>
-                    취소
-                  </button>
-                  <button className="save_button" onClick={handleSaveMemo}>
-                    {editIndex !== null ? '메모 수정' : '메모 저장'}
-                  </button>
+              {isAddingMemo ? (
+                <div className="memo_bottom_content">
+                  <div className="timer">{memoTime}</div>
+                  <textarea
+                    className="memo_input"
+                    placeholder="메모를 입력하세요..."
+                    value={memoText}
+                    onChange={(e) => setMemoText(e.target.value)}
+                  ></textarea>
+                  <div className="actions">
+                    <button className="cancel_button" onClick={resetMemo}>
+                      취소
+                    </button>
+                    <button className="save_button" onClick={handleSaveMemo}>
+                      {editIndex !== null ? '메모 수정' : '메모 저장'}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <button className="add_button" onClick={handleAddMemo}>
+                  메모 추가
+                </button>
+              )}
             </div>
           </div>
         </div>

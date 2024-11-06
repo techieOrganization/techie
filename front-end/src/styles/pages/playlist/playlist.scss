@@ -125,6 +125,13 @@
       background: var(--sub-btn-color);
       border-radius: 1rem;
       color: #fff;
+      border: none;
+    }
+    .add_button {
+      background: var(--btn-color);
+      color: #fff;
+      margin-top: 2rem;
+      border: none;
     }
     button {
       width: 8rem;
