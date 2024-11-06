@@ -25,8 +25,7 @@ public class MemoServiceImpl implements MemoService {
 
     @Override
     public ResponseEntity<MemoResponse> createMemo(MemoRequest request, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("user not found"));
+        User user = userRepository.findByEmail(username);
         Memo memo = modelMapper.map(request, Memo.class);
         memo.assignUser(user);
         memoRepository.save(memo);
@@ -35,8 +34,7 @@ public class MemoServiceImpl implements MemoService {
 
     @Override
     public ResponseEntity<List<MemoResponse>> getMemoList(Long id, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("user not found"));
+        User user = userRepository.findByEmail(username);
         Optional<List<Memo>> memoList = memoRepository.findByUser(user);
         List<MemoResponse> memoResponses = new ArrayList<>();
         if(memoList.isPresent()) {
