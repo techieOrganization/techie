@@ -7,7 +7,7 @@
     justify-content: center;
     text-align: center;
     padding: 4rem 0;
-    // background: var(--bg-color);
+    border-bottom: 1px solid #ccc;
 
     li {
       width: 10rem;
@@ -41,6 +41,7 @@
       }
     }
   }
+
   .video_list {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

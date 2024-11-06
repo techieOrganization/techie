@@ -2,7 +2,7 @@ import { Video } from '@/types/video';
 
 export const fetchVideosByCategory = async (category: string): Promise<Video[]> => {
   try {
-    const response = await fetch(`/assets/json/videos.json`);
+    const response = await fetch(`/assets/json/videos.json`); // 실제 백엔드가 들어올 api 자리
     if (!response.ok) {
       throw new Error(`Failed to fetch videos for category: ${category}`);
     }
