@@ -1,11 +1,36 @@
 .section {
   h2 {
-    font-size: 4.5rem;
+    font-size: 3.5rem;
     font-weight: 700;
     text-align: center;
     letter-spacing: -2px;
+  }
+  .sub_title{
+    font-size: 1.7rem;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: gray;
     margin-bottom: 4rem;
   }
+
+  .swiper-pagination-bullet-active {
+    background: var(--btn-color);
+  }
+
+  .swiper-button-prev, .swiper-button-next{
+    color: #000;
+    min-width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.788);
+    border-radius: 50%;
+    border: 1px solid #919191;
+
+    &:after {
+      font-size: 1.6rem;
+    }
+  }
+
   &.sec01 {
     .swiper-slide {
       width: 100%;
@@ -110,7 +135,7 @@
 
   &.sec04 {
     .inner {
-      padding: 10rem 0;
+      padding: 15rem 0;
     }
     .instructor_list {
       display: flex;
@@ -120,10 +145,15 @@
         border: 1px solid #ccc;
         border-radius: 1rem;
         width: 100%;
+        transition: all 0.3s;
+
+        &:hover {
+          transform: scale(1.05);
+        }
 
         a {
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
           align-items: center;
           gap: 2rem;
           padding: 3rem 1.5rem;
@@ -153,7 +183,7 @@
 
   &.sec05 {
     background: var(--bg-color);
-    padding: 10rem 0;
+    padding: 15rem 0;
 
     .personaSwiper {
       width: 100%;
@@ -178,7 +208,15 @@
           border-radius: 50%;
           min-width: 18rem;
           height: 18rem;
-          background: var(--gradient-bg);
+          background: linear-gradient(120deg, #6a83ff77, #6ab5ff75);
+          position: relative;
+
+          .memoji {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
         }
 
         .student_info {

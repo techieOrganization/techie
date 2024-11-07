@@ -138,7 +138,8 @@ export default function Home() {
       </section>
       <section className="section sec03">
         <div className="inner">
-          <h2>최신 등록 강의</h2>
+          <h2>따끈따끈한 최신 강의 모음🏫</h2>
+          <p className="sub_title">최신 트렌드와 함께 배우세요.</p>
           <Swiper
             spaceBetween={20}
             slidesPerView={5}
@@ -171,26 +172,33 @@ export default function Home() {
       </section>
       <section className="section sec04">
         <div className="inner">
-          <h2>강사 리스트</h2>
+          <h2>당신의 멘토가 될 강사님들을 소개합니다🥳</h2>
+          <p className="sub_title">각 분야의 멘토와 함께 실력을 쌓아 보세요!</p>
           <ul className="instructor_list">
-            {/* <li>
+            <li>
               <Link href="#">
                 <Image src="/assets/images/main/logo01.jpg" alt="강사" width={100} height={100} />
-                <span>생활코딩</span>
+                <div className="txt_box">
+                  <span>생활코딩</span>
+                  <p>프로그래밍 기초부터 고급까지, 누구나 쉽게 배울 수 있는 강좌 제공</p>
+                </div>
               </Link>
             </li>
             <li>
               <Link href="#">
                 <Image src="/assets/images/main/logo02.jpg" alt="강사" width={100} height={100} />
-                <span>드림코딩</span>
+                <div className="txt_box">
+                  <span>드림코딩</span>
+                  <p>초보자를 위한 친절한 강의로 웹 개발 전반을 배울 수 있어요</p>
+                </div>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link href="#">
                 <Image src="/assets/images/main/logo03.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>조코딩</span>
-                  <p>주로 파이썬, 데이터 분석, AI 관련 강좌</p>
+                  <p>파이썬과 AI, 데이터 분석 등 최신 기술을 다루는 실용적 강좌</p>
                 </div>
               </Link>
             </li>
@@ -199,7 +207,7 @@ export default function Home() {
                 <Image src="/assets/images/main/logo04.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>코딩 알려주는 누나</span>
-                  <p>초보자들을 위한 다양한 프로그래밍 강좌</p>
+                  <p>비전공자도 쉽게 접근할 수 있는 다양한 프로그래밍 강좌</p>
                 </div>
               </Link>
             </li>
@@ -208,7 +216,7 @@ export default function Home() {
                 <Image src="/assets/images/main/logo05.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>애플코딩</span>
-                  <p>iOS 개발자를 위한 Swift와 다양한 앱 개발 강좌를 제공</p>
+                  <p>iOS 개발자와 앱 개발자를 위한 Swift와 다양한 앱 개발 강의</p>
                 </div>
               </Link>
             </li>
@@ -216,7 +224,8 @@ export default function Home() {
         </div>
       </section>
       <section className="section sec05">
-        <h2>수강생 리스트</h2>
+        <h2>성장한 수강생들의 진솔한 후기✍️</h2>
+        <p className="sub_title">함께 이룬 성장을 자랑스럽게 소개합니다.</p>
         <Swiper
           spaceBetween={20}
           slidesPerView={'auto'}
@@ -232,7 +241,15 @@ export default function Home() {
           {studentData.map((student, index) => (
             <SwiperSlide key={index} className="persona_slide">
               <li>
-                <div className="img_box"></div>
+                <div className="img_box">
+                  <Image
+                    className="memoji"
+                    src={student.img}
+                    alt={`${student.name}'s profile picture`}
+                    width={150}
+                    height={150}
+                  />
+                </div>
                 <div className="student_info">
                   <span className="student_job">{student.title}</span>
                   <strong>{student.title_desc}</strong>

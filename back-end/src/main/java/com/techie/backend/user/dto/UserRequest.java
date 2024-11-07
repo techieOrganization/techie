@@ -13,16 +13,9 @@ public class UserRequest {
     }
 
     @Data
-    public static class Login {
-        private String email;
-        private String password;
-    }
-
-    @Data
     public static class Update {
         private String email;
         private String nickname;
-        private String currentPassword;
         private String newPassword;
     }
 }
