@@ -1,5 +1,6 @@
 package com.techie.backend.memo.domain;
 
+import com.techie.backend.global.BaseTime;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.video.domain.Video;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name  = "memo")
-public class Memo {
+public class Memo extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,14 +25,6 @@ public class Memo {
 
     @Column(nullable = true)
     private String title;
-
-    @Column(nullable = false)
-    @CreatedDate
-    private LocalDateTime createDate;
-
-    @Column(nullable = false)
-    @LastModifiedDate
-    private LocalDateTime modifyDate;
 
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
