@@ -5,7 +5,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
@@ -32,5 +32,4 @@ public class User {
         this.nickname = nickname;
         this.role = role;
     }
-
 }

@@ -10,7 +10,6 @@ import java.util.Collection;
 
 @RequiredArgsConstructor
 public class UserDetailsCustom implements UserDetails {
-
     private final User user;
 
     @Override
@@ -33,6 +32,10 @@ public class UserDetailsCustom implements UserDetails {
     @Override
     public String getPassword() {
         return user.getPassword();
+    }
+
+    public String getNickname() {
+        return user.getNickname();
     }
 
     @Override

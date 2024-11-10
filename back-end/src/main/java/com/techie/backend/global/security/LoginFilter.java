@@ -18,7 +18,6 @@ import java.util.Iterator;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
-
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -55,8 +54,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
+        String nickname = userDetailsCustom.getNickname();
 
-        String token = jwtUtil.createJwt(email, role, 60*60*10L);
+        String token = jwtUtil.createJwt(email, role, nickname,60*60*10L);
 
         response.addHeader("Authorization", "Bearer " + token);
         // HTTP 인증 방식은 RFC 7235 정의에 따라 아래 인증 헤더 형태를 가져야 한다.

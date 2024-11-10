@@ -15,7 +15,6 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
-
     private final JWTUtil jwtUtil;
 
     @Override
@@ -43,10 +42,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String email = jwtUtil.getEmail(token);
         String role = jwtUtil.getRole(token);
+        String nickname = jwtUtil.getNickname(token);
 
         User user = User.builder()
                 .email(email)
                 .password("tempPassword")
+                .nickname(nickname)
                 .role(role)
                 .build();
 

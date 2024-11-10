@@ -14,7 +14,6 @@ public class UserRequest {
 
     @Data
     public static class Update {
-        private String email;
         private String nickname;
         private String newPassword;
     }
