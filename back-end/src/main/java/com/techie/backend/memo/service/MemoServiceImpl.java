@@ -29,7 +29,6 @@ public class MemoServiceImpl implements MemoService {
     public ResponseEntity<MemoResponse> createMemo(MemoRequest request, String username) {
         User user = userRepository.findByEmail(username);
         Memo memo = modelMapper.map(request, Memo.class);
-        log.info("서비스 단 유저 정보: {}", user.toString());
         memo.assignUser(user);
         memoRepository.save(memo);
         return ResponseEntity.ok(modelMapper.map(memo, MemoResponse.class));

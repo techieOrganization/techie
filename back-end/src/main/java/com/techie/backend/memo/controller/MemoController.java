@@ -23,8 +23,6 @@ public class MemoController {
     @PostMapping
     public ResponseEntity<MemoResponse> createMemo(@RequestBody MemoRequest memoRequest,
                                                    @AuthenticationPrincipal UserDetailsCustom userDetails) {
-        log.info("유저 디테일: {}", userDetails.toString());
-        log.info("유저 이메일: {}", userDetails.getUsername());
         return memoService.createMemo(memoRequest, userDetails.getUsername());
     }
 
