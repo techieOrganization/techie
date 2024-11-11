@@ -38,7 +38,7 @@ public class GptServiceImpl implements GptService {
     private static final Logger logger = LoggerFactory.getLogger(GptServiceImpl.class);
     private final ObjectMapper objectMapper;
     private final GptRepository gptRepository;
-    private final UserRepository userRepository;  // UserRepository 주입
+    private final UserRepository userRepository;
 
     @Value("${openai.api.key}")
     private String API_KEY;
