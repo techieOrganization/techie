@@ -15,12 +15,17 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
-
     private final JWTUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
+        String path = request.getRequestURI();
+
+        if ("/login".equals(path)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             System.out.println("token null");
@@ -37,10 +42,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String email = jwtUtil.getEmail(token);
         String role = jwtUtil.getRole(token);
+        String nickname = jwtUtil.getNickname(token);
 
         User user = User.builder()
                 .email(email)
                 .password("tempPassword")
+                .nickname(nickname)
                 .role(role)
                 .build();
 

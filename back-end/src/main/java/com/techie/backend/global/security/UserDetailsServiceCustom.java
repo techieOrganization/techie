@@ -24,6 +24,4 @@ public class UserDetailsServiceCustom implements UserDetailsService {
             return new UserDetailsCustom(userData);
         }
     }
-
-
 }
