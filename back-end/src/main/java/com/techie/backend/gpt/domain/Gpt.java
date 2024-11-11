@@ -21,7 +21,6 @@ public class Gpt {
     @Column(nullable = false)
     private String response;
 
-    @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

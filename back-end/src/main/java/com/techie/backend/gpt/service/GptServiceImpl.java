@@ -76,12 +76,12 @@ public class GptServiceImpl implements GptService {
 
                 JsonNode rootNode = objectMapper.readTree(responseBody);
                 String gptContent = rootNode.path("choices").get(0).path("message").path("content").asText();
-                Optional<User> user = userRepository.findById((userDetails.getId()));
+                User user = userRepository.findByEmail((userDetails.getUsername()));
 
                 Gpt gpt = new Gpt();
                 gpt.updateRequest(request);
                 gpt.updateResponse(gptContent);
-                gpt.assignUser(user.orElse(null));
+                gpt.assignUser(user);
                 gptRepository.save(gpt);
 
                 GptResponse gptResponse = new GptResponse();

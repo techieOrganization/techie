@@ -48,7 +48,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
         UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getPrincipal();
 
-        Long id = userDetailsCustom.getId();
         String email = userDetailsCustom.getUsername();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -57,12 +56,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
         String nickname = userDetailsCustom.getNickname();
 
-        String token = jwtUtil.createJwt(id, email, role, nickname,60*60*10L);
+        String token = jwtUtil.createJwt(email, role, nickname,60*60*10L);
 
         response.addHeader("Authorization", "Bearer " + token);
-        // HTTP 인증 방식은 RFC 7235 정의에 따라 아래 인증 헤더 형태를 가져야 한다.
-        // Authorization: 타입 인증토큰 예시
-        // Authorization: Bearer 인증토큰 string
     }
 
     @Override
