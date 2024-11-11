@@ -4,7 +4,6 @@ import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
@@ -37,5 +36,4 @@ public class Gpt {
     public void assignUser(User user) {
         this.user = user;
     }
-
 }
