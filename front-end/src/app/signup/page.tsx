@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import '@/styles/pages/register/register.scss';
-import { fetchRegisterUser } from '@/libs/api/registerUserApi';
+import { fetchRegisterUser } from '@/app/api/registerUserApi';
 
 const Signup = () => {
   const [nickname, setNickname] = useState('');
@@ -81,7 +81,6 @@ const Signup = () => {
           </button>
         </div>
       </form>
-      ,
     </div>
   );
 };

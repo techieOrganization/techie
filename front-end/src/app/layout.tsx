@@ -4,6 +4,8 @@ import Footer from '@/components/Footer';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'inspector/promises';
 
 export default function RootLayout({
   children,
