@@ -1,15 +1,13 @@
 import axios from 'axios';
 
-interface RegisterUserParams {
-  nickname: string;
+interface LoginUserParams {
   email: string;
   password: string;
 }
 
-export const fetchRegisterUser = async (params: RegisterUserParams) => {
+export const loginUser = async (params: LoginUserParams) => {
   try {
-    const response = await axios.post('http://localhost:8080/api/users/join', {
-      nickname: params.nickname,
+    const response = await axios.post('http://localhost:8080/login', {
       email: params.email,
       password: params.password,
     });
