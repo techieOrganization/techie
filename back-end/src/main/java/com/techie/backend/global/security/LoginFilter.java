@@ -7,12 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -52,20 +54,29 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
-
         String role = auth.getAuthority();
         String nickname = userDetailsCustom.getNickname();
-
-        String token = jwtUtil.createJwt(email, role, nickname,60*60*10L);
+        String token = jwtUtil.createJwt(email, role, nickname, 60 * 60 * 10L);
 
         response.addHeader("Authorization", "Bearer " + token);
-        // HTTP 인증 방식은 RFC 7235 정의에 따라 아래 인증 헤더 형태를 가져야 한다.
-        // Authorization: 타입 인증토큰 예시
-        // Authorization: Bearer 인증토큰 string
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String errorMessage = "이메일 또는 비밀번호가 올바르지 않거나, 필수 입력란이 비어 있습니다.";
+
+        if (failed instanceof AuthenticationServiceException) {
+            errorMessage = failed.getMessage();
+        }
+        try {
+            response.getWriter().write("{\"error\": \"" + errorMessage + "\"}");
+            response.getWriter().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

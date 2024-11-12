@@ -2,15 +2,18 @@
 
 import React from 'react';
 import '@/styles/pages/mypage/mypage.scss';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 const Mypage = () => {
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
   return (
     <div className="mypage_container">
       <div className="inner">
         <h2 className="section_title">마이페이지</h2>
         <div className="user_info_section">
           <p className="email_cont">
-            <strong>이메일</strong> user@example.com
+            <strong>이메일</strong> {userInfo?.email}
           </p>
           <div className="nickname_cont">
             <label>

@@ -1,23 +1,23 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 interface RegisterUserParams {
   nickname: string;
-  password: string;
   email: string;
+  password: string;
 }
 
-export const fetchRegisterUser = async (params: RegisterUserParams): Promise<void> => {
+export const fetchRegisterUser = async (params: RegisterUserParams) => {
   try {
-    const response = await axios.post(process.env.NEXT_PUBLIC_REGISTER_USER!, {
+    const response = await axios.post('http://localhost:8080/api/users/join', {
       nickname: params.nickname,
-      password: params.password,
       email: params.email,
+      password: params.password,
     });
-    return response.data;
-  } catch (error) {
-    console.error('');
+    return response;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error('알 수 없는 오류가 발생했습니다.');
   }
 };

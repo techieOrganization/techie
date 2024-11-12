@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/gpt/**").permitAll()
                         .requestMatchers("/api/videos/**").permitAll()
                         .requestMatchers("/api/users/me").authenticated()
+                        .requestMatchers("/api/gpt/qna").authenticated()
                         .requestMatchers("/api/users/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)

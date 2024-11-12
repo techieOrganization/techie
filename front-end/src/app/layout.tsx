@@ -4,8 +4,9 @@ import Footer from '@/components/Footer';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { SessionProvider } from 'next-auth/react';
-import { Session } from 'inspector/promises';
+import '@/styles/pages/chatbot/chatbot.scss';
+import ChatbotLayout from '@/components/ChatbotLayout';
+import ClientProvider from '@/components/ClientProvider';
 
 export default function RootLayout({
   children,
@@ -14,11 +15,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <ClientProvider>
+        <body>
+          <Header />
+          {children}
+          <Footer />
+        </body>
+      </ClientProvider>
     </html>
   );
 }
