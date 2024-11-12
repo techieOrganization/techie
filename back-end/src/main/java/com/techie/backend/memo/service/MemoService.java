@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MemoService {
     public ResponseEntity<MemoResponse> createMemo(MemoRequest memoRequest, String username);
-    public ResponseEntity<List<MemoResponse>> getMemoList(Long id, String username);
-    public ResponseEntity<MemoResponse> getMemo(Long id);
+    public ResponseEntity<List<MemoResponse>> getMemoList(String username);
+    public ResponseEntity<MemoResponse> getMemo(String username, Long id);
 }
