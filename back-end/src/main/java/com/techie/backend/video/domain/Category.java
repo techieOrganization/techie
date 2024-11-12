@@ -1,6 +1,14 @@
 package com.techie.backend.video.domain;
 
 public enum Category {
-    CLOUD,
-    DATA
+    LANG,
+    GAME,
+    BACK,
+    MOBILE,
+    FRONT,
+    DATA,
+    AI,
+    SEC,
+    CS,
+    CLOUD
 }

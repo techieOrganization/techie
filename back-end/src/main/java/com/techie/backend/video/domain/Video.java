@@ -11,14 +11,10 @@ import lombok.NoArgsConstructor;
 public class Video {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String videoId;
 
     @Column(nullable = false)
     private String title;
-
-    @Column(nullable = false)
-    private String videoId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
