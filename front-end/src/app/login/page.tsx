@@ -2,22 +2,28 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
 import { loginUser } from '@/app/api/loginUserApi';
 import '@/styles/pages/login/login.scss';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '@/redux/reducer';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // 입력값 변경 시 formData 업데이트
-  const onChange = ({ target: { name, value } }) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // 로그인 폼 제출 시 처리 함수
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -35,21 +41,43 @@ const Login = () => {
   const performLogin = async () => {
     const res = await loginUser(formData);
     if (res.status === 200) {
-      const token = res.data.token;
-      localStorage.setItem('token', token);
-      window.dispatchEvent(new Event('loginStatusChanged')); // 로그인 상태 변경 이벤트 발생
-      router.push('/'); // 로그인 성공 시 메인 페이지로 이동
+      const token = res.headers['authorization']?.split(' ')[1];
+      if (token) {
+        // 쿠키에 토큰을 저장
+        Cookies.set('token', token, { expires: 1, path: '/' });
+        window.dispatchEvent(new Event('loginStatusChanged'));
+        router.push('/'); // 로그인 성공 시 메인 페이지로 이동
+        const base64Payload = token.split('.')[1];
+        const base64 = base64Payload.replace(/-/g, '+').replace(/_/g, '/');
+        const decodedJWT = JSON.parse(
+          decodeURIComponent(
+            window
+              .atob(base64)
+              .split('')
+              .map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+              })
+              .join(''),
+          ),
+        );
+        console.log(decodedJWT);
+
+        dispatch(setUserInfo(decodedJWT));
+      } else {
+        console.error('Token is undefined in the response headers');
+      }
     }
   };
 
   // 로그인 오류 처리 함수
-  const handleLoginError = (error) => {
-    if (error?.response?.status === 401) {
+  const handleLoginError = (error: unknown) => {
+    const axiosError = error as AxiosError;
+    if (axiosError.response?.status === 401) {
       setError('이메일 또는 비밀번호가 잘못되었습니다.');
     } else {
       setError('로그인 중 오류가 발생했습니다.');
     }
-    console.error('로그인 오류:', error);
+    console.error('로그인 오류:', axiosError);
   };
 
   return (
