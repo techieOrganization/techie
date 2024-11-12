@@ -1,9 +1,6 @@
 package com.techie.backend.user.service;
 
-import com.techie.backend.global.exception.user.EmptyFieldException;
-import com.techie.backend.global.exception.user.InvalidEmailFormatException;
-import com.techie.backend.global.exception.user.PasswordTooShortException;
-import com.techie.backend.global.exception.user.UserAlreadyExistsException;
+import com.techie.backend.global.exception.user.*;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.dto.UserRequest;
@@ -23,6 +20,7 @@ public class UserServiceImpl implements UserService {
     public Boolean joinProcess(UserRequest.Register request) {
         String email = request.getEmail();
         String password = request.getPassword();
+        String confirmPassword = request.getConfirmPassword();
         String nickname = request.getNickname();
 
         if (email == null || email.isEmpty() || password == null || password.isEmpty() || nickname == null || nickname.isEmpty()) {
@@ -33,6 +31,9 @@ public class UserServiceImpl implements UserService {
         }
         if (password.length() < 8) {
             throw new PasswordTooShortException();
+        }
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordMismatchException();
         }
         Boolean isExist = userRepository.existsByEmail(email);
         if (isExist) {

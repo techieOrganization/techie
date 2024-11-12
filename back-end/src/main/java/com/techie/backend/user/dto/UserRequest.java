@@ -9,6 +9,7 @@ public class UserRequest {
     public static class Register {
         private String email;
         private String password;
+        private String confirmPassword;
         private String nickname;
     }
 
