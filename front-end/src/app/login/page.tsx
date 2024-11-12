@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
 import { loginUser } from '@/app/api/loginUserApi';
 import '@/styles/pages/login/login.scss';
 
@@ -37,10 +38,15 @@ const Login = () => {
   const performLogin = async () => {
     const res = await loginUser(formData);
     if (res.status === 200) {
-      const token = res.data.token;
-      localStorage.setItem('token', token);
-      window.dispatchEvent(new Event('loginStatusChanged')); // 로그인 상태 변경 이벤트 발생
-      router.push('/'); // 로그인 성공 시 메인 페이지로 이동
+      const token = res.headers['authorization']?.split(' ')[1];
+      if (token) {
+        // 쿠키에 토큰을 저장
+        Cookies.set('token', token, { expires: 1, path: '/' });
+        window.dispatchEvent(new Event('loginStatusChanged'));
+        router.push('/'); // 로그인 성공 시 메인 페이지로 이동
+      } else {
+        console.error('Token is undefined in the response headers');
+      }
     }
   };
 

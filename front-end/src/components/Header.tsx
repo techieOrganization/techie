@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,10 +13,10 @@ const Header = () => {
   // 로그인 상태 확인 함수
   const checkLoginStatus = () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       setIsLoggedIn(!!token);
     } catch (error) {
-      console.error('Error accessing localStorage:', error);
+      console.error('Error accessing Cookies:', error);
       setIsLoggedIn(false);
     }
   };
@@ -23,16 +24,14 @@ const Header = () => {
   useEffect(() => {
     checkLoginStatus();
     window.addEventListener('loginStatusChanged', checkLoginStatus);
-    window.addEventListener('storage', checkLoginStatus);
 
     return () => {
       window.removeEventListener('loginStatusChanged', checkLoginStatus);
-      window.removeEventListener('storage', checkLoginStatus);
     };
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    Cookies.remove('token');
     setIsLoggedIn(false);
     window.dispatchEvent(new Event('loginStatusChanged'));
     router.push('/');
