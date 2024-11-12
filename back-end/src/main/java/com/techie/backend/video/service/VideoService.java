@@ -79,6 +79,7 @@ public class VideoService {
                     JsonNode snippetNode = itemNode.get("snippet");
                     VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
                     String duration = itemNode.get("contentDetails").get("duration").asText();
+
                     videoResponse.setDuration(duration);
                     videoResponses.add(videoResponse);
                 }
