@@ -5,10 +5,13 @@ import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
+import { clearUserInfo } from '@/redux/reducer';
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // 로그인 상태 확인 함수
   const checkLoginStatus = () => {
@@ -35,6 +38,7 @@ const Header = () => {
     setIsLoggedIn(false);
     window.dispatchEvent(new Event('loginStatusChanged'));
     router.push('/');
+    dispatch(clearUserInfo());
   };
 
   return (

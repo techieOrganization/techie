@@ -6,12 +6,15 @@ import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { loginUser } from '@/app/api/loginUserApi';
 import '@/styles/pages/login/login.scss';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '@/redux/reducer';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // 입력값 변경 시 formData 업데이트
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +47,22 @@ const Login = () => {
         Cookies.set('token', token, { expires: 1, path: '/' });
         window.dispatchEvent(new Event('loginStatusChanged'));
         router.push('/'); // 로그인 성공 시 메인 페이지로 이동
+        const base64Payload = token.split('.')[1];
+        const base64 = base64Payload.replace(/-/g, '+').replace(/_/g, '/');
+        const decodedJWT = JSON.parse(
+          decodeURIComponent(
+            window
+              .atob(base64)
+              .split('')
+              .map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+              })
+              .join(''),
+          ),
+        );
+        console.log(decodedJWT);
+
+        dispatch(setUserInfo(decodedJWT));
       } else {
         console.error('Token is undefined in the response headers');
       }

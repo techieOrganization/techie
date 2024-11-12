@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import ClientProvider from '@/components/ClientProvider';
 
 export default function RootLayout({
   children,
@@ -12,11 +13,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <ClientProvider>
+        <body>
+          <Header />
+          {children}
+          <Footer />
+        </body>
+      </ClientProvider>
     </html>
   );
 }
