@@ -24,7 +24,7 @@ const studentData = [
     title_desc:
       '백엔드 개발만 하다 보니 프론트엔드가 항상 어려웠는데, 이 강의 덕분에 기초를 확실히 다질 수 있었어요. 😄',
     rating: '⭐⭐⭐⭐⭐',
-    img: '/assets/images/main/memoji02.webp',
+    img: '/assets/images/main/memoji07.webp',
   },
   {
     name: '최수현',
@@ -51,7 +51,7 @@ const studentData = [
     title_desc:
       '프리랜서로 일하면서 항상 기초가 부족하다고 느꼈는데, 이 강의가 딱 제게 필요했던 강의였어요! 🙏',
     rating: '⭐⭐⭐⭐',
-    img: '/assets/images/main/memoji07.webp',
+    img: '/assets/images/main/memoji02.webp',
   },
   {
     name: '정수영',

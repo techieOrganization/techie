@@ -1,28 +1,15 @@
-import Link from 'next/link';
+'use client';
+
 import React from 'react';
 
-interface Playlists {
-  id: string;
-  name: string;
-}
-const playlists: Playlists[] = [
-  { id: '1', name: '재생목록 1' },
-  { id: '2', name: '재생목록 2' },
-];
+import CategoryPlaylist from '@/components/playlist/CategoryPlaylist';
 
-const Playlists = () => {
+const AllPlaylistsPage: React.FC = () => {
   return (
     <div>
-      <h2>재생목록</h2>
-      <div>
-        {playlists.map((playlist) => (
-          <div key={playlist.id}>
-            <Link href={`/playlists/${playlist.id}`}>{playlist.name}</Link>
-          </div>
-        ))}
-      </div>
+      <CategoryPlaylist category="all" />
     </div>
   );
 };
 
-export default Playlists;
+export default AllPlaylistsPage;
