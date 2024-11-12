@@ -3,13 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 import '@/styles/pages/home/home.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
+
 import { fetchPlaylistVideos } from '@/app/api/youtubeAPI';
 import studentData from '@/data/studentData';
 
@@ -69,31 +67,31 @@ export default function Home() {
         <div className="inner">
           <ul className="dev_list">
             <li>
-              <Link href="#">
+              <Link href="/playlists/language">
                 <Image src="/assets/images/main/dev_01.png" alt="언어" width={50} height={50} />
                 <span>언어</span>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/gameDev">
                 <Image src="/assets/images/main/dev_02.png" alt="게임개발" width={50} height={50} />
                 <span>게임개발</span>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/backend">
                 <Image src="/assets/images/main/dev_03.png" alt="백엔드" width={50} height={50} />
                 <span>백엔드</span>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/mobile">
                 <Image src="/assets/images/main/dev_04.png" alt="모바일" width={50} height={50} />
                 <span>모바일</span>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/frontend">
                 <Image
                   src="/assets/images/main/dev_05.png"
                   alt="프론트엔드"
@@ -104,25 +102,25 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/data">
                 <Image src="/assets/images/main/dev_06.png" alt="데이터" width={50} height={50} />
                 <span>데이터</span>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/ai">
                 <Image src="/assets/images/main/dev_07.png" alt="인공지능" width={50} height={50} />
                 <span>인공지능</span>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/security">
                 <Image src="/assets/images/main/dev_08.png" alt="보안" width={50} height={50} />
                 <span>보안</span>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/playlists/cs">
                 <Image src="/assets/images/main/dev_09.png" alt="CS" width={50} height={50} />
                 <span>CS</span>
               </Link>
@@ -176,7 +174,7 @@ export default function Home() {
           <p className="sub_title">각 분야의 멘토와 함께 실력을 쌓아 보세요!</p>
           <ul className="instructor_list">
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/생활코딩">
                 <Image src="/assets/images/main/logo01.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>생활코딩</span>
@@ -185,7 +183,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/드림코딩">
                 <Image src="/assets/images/main/logo02.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>드림코딩</span>
@@ -194,7 +192,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/조코딩">
                 <Image src="/assets/images/main/logo03.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>조코딩</span>
@@ -203,7 +201,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/코딩 알려주는 누나">
                 <Image src="/assets/images/main/logo04.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>코딩 알려주는 누나</span>
@@ -212,7 +210,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link href="/teacher-lists/애플코딩">
                 <Image src="/assets/images/main/logo05.jpg" alt="강사" width={100} height={100} />
                 <div className="txt_box">
                   <span>애플코딩</span>
