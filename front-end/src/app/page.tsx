@@ -7,7 +7,7 @@ import '@/styles/pages/home/home.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
-import { fetchPlaylistVideos } from '@/libs/api/youtubeAPI';
+import { fetchPlaylistVideos } from '@/app/api/youtubeAPI';
 import studentData from '@/data/studentData';
 
 export default function Home() {

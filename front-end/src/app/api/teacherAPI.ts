@@ -44,6 +44,8 @@ export const fetchPlaylistVideos = async (playlistId: string): Promise<Video[]> 
         duration: item.contentDetails.duration,
         videoId: item.contentDetails.videoId,
         thumbnails: item.snippet.thumbnails,
+        snippet: item.snippet,
+        category: 'General',
       }),
     );
   } catch (error) {

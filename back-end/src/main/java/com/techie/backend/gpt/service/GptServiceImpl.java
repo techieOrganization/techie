@@ -2,10 +2,13 @@ package com.techie.backend.gpt.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.gpt.domain.Gpt;
 import com.techie.backend.gpt.dto.GptRequest;
 import com.techie.backend.gpt.dto.GptResponse;
 import com.techie.backend.gpt.repository.GptRepository;
+import com.techie.backend.user.domain.User;
+import com.techie.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -26,15 +29,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class GptServiceImpl implements GptService {
 
     private static final Logger logger = LoggerFactory.getLogger(GptServiceImpl.class);
-
     private final ObjectMapper objectMapper;
     private final GptRepository gptRepository;
+    private final UserRepository userRepository;
 
     @Value("${openai.api.key}")
     private String API_KEY;
@@ -42,7 +46,7 @@ public class GptServiceImpl implements GptService {
     private String API_URL;
 
     @Override
-    public ResponseEntity<GptResponse> questionAndAnswer(GptRequest gptRequest) {
+    public ResponseEntity<GptResponse> questionAndAnswer(GptRequest gptRequest, UserDetailsCustom userDetails) {
         String request = gptRequest.getRequest();
 
         if (request == null || request.isEmpty()) {
@@ -72,10 +76,12 @@ public class GptServiceImpl implements GptService {
 
                 JsonNode rootNode = objectMapper.readTree(responseBody);
                 String gptContent = rootNode.path("choices").get(0).path("message").path("content").asText();
+                User user = userRepository.findByEmail((userDetails.getUsername()));
 
                 Gpt gpt = new Gpt();
                 gpt.updateRequest(request);
                 gpt.updateResponse(gptContent);
+                gpt.assignUser(user);
                 gptRepository.save(gpt);
 
                 GptResponse gptResponse = new GptResponse();

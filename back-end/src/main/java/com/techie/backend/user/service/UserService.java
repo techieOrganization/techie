@@ -1,16 +1,16 @@
 package com.techie.backend.user.service;
 
+import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.user.dto.UserRequest;
 import com.techie.backend.user.dto.UserResponse;
-import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserService {
+    
+    Boolean joinProcess(UserRequest.Register request);
 
-    UserResponse.Information register(UserRequest.Register userRequest);
+    UserResponse.Information getUser(UserDetailsCustom userDetails);
 
-    UserResponse.Information getLoggedInUser(UserDetails userDetails);
+    Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request);
 
-    Boolean updateUser(UserDetails userDetails, UserRequest.Update userRequest);
-
-    Boolean deleteUser(UserDetails userDetails);
+    Boolean deleteUser(String email);
 }
