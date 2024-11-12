@@ -106,6 +106,9 @@ const Login = () => {
             {isLoading ? '로그인 중...' : '로그인'}
           </button>
         </div>
+        <div className="button-wrapper">
+          <button type="submit">로그인</button>
+        </div>
       </form>
     </div>
   );
