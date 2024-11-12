@@ -1,8 +1,6 @@
 package com.techie.backend.global.exception;
 
-import com.techie.backend.global.exception.user.InvalidEmailFormatException;
-import com.techie.backend.global.exception.user.UserAlreadyExistsException;
-import com.techie.backend.global.exception.user.UserNotFoundException;
+import com.techie.backend.global.exception.user.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +23,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidEmailFormatException.class)
     public ResponseEntity<String> handleInvalidEmailFormatException(InvalidEmailFormatException ex) {
+        return new ResponseEntity<>(ex.getExceptionType().getMessage(), ex.getExceptionType().getStatus());
+    }
+
+    @ExceptionHandler(EmptyFieldException.class)
+    public ResponseEntity<String> handleEmptyFieldException(EmptyFieldException ex) {
+        return new ResponseEntity<>(ex.getExceptionType().getMessage(), ex.getExceptionType().getStatus());
+    }
+
+    @ExceptionHandler(PasswordTooShortException.class)
+    public ResponseEntity<String> handlePasswordTooShortException(PasswordTooShortException ex) {
         return new ResponseEntity<>(ex.getExceptionType().getMessage(), ex.getExceptionType().getStatus());
     }
 }
