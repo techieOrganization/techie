@@ -1,4 +1,5 @@
 import { createStore, combineReducers } from 'redux';
+
 import { authReducer } from './reducer';
 import { AuthState } from './types';
 

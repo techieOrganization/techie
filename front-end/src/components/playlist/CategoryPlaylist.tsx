@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { fetchVideosByCategory } from '@/libs/api/videoAPI';
+
 import { Video } from '@/types/video';
 import vidListData from '@/data/vidListData';
+
+import { fetchVideosByCategory } from '@/libs/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
 interface CategoryPlaylistProps {

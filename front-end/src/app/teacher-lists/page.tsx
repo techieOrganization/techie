@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+
 import TeacherPlaylist from '@/components/playlist/TeacherPlaylist';
 
 const AllTeachersPage: React.FC = () => {

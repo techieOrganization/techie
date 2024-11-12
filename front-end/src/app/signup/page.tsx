@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+
 import { fetchRegisterUser } from '@/app/api/registerUserApi';
 import '@/styles/pages/register/register.scss';
 

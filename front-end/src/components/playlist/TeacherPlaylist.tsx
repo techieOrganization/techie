@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { fetchPlaylistVideos, fetchAllPlaylistsVideos, Video } from '@/libs/api/teacherAPI';
+
 import instructorData from '@/data/instructorData';
+
+import { fetchPlaylistVideos, fetchAllPlaylistsVideos, Video } from '@/libs/api/teacherAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
 interface TeacherPlaylistProps {

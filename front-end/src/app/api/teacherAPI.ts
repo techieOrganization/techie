@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import instructorData from '@/data/instructorData';
 import { Video } from '@/types/video';
 

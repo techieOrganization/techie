@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
+
 import instructorData from '@/data/instructorData';
 import TeacherPlaylist from '@/components/playlist/TeacherPlaylist';
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+
 import CategoryPlaylist from '@/components/playlist/CategoryPlaylist';
 
 const AllPlaylistsPage: React.FC = () => {

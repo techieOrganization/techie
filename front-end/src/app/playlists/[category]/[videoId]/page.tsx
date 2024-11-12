@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
+
 import { fetchVideoDetails } from '@/libs/api/videoAPIDetail';
 // import { saveMemo, updateMemo, deleteMemo, getMemo, getAllMemos } from '@/libs/api/memoAPI';
 import '@/styles/pages/playlist/playlist.scss';
