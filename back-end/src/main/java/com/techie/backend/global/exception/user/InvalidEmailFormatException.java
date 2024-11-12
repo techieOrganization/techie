@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class InvalidEmailFormatException extends RuntimeException {
-
     private final ExceptionType exceptionType;
 
     public InvalidEmailFormatException() {
