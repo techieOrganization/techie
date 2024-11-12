@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 import { fetchRegisterUser } from '@/app/api/registerUserApi';
 import '@/styles/pages/register/register.scss';
 
@@ -17,12 +17,13 @@ const Signup = () => {
   const [error, setError] = useState('');
 
   // 입력값 변경 시 formData 업데이트
-  const handleChange = ({ target: { name, value } }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   // 회원가입 폼 제출 시 처리 함수
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
@@ -35,36 +36,28 @@ const Signup = () => {
 
     try {
       await registerUser({ nickname, email, password });
-      await loginUserAfterSignup(email, password);
+      router.push('/login'); // 회원가입 성공 시 로그인 페이지로 이동
     } catch (error) {
       handleSignupError(error);
     }
   };
 
   // 회원가입 요청 전송 함수
-  const registerUser = async (userData) => {
+  const registerUser = async (userData: { nickname: string; email: string; password: string }) => {
     const response = await fetchRegisterUser(userData);
     if (response.status === 200 || response.status === 201) {
       alert('회원가입 완료');
     }
   };
 
-  // 회원가입 후 로그인 상태 전환 함수
-  const loginUserAfterSignup = async (email, password) => {
-    const loginResponse = await axios.post('http://localhost:8080/login', { email, password });
-
-    if (loginResponse.status === 200) {
-      const token = loginResponse.data.token;
-      localStorage.setItem('token', token);
-
-      router.push('/login'); // 로그인 페이지로 이동
-    }
-  };
-
   // 회원가입 오류 처리 함수
-  const handleSignupError = (error) => {
-    const errorMessage = error.response?.data || '회원가입 중 오류가 발생했습니다.';
-    setError(errorMessage);
+  const handleSignupError = (error: unknown) => {
+    if (error instanceof AxiosError && error.response) {
+      const errorMessage = error.response.data || '회원가입 중 오류가 발생했습니다.';
+      setError(errorMessage);
+    } else {
+      setError('회원가입 중 오류가 발생했습니다.');
+    }
     console.error('회원가입 오류:', error);
   };
 

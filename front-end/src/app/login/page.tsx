@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 import { loginUser } from '@/app/api/loginUserApi';
 import '@/styles/pages/login/login.scss';
 
@@ -12,12 +13,13 @@ const Login = () => {
   const router = useRouter();
 
   // 입력값 변경 시 formData 업데이트
-  const onChange = ({ target: { name, value } }) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // 로그인 폼 제출 시 처리 함수
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -43,13 +45,14 @@ const Login = () => {
   };
 
   // 로그인 오류 처리 함수
-  const handleLoginError = (error) => {
-    if (error?.response?.status === 401) {
+  const handleLoginError = (error: unknown) => {
+    const axiosError = error as AxiosError;
+    if (axiosError.response?.status === 401) {
       setError('이메일 또는 비밀번호가 잘못되었습니다.');
     } else {
       setError('로그인 중 오류가 발생했습니다.');
     }
-    console.error('로그인 오류:', error);
+    console.error('로그인 오류:', axiosError);
   };
 
   return (
