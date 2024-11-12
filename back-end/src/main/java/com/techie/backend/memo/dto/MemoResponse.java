@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class MemoResponse {
+    private String title;
     private String content;
     private String noteTime;
-    private Long videoId;
+    private String videoId;
 }

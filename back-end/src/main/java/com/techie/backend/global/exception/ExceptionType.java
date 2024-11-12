@@ -12,7 +12,8 @@ public enum ExceptionType {
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "이메일 형식이 유효하지 않습니다."),
     EMPTY_FIELD(HttpStatus.BAD_REQUEST, "모든 필드를 입력해야 합니다."),
     PASSWORD_TOO_SHORT(HttpStatus.BAD_REQUEST, "비밀번호는 최소 8자리 이상이어야 합니다."),
-    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 확인 값이 일치하지 않습니다.");
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 확인 값이 일치하지 않습니다."),
+    EMPTY_CONTENT(HttpStatus.BAD_REQUEST, "내용이 비어있습니다.");
 
     private final HttpStatus status;
     private final String message;

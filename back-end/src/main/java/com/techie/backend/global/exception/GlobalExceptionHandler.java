@@ -1,5 +1,6 @@
 package com.techie.backend.global.exception;
 
+import com.techie.backend.global.exception.memo.EmptyContentException;
 import com.techie.backend.global.exception.user.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<Map<String, String>> handlePasswordMismatchException(PasswordMismatchException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, ex.getExceptionType().getStatus());
+    }
+
+    @ExceptionHandler(EmptyContentException.class)
+    public ResponseEntity<Map<String, String>> handleEmptyContentException(EmptyContentException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, ex.getExceptionType().getStatus());
