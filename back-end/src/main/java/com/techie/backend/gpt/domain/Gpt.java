@@ -4,7 +4,6 @@ import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
@@ -22,8 +21,8 @@ public class Gpt {
     @Column(nullable = false)
     private String response;
 
-    @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public void updateRequest(String request) {
@@ -37,5 +36,4 @@ public class Gpt {
     public void assignUser(User user) {
         this.user = user;
     }
-
 }

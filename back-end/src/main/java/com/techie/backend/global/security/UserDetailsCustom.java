@@ -24,6 +24,8 @@ public class UserDetailsCustom implements UserDetails {
         return collection;
     }
 
+    public Long getId() { return user.getId(); }
+
     @Override
     public String getUsername() {
         return user.getEmail();
