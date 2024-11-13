@@ -1,10 +1,9 @@
 .mypage_container {
   padding: 10rem 0;
 
-  
   .user_info_section {
     max-width: 50rem;
-    margin: 0 auto; 
+    margin: 0 auto;
   }
 
   strong {
@@ -41,7 +40,7 @@
 
   .password_cont {
     margin-bottom: 2rem;
-    
+
     input {
       margin-bottom: 1rem;
     }
@@ -66,5 +65,4 @@
     cursor: pointer;
     text-decoration: underline;
   }
-
 }
