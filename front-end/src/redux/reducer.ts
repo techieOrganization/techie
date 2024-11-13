@@ -1,5 +1,6 @@
-import { UserInfo } from '@/types/userInfo';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { UserInfo } from '@/types/userInfo';
 
 interface UserState {
   userInfo: UserInfo | null;

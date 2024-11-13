@@ -3,6 +3,7 @@
 import React from 'react';
 import '@/styles/pages/mypage/mypage.scss';
 import { useSelector } from 'react-redux';
+
 import { RootState } from '@/redux/store';
 
 const Mypage = () => {
