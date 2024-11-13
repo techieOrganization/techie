@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
+
 import { loginUser } from '@/app/api/loginUserApi';
 import '@/styles/pages/login/login.scss';
-import { useDispatch } from 'react-redux';
 import { setUserInfo } from '@/redux/reducer';
 
 const Login = () => {
@@ -39,34 +40,46 @@ const Login = () => {
 
   // 로그인 요청 전송 함수
   const performLogin = async () => {
-    const res = await loginUser(formData);
-    if (res.status === 200) {
-      const token = res.headers['authorization']?.split(' ')[1];
-      if (token) {
-        // 쿠키에 토큰을 저장
-        Cookies.set('token', token, { expires: 1, path: '/' });
-        window.dispatchEvent(new Event('loginStatusChanged'));
-        router.push('/'); // 로그인 성공 시 메인 페이지로 이동
-        const base64Payload = token.split('.')[1];
-        const base64 = base64Payload.replace(/-/g, '+').replace(/_/g, '/');
-        const decodedJWT = JSON.parse(
-          decodeURIComponent(
-            window
-              .atob(base64)
-              .split('')
-              .map(function (c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-              })
-              .join(''),
-          ),
-        );
-        console.log(decodedJWT);
+    try {
+      const res = await loginUser(formData);
+      if (res.status === 200) {
+        const token = res.headers['authorization']?.split(' ')[1];
+        if (token) {
+          // 쿠키에 토큰을 저장
+          Cookies.set('token', token, { expires: 1, path: '/' });
+          window.dispatchEvent(new Event('loginStatusChanged'));
+          router.push('/'); // 로그인 성공 시 메인 페이지로 이동
 
-        dispatch(setUserInfo(decodedJWT));
+          // JWT 디코딩
+          const decodedJWT = decodeJWT(token);
+          dispatch(setUserInfo(decodedJWT));
+        } else {
+          console.error('Token is undefined in the response headers');
+        }
       } else {
-        console.error('Token is undefined in the response headers');
+        console.error('Failed to log in, unexpected response status');
       }
+    } catch (error) {
+      console.error('Error during login request:', error);
+      setError('로그인 중 오류가 발생했습니다.');
     }
+  };
+
+  // JWT 디코딩 함수
+  const decodeJWT = (token: string) => {
+    const base64Payload = token.split('.')[1];
+    const base64 = base64Payload.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(
+      decodeURIComponent(
+        window
+          .atob(base64)
+          .split('')
+          .map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join(''),
+      ),
+    );
   };
 
   // 로그인 오류 처리 함수
@@ -105,9 +118,6 @@ const Login = () => {
           <button type="submit" disabled={isLoading}>
             {isLoading ? '로그인 중...' : '로그인'}
           </button>
-        </div>
-        <div className="button-wrapper">
-          <button type="submit">로그인</button>
         </div>
       </form>
     </div>

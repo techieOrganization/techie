@@ -18,6 +18,7 @@ export default function RootLayout({
       <ClientProvider>
         <body>
           <Header />
+          <ChatbotLayout />
           {children}
           <Footer />
         </body>
