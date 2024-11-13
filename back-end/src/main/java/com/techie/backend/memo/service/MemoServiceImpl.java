@@ -15,16 +15,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -94,6 +90,7 @@ public class MemoServiceImpl implements MemoService {
         return ResponseEntity.ok(memoResponse);
     }
 
+    // -- 메모 수정 --
     @Override
     public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoUpdateRequest updateRequest) throws AccessDeniedException {
         Memo memo = memoRepository.findById(id)
@@ -110,6 +107,21 @@ public class MemoServiceImpl implements MemoService {
 
         MemoResponse memoResponse = modelMapper.map(memo, MemoResponse.class);
         return ResponseEntity.ok(memoResponse);
+    }
+
+    // -- 메모 삭제 --
+    @Override
+    public ResponseEntity<String> deleteMemo(String username, Long id) throws AccessDeniedException {
+        Memo memo = memoRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("메모를 찾을 수 없습니다."));
+
+        // 현재 사용자와 메모 소유자가 일치하는 지 확인
+        if(!memo.getUser().equals(userRepository.findByEmail(username))) {
+            throw new AccessDeniedException("해당 메모에 접근할 권한이 없습니다.");
+        }
+
+        memoRepository.deleteById(memo.getId());
+        return ResponseEntity.ok("메모가 정상적으로 삭제되었습니다.");
     }
 
 

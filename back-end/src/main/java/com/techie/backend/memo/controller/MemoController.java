@@ -5,10 +5,8 @@ import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.dto.MemoUpdateRequest;
 import com.techie.backend.memo.service.MemoService;
-import com.techie.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -46,6 +44,12 @@ public class MemoController {
                                                    @RequestBody MemoUpdateRequest updateRequest,
                                                    @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
         return memoService.updateMemo(userDetails.getUsername(), id, updateRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMemo(@PathVariable Long id,
+                                                 @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
+        return memoService.deleteMemo(userDetails.getUsername(), id);
     }
 
 }

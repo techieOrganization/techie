@@ -13,4 +13,5 @@ public interface MemoService {
     public ResponseEntity<List<MemoResponse>> getMemoList(String username);
     public ResponseEntity<MemoResponse> getMemo(String username, Long id) throws AccessDeniedException;
     public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoUpdateRequest updateRequest) throws AccessDeniedException;
+    public ResponseEntity<String> deleteMemo(String username, Long id) throws AccessDeniedException;
 }
