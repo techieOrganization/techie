@@ -6,6 +6,7 @@ import { FiSearch } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
+
 import { clearUserInfo } from '@/redux/reducer';
 
 const Header = () => {

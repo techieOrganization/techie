@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import '@/styles/pages/mypage/mypage.scss';
 import { useSelector } from 'react-redux';
+
 import { useRouter } from 'next/navigation';
 
-import { RootState } from '@/redux/store';
 import { updateNickname, updatePassword, deleteUser } from '@/app/api/userApi';
+import { RootState } from '@/redux/store';
 
 const Mypage = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
