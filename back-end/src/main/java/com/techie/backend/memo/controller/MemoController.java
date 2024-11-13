@@ -6,10 +6,14 @@ import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,8 +30,13 @@ public class MemoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MemoResponse> getMemo(@PathVariable Long id,
-                                                @AuthenticationPrincipal UserDetailsCustom userDetails) {
+                                                @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
         return memoService.getMemo(userDetails.getUsername(), id);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<MemoResponse>> getAllMemos(@AuthenticationPrincipal UserDetailsCustom userDetails) {
+        return memoService.getMemoList(userDetails.getUsername());
     }
 
 }

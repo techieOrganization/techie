@@ -36,4 +36,8 @@ public class Memo extends BaseTime {
     public void assignUser(User user) {
         this.user = user;
     }
+
+    public void assignVideo(Video video) {
+        this.video = video;
+    }
 }
