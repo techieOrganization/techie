@@ -1,8 +1,6 @@
-# techie/.husky/pre-commit
-
 if git diff --cached --name-only | grep -q '^front-end/'; then
   cd "$(git rev-parse --show-toplevel)/front-end"
-  npx lint-staged
+  yarn lint-staged
 else
   echo "No changes in front-end folder, skipping lint-staged."
 fi
