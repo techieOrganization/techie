@@ -1,7 +1,7 @@
 export interface UserInfo {
-  email: string;
-  exp: number;
-  iat: number;
+  email?: string;
   nickname: string;
-  role: string;
+  role?: string;
+  exp?: number;
+  iat?: number;
 }
