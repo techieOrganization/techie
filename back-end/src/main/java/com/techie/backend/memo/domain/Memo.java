@@ -40,4 +40,12 @@ public class Memo extends BaseTime {
     public void assignVideo(Video video) {
         this.video = video;
     }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }

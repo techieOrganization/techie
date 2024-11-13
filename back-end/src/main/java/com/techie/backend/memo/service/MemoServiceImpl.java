@@ -4,6 +4,7 @@ import com.techie.backend.global.exception.memo.EmptyContentException;
 import com.techie.backend.memo.domain.Memo;
 import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
+import com.techie.backend.memo.dto.MemoUpdateRequest;
 import com.techie.backend.memo.repository.MemoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.repository.UserRepository;
@@ -72,11 +73,7 @@ public class MemoServiceImpl implements MemoService {
         }
 
         List<MemoResponse> memoResponses = memoList.stream()
-                                                .map(memo -> {
-                                                    MemoResponse memoResponse = modelMapper.map(memo, MemoResponse.class);
-                                                    memoResponse.setId(memo.getId());
-                                                    return memoResponse;
-                                                })
+                                                .map(memo -> modelMapper.map(memo, MemoResponse.class))
                                                 .toList();
 
         return ResponseEntity.ok(memoResponses);
@@ -94,8 +91,26 @@ public class MemoServiceImpl implements MemoService {
         }
 
         MemoResponse memoResponse = modelMapper.map(memo, MemoResponse.class);
-        memoResponse.setId(memo.getId());
         return ResponseEntity.ok(memoResponse);
     }
+
+    @Override
+    public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoUpdateRequest updateRequest) throws AccessDeniedException {
+        Memo memo = memoRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("메모를 찾을 수 없습니다."));
+
+        // 현재 사용자와 메모 소유자가 일치하는 지 확인
+        if(!memo.getUser().equals(userRepository.findByEmail(username))) {
+            throw new AccessDeniedException("해당 메모에 접근할 권한이 없습니다.");
+        }
+
+        memo.changeTitle(updateRequest.getTitle());
+        memo.changeContent(updateRequest.getContent());
+        memoRepository.save(memo);
+
+        MemoResponse memoResponse = modelMapper.map(memo, MemoResponse.class);
+        return ResponseEntity.ok(memoResponse);
+    }
+
 
 }

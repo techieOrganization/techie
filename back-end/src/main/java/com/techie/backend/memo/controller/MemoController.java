@@ -3,7 +3,9 @@ package com.techie.backend.memo.controller;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
+import com.techie.backend.memo.dto.MemoUpdateRequest;
 import com.techie.backend.memo.service.MemoService;
+import com.techie.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.A;
@@ -37,6 +39,13 @@ public class MemoController {
     @GetMapping("/list")
     public ResponseEntity<List<MemoResponse>> getAllMemos(@AuthenticationPrincipal UserDetailsCustom userDetails) {
         return memoService.getMemoList(userDetails.getUsername());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MemoResponse> updateMemo(@PathVariable Long id,
+                                                   @RequestBody MemoUpdateRequest updateRequest,
+                                                   @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
+        return memoService.updateMemo(userDetails.getUsername(), id, updateRequest);
     }
 
 }
