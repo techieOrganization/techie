@@ -9,21 +9,9 @@
   ],
   "plugins": ["prettier", "react-hooks", "@typescript-eslint", "import"],
   "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true
-      }
-    ],
+    "prettier/prettier": "error",
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "import/order": [
-      "error",
-      {
-        "groups": [["builtin", "external"], ["internal"], ["parent", "sibling", "index"]],
-        "newlines-between": "always"
-      }
-    ]
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }
