@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import '@/styles/pages/mypage/mypage.scss';
 import { useSelector } from 'react-redux';
-
 import { useRouter } from 'next/navigation';
 
 import { updateNickname, updatePassword, deleteUser } from '@/app/api/userApi';
