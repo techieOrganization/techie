@@ -1,11 +1,11 @@
 'use client';
 import { useState } from 'react';
 import '@/styles/pages/chatbot/chatbot.scss';
+import Link from 'next/link';
 
-const Chatbot = () => {
+const LogoutChatBot = () => {
   const [position, setPosition] = useState({ x: 1450, y: 650 });
   const [isOpen, setIsOpen] = useState(false);
-  const [textarea, setTextarea] = useState('');
   const MOVE_THRESHOLD = 10;
 
   const toggleTextArea = () => {
@@ -42,10 +42,6 @@ const Chatbot = () => {
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextarea(e.target.value);
-  };
-
   return (
     <div
       className="chatbot"
@@ -54,22 +50,19 @@ const Chatbot = () => {
     >
       <div className="icon">💬</div>
       <div
-        className={`chatbot-content ${isOpen ? 'isOpen' : ''}`}
-        style={{ left: position.x - 620, top: position.y - 200, position: 'fixed' }}
+        className={`chatbot-content_logout ${isOpen ? 'isOpen' : ''}`}
+        style={{ left: position.x - 380, top: position.y - 50, position: 'fixed' }}
       >
-        <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
-          챗봇응답
+        <div onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
+          GPT 기능은 &nbsp;
+          <Link href="/login" className="logout-link">
+            로그인
+          </Link>{' '}
+          &nbsp; 후 이용하실 수 있습니다.
         </div>
-        <textarea
-          value={textarea}
-          onChange={handleTextArea}
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-        ></textarea>
-        <button onMouseDown={(e) => e.stopPropagation()}>➡️</button>
       </div>
     </div>
   );
 };
 
-export default Chatbot;
+export default LogoutChatBot;

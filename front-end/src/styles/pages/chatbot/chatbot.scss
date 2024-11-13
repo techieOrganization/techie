@@ -15,7 +15,7 @@
   font-size: 1.5rem;
 }
 
-.chatbot-content {
+.chatbot-content_login {
   width: 40vw;
   display: flex;
   flex-direction: row;
@@ -58,5 +58,40 @@
     background-color: var(--btn-color);
     border-radius: 50%;
     color: white;
+  }
+}
+
+/// 로그아웃
+///
+///
+.chatbot-content_logout {
+  width: 25vw;
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  opacity: 0;
+  transform: scale(0) translateY(-10px);
+  transform-origin: bottom right;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  div {
+    background-color: var(--btn-color);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 700;
+    .logout-link {
+      color: rgb(255, 235, 59);
+    }
+  }
+
+  &.isOpen {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }
