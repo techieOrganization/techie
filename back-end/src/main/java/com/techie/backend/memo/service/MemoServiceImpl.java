@@ -90,6 +90,27 @@ public class MemoServiceImpl implements MemoService {
         return ResponseEntity.ok(memoResponse);
     }
 
+    // -- 영상 별 메모 조회
+    @Override
+    public ResponseEntity<List<MemoResponse>> getAllMemosByVideoId(String username, String videoId) {
+        User user = userRepository.findByEmail(username);
+        Video video = videoRepository.findByVideoId(videoId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 영상이 없습니다."));
+
+        List<Memo> memoList = memoRepository.findByUserAndVideo(user, video);
+
+        if (memoList.isEmpty()) {
+            throw new EntityNotFoundException("해당 영상에 작성한 메모가 없습니다.");
+        }
+
+        List<MemoResponse> memoResponses = memoList.stream()
+                                                .map(memo -> modelMapper.map(memo, MemoResponse.class))
+                                                .toList();
+
+        return ResponseEntity.ok(memoResponses);
+    }
+
+
     // -- 메모 수정 --
     @Override
     public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoUpdateRequest updateRequest) throws AccessDeniedException {

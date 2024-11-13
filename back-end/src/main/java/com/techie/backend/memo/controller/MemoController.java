@@ -39,6 +39,12 @@ public class MemoController {
         return memoService.getMemoList(userDetails.getUsername());
     }
 
+    @GetMapping("/byVideo")
+    public ResponseEntity<List<MemoResponse>> getAllMemosByVideo(@RequestParam String vId,
+                                                                 @AuthenticationPrincipal UserDetailsCustom userDetails) {
+        return memoService.getAllMemosByVideoId(userDetails.getUsername(), vId);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<MemoResponse> updateMemo(@PathVariable Long id,
                                                    @RequestBody MemoUpdateRequest updateRequest,
@@ -48,7 +54,7 @@ public class MemoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMemo(@PathVariable Long id,
-                                                 @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
+                                             @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
         return memoService.deleteMemo(userDetails.getUsername(), id);
     }
 
