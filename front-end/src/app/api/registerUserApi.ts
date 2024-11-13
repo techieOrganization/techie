@@ -4,6 +4,7 @@ interface RegisterUserParams {
   nickname: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 export const fetchRegisterUser = async (params: RegisterUserParams) => {
@@ -12,6 +13,7 @@ export const fetchRegisterUser = async (params: RegisterUserParams) => {
       nickname: params.nickname,
       email: params.email,
       password: params.password,
+      confirmPassword: params.confirmPassword,
     });
     return response;
   } catch (error: unknown) {
