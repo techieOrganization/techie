@@ -67,16 +67,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleEntityNotFoundException(EntityNotFoundException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
+        errorResponse.put("status", HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
+        errorResponse.put("status", HttpStatus.FORBIDDEN.value());
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
