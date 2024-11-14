@@ -6,19 +6,16 @@ import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.dto.MemoUpdateRequest;
 import com.techie.backend.memo.service.MemoService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/memo")
-@Slf4j
 public class MemoController {
     private final MemoService memoService;
 
