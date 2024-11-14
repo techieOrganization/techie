@@ -2,37 +2,37 @@
 
 import React, { useState } from 'react';
 import '@/styles/pages/mypage/mypage.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 
-import { updateNickname, updatePassword, deleteUser } from '@/app/api/userApi';
+import { updateUserInfo, deleteUser } from '@/app/api/userApi';
 import { RootState } from '@/redux/store';
+import { setUserInfo, clearUserInfo } from '@/redux/reducer';
+import Cookies from 'js-cookie';
 
 const Mypage = () => {
+  const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const router = useRouter();
 
   const [nickname, setNickname] = useState(userInfo?.nickname || '');
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  // 닉네임 업데이트 함수 호출
-  const handleNicknameUpdate = async () => {
+  // 유저 정보 업데이트 함수 호출
+  const handleUserInfoUpdate = async () => {
     try {
-      await updateNickname(nickname);
-      alert('닉네임이 성공적으로 수정되었습니다.');
+      await updateUserInfo(nickname, newPassword);
+      dispatch(setUserInfo({ ...userInfo, nickname }));
+      alert('정보가 성공적으로 수정되었습니다.');
     } catch (error) {
-      alert(error instanceof Error ? error.message : '닉네임 수정에 실패했습니다.');
-    }
-  };
-
-  // 비밀번호 업데이트 함수 호출
-  const handlePasswordUpdate = async () => {
-    try {
-      await updatePassword(newPassword);
-      alert('비밀번호가 성공적으로 수정되었습니다.');
-    } catch (error) {
-      alert(error instanceof Error ? error.message : '비밀번호 수정에 실패했습니다.');
+      if (error instanceof AxiosError && error.response) {
+        console.error('오류 상태 코드:', error.response.status);
+        console.error('오류 메시지:', error.response.data);
+        alert(`오류: ${error.response.data.message || '정보 수정에 실패했습니다.'}`);
+      } else {
+        alert('정보 수정에 실패했습니다.');
+      }
     }
   };
 
@@ -41,6 +41,13 @@ const Mypage = () => {
     try {
       await deleteUser();
       alert('회원 탈퇴가 성공적으로 처리되었습니다.');
+
+      // 탈퇴 후 처리
+      Cookies.remove('token');
+      dispatch(clearUserInfo());
+      window.dispatchEvent(new Event('loginStatusChanged'));
+
+      // 메인 페이지로 이동
       router.push('/');
     } catch (error) {
       alert(error instanceof Error ? error.message : '회원 탈퇴에 실패했습니다.');
@@ -60,20 +67,10 @@ const Mypage = () => {
               <strong>닉네임</strong>
               <div className="modify_cont">
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-                <button onClick={handleNicknameUpdate}>닉네임 수정</button>
               </div>
             </label>
           </div>
           <div className="password_cont">
-            <label>
-              <strong>현재 비밀번호</strong>
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="현재 비밀번호 입력"
-              />
-            </label>
             <label>
               <strong>새 비밀번호</strong>
               <input
@@ -83,8 +80,8 @@ const Mypage = () => {
                 placeholder="새 비밀번호 입력"
               />
             </label>
-            <button onClick={handlePasswordUpdate} className="pwd_modify_button">
-              비밀번호 수정
+            <button onClick={handleUserInfoUpdate} className="pwd_modify_button">
+              정보 수정
             </button>
           </div>
           <button onClick={handleDeleteUser} className="secession_button">
