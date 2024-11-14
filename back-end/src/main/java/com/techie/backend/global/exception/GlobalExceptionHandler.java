@@ -72,9 +72,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmptyContentException.class)
-    public ResponseEntity<Map<String, String>> handleEmptyContentException(EmptyContentException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> handleEmptyContentException(EmptyContentException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
+        errorResponse.put("status", ex.getExceptionType().getStatus().value());
         return new ResponseEntity<>(errorResponse, ex.getExceptionType().getStatus());
     }
 
