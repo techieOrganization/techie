@@ -26,6 +26,7 @@
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
+  gap: 10px;
 
   &.isOpen {
     opacity: 1;
@@ -44,8 +45,17 @@
 
   .chatbot-response {
     width: 50%;
-    background-color: var(--btn-color);
+    background-color: #2c3e50;
     border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 200px;
+    user-select: text;
+    cursor: auto;
+    p {
+      color: white;
+    }
   }
 
   button {
@@ -62,8 +72,6 @@
 }
 
 /// 로그아웃
-///
-///
 .chatbot-content_logout {
   width: 25vw;
   display: flex;

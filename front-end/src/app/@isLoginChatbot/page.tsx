@@ -1,11 +1,14 @@
 'use client';
 import { useState } from 'react';
 import '@/styles/pages/chatbot/chatbot.scss';
+import fetchChatBot from '../api/chatBotApi';
+import Cookies from 'js-cookie';
 
 const Chatbot = () => {
   const [position, setPosition] = useState({ x: 1450, y: 650 });
   const [isOpen, setIsOpen] = useState(false);
   const [textarea, setTextarea] = useState('');
+  const [gptResponse, setGptResponse] = useState('');
   const MOVE_THRESHOLD = 10;
 
   const toggleTextArea = () => {
@@ -46,6 +49,35 @@ const Chatbot = () => {
     setTextarea(e.target.value);
   };
 
+  const token = Cookies.get('token');
+
+  const handleSubmit = async () => {
+    if (!textarea) return;
+    if (!token) return;
+    try {
+      const apiResponse = await fetchChatBot({ request: textarea, token: token });
+      typeResponse(apiResponse.response);
+      setTextarea('');
+      console.log(apiResponse.response);
+      console.log('토큰 가져오기 성공', token);
+    } catch (error) {
+      console.error('함수요청 오류', error);
+    }
+  };
+
+  const typeResponse = (text: string) => {
+    setGptResponse('');
+    let index = -1;
+    const interval = setInterval(() => {
+      if (index < text.length - 1) {
+        setGptResponse((prev) => prev + text[index]);
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 50);
+  };
+
   return (
     <div
       className="chatbot"
@@ -58,7 +90,7 @@ const Chatbot = () => {
         style={{ left: position.x - 620, top: position.y - 200, position: 'fixed' }}
       >
         <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
-          챗봇응답
+          <p>{gptResponse}</p>
         </div>
         <textarea
           value={textarea}
@@ -66,7 +98,9 @@ const Chatbot = () => {
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         ></textarea>
-        <button onMouseDown={(e) => e.stopPropagation()}>➡️</button>
+        <button onMouseDown={(e) => e.stopPropagation()} onClick={handleSubmit}>
+          ➡️
+        </button>
       </div>
     </div>
   );
