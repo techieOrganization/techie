@@ -1,6 +1,7 @@
 package com.techie.backend.playlist.service;
 
 import com.techie.backend.global.exception.playlist.PlaylistNotFoundException;
+import com.techie.backend.global.exception.playlist.VideoNotFoundException;
 import com.techie.backend.global.exception.user.UserNotFoundException;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.playlist.domain.Playlist;
@@ -104,31 +105,32 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public PlaylistResponse.UpdatePlaylist updatePlaylist(UserDetailsCustom userDetails, PlaylistRequest.UpdatePlaylist request, Long playlistId) {
         User user = userRepository.findByEmail(userDetails.getUsername());
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
 
         Playlist playlist = playlistRepository.findByIdAndUser(playlistId, user);
-        if (playlist == null) {
-            throw new PlaylistNotFoundException();
-        }
 
-        if (request.getName() != null) {
+        if (request.getName() != null && !request.getName().isBlank()) {
             playlist.updateName(request.getName());
         }
 
-        if (request.getVideoIds() != null && !request.getVideoIds().isEmpty()) {
-            List<Video> videos = videoRepository.findAllById(request.getVideoIds());
-            List<String> invalidIds = request.getVideoIds().stream()
-                    .filter(id -> videos.stream().noneMatch(video -> video.getVideoId().equals(id)))
-                    .toList();
-            if (!invalidIds.isEmpty()) {
-                throw new IllegalArgumentException("videoId가 유효하지 않습니다. : " + invalidIds);
-            }
+        if (request.getAddVideoIds() != null) {
+            for (String videoId : request.getAddVideoIds()) {
+                Video video = videoRepository.findById(videoId)
+                        .orElseThrow(() -> new VideoNotFoundException());
 
-            playlist.getPlaylistVideos().clear();
-            for (Video video : videos) {
-                playlist.addVideo(video);
+                if (!playlist.hasVideo(video)) {
+                    playlist.addVideo(video);
+                }
+            }
+        }
+
+        if (request.getRemoveVideoIds() != null) {
+            for (String videoId : request.getRemoveVideoIds()) {
+                Video video = videoRepository.findById(videoId)
+                        .orElseThrow(() -> new VideoNotFoundException());
+
+                if (playlist.hasVideo(video)) {
+                    playlist.removeVideo(video);
+                }
             }
         }
         playlistRepository.save(playlist);

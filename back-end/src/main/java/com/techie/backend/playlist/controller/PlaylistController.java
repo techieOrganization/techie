@@ -40,12 +40,17 @@ public class PlaylistController {
     }
 
     @PutMapping("/{playlistId}")
-    public ResponseEntity<PlaylistResponse.UpdatePlaylist> updatePlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails, @RequestBody PlaylistRequest.UpdatePlaylist request, @PathVariable Long playlistId) {
-        return ResponseEntity.ok(playlistService.updatePlaylist(userDetails, request, playlistId));
+    public ResponseEntity<PlaylistResponse.UpdatePlaylist> updatePlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails,
+                                                                          @RequestBody PlaylistRequest.UpdatePlaylist request,
+                                                                          @PathVariable Long playlistId) {
+        PlaylistResponse.UpdatePlaylist response = playlistService.updatePlaylist(userDetails, request, playlistId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{playlistId}")
-    public ResponseEntity<Boolean> deletePlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails, @PathVariable Long playlistId) {
-        return ResponseEntity.ok(playlistService.deletePlaylist(userDetails, playlistId));
+    public ResponseEntity<Boolean> deletePlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails,
+                                                  @PathVariable Long playlistId) {
+        Boolean isDeleted = playlistService.deletePlaylist(userDetails, playlistId);
+        return ResponseEntity.ok(isDeleted);
     }
 }

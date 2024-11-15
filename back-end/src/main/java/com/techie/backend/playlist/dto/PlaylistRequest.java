@@ -16,6 +16,7 @@ public class PlaylistRequest {
     @Data
     public static class UpdatePlaylist {
         private String name;
-        private List<String> videoIds;
+        private List<String> addVideoIds;
+        private List<String> removeVideoIds;
     }
 }

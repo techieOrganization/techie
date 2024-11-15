@@ -1,5 +1,6 @@
 package com.techie.backend.playlist.domain;
 
+import com.techie.backend.global.exception.playlist.VideoNotFoundException;
 import com.techie.backend.playlist_video.domain.PlaylistVideo;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.video.domain.Video;
@@ -48,5 +49,18 @@ public class Playlist {
             throw new IllegalArgumentException("이름은 비어있을 수 없습니다.");
         }
         this.name = newName;
+    }
+
+    public void removeVideo(Video video) {
+        PlaylistVideo playlistVideo = playlistVideos.stream()
+                .filter(pv -> pv.getVideo().equals(video))
+                .findFirst()
+                .orElseThrow(VideoNotFoundException::new);
+
+        playlistVideos.remove(playlistVideo);
+    }
+
+    public boolean hasVideo(Video video) {
+        return playlistVideos.stream().anyMatch(pv -> pv.getVideo().equals(video));
     }
 }
