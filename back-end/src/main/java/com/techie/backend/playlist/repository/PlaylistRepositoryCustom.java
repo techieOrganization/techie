@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface PlaylistRepositoryCustom {
 
+    Playlist findByUserIdAndId(Long userId, Long playlistId);
+    List<Playlist> findAllByUser(User user);
+    Playlist findByIdAndUser(Long playlistId, User user);
 }

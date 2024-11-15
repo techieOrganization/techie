@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +15,7 @@ public class PlaylistResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Overview {
-        private List<PlaylistSummary> playlists;
+        private List<PlaylistSummary> playlists = new ArrayList<>();
 
         @Data
         @NoArgsConstructor

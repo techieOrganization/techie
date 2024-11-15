@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class PlaylistController {
     private final PlaylistService playlistService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Boolean> createPlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails, @RequestBody PlaylistRequest.CreatePlaylist request) {
         return ResponseEntity.ok(playlistService.createPlaylist(userDetails, request));
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<PlaylistResponse.Overview> getPlaylists(@AuthenticationPrincipal UserDetailsCustom userDetails) {
         return ResponseEntity.ok(playlistService.getPlaylists(userDetails));
     }
