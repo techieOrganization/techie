@@ -21,7 +21,9 @@ public class PlaylistController {
     private final PlaylistService playlistService;
 
     @PostMapping
-    public ResponseEntity<Boolean> createPlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails, @RequestBody PlaylistRequest.CreatePlaylist request) {
+    public ResponseEntity<Boolean> createPlaylist(
+            @AuthenticationPrincipal UserDetailsCustom userDetails,
+            @RequestBody PlaylistRequest.CreatePlaylist request) {
         return ResponseEntity.ok(playlistService.createPlaylist(userDetails, request));
     }
 
@@ -40,16 +42,18 @@ public class PlaylistController {
     }
 
     @PutMapping("/{playlistId}")
-    public ResponseEntity<PlaylistResponse.UpdatePlaylist> updatePlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails,
-                                                                          @RequestBody PlaylistRequest.UpdatePlaylist request,
-                                                                          @PathVariable Long playlistId) {
+    public ResponseEntity<PlaylistResponse.UpdatePlaylist> updatePlaylist(
+            @AuthenticationPrincipal UserDetailsCustom userDetails,
+            @RequestBody PlaylistRequest.UpdatePlaylist request,
+            @PathVariable Long playlistId) {
         PlaylistResponse.UpdatePlaylist response = playlistService.updatePlaylist(userDetails, request, playlistId);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{playlistId}")
-    public ResponseEntity<Boolean> deletePlaylist(@AuthenticationPrincipal UserDetailsCustom userDetails,
-                                                  @PathVariable Long playlistId) {
+    public ResponseEntity<Boolean> deletePlaylist(
+            @AuthenticationPrincipal UserDetailsCustom userDetails,
+            @PathVariable Long playlistId) {
         Boolean isDeleted = playlistService.deletePlaylist(userDetails, playlistId);
         return ResponseEntity.ok(isDeleted);
     }

@@ -18,7 +18,6 @@ import java.util.List;
 @Table(name = "playlists")
 public class Playlist {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

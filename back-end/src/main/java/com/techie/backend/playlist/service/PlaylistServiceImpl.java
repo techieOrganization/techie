@@ -10,6 +10,7 @@ import com.techie.backend.playlist.dto.PlaylistResponse;
 import com.techie.backend.playlist.repository.PlaylistRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.repository.UserRepository;
+import com.techie.backend.user.service.UserService;
 import com.techie.backend.video.domain.Video;
 import com.techie.backend.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +25,14 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
+
+
 
     @Transactional
     @Override
     public Boolean createPlaylist(UserDetailsCustom userDetails, PlaylistRequest.CreatePlaylist request) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = userService.getUserFromSecurityContext(userDetails);
 
         Playlist playlist = Playlist.builder()
                 .name(request.getName())
@@ -57,10 +58,8 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public PlaylistResponse.Overview getPlaylists(UserDetailsCustom userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = userService.getUserFromSecurityContext(userDetails);
+
         List<Playlist> playlists = playlistRepository.findAllByUser(user);
         if (playlists.isEmpty()) {
             return new PlaylistResponse.Overview(List.of());
@@ -104,7 +103,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public PlaylistResponse.UpdatePlaylist updatePlaylist(UserDetailsCustom userDetails, PlaylistRequest.UpdatePlaylist request, Long playlistId) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
+        User user = userService.getUserFromSecurityContext(userDetails);
 
         Playlist playlist = playlistRepository.findByIdAndUser(playlistId, user);
 
@@ -141,10 +140,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     @Transactional
     public Boolean deletePlaylist(UserDetailsCustom userDetails, Long playlistId) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = userService.getUserFromSecurityContext(userDetails);
 
         Playlist playlist = playlistRepository.findByIdAndUser(playlistId, user);
         if (playlist == null) {

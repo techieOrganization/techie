@@ -16,6 +16,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public User getUserFromSecurityContext(UserDetailsCustom userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        return user;
+    }
+
     @Override
     public Boolean joinProcess(UserRequest.Register request) {
         String email = request.getEmail();
@@ -53,32 +61,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse.Information getUser(UserDetailsCustom userDetails) {
-        String email = userDetails.getUsername();
-        String nickname = userDetails.getNickname();
-
-        return new UserResponse.Information(email, nickname);
+        User user = getUserFromSecurityContext(userDetails);
+        return new UserResponse.Information(user.getEmail(), user.getNickname());
     }
 
     @Override
     public Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
+        try {
+            User user = getUserFromSecurityContext(userDetails);
 
-        if (user == null) {
+            if (request.getNewPassword() == null || request.getNewPassword().equals(user.getPassword())) {
+                return false;
+            }
+
+            String updatedNickname = request.getNickname() != null ? request.getNickname() : user.getNickname();
+            String updatedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
+            User updatedUser = user.toBuilder()
+                    .nickname(updatedNickname)
+                    .password(updatedPassword)
+                    .build();
+
+            userRepository.save(updatedUser);
+
+            return true;
+        } catch (UserNotFoundException e) {
             return false;
         }
-        if (request.getNewPassword() == null || request.getNewPassword().equals(user.getPassword())) {
-            return false;
-        }
-
-        String updatedNickname = request.getNickname() != null ? request.getNickname() : user.getNickname();
-        String updatedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
-        User updatedUser = user.toBuilder()
-                .nickname(updatedNickname)
-                .password(updatedPassword)
-                .build();
-        userRepository.save(updatedUser);
-
-        return true;
     }
 
     @Override

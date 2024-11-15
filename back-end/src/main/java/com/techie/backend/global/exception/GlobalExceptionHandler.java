@@ -2,6 +2,7 @@ package com.techie.backend.global.exception;
 
 import com.techie.backend.global.exception.memo.EmptyContentException;
 import com.techie.backend.global.exception.playlist.PlaylistNotFoundException;
+import com.techie.backend.global.exception.playlist.VideoNotFoundException;
 import com.techie.backend.global.exception.user.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +103,14 @@ public class GlobalExceptionHandler {
         errorResponse.put("message", ex.getExceptionType().getMessage());
         errorResponse.put("status", ex.getExceptionType().getStatus().value());
 
+        return new ResponseEntity<>(errorResponse, ex.getExceptionType().getStatus());
+    }
+
+    @ExceptionHandler(VideoNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleVideoNotFoundException(VideoNotFoundException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("message", ex.getExceptionType().getMessage());
+        errorResponse.put("status", ex.getExceptionType().getStatus().value());
         return new ResponseEntity<>(errorResponse, ex.getExceptionType().getStatus());
     }
 }

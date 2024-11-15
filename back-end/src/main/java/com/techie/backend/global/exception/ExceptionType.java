@@ -16,6 +16,7 @@ public enum ExceptionType {
     EMPTY_CONTENT(HttpStatus.BAD_REQUEST, "내용이 비어있습니다."),
     PLAYLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이리스트를 찾을 수 없습니다."),
     VIDEO_NOT_FOUND(HttpStatus.NOT_FOUND, "비디오를 찾을 수 없습니다.");
+
     private final HttpStatus status;
     private final String message;
 

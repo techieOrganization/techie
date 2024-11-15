@@ -5,7 +5,6 @@ import com.techie.backend.playlist.domain.Playlist;
 import com.techie.backend.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 import static com.techie.backend.playlist.domain.QPlaylist.playlist;
