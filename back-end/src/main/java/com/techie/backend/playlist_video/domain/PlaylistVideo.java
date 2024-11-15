@@ -16,11 +16,16 @@ public class PlaylistVideo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "playlist_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_id", nullable = false)
     private Playlist playlist;
 
-    @JoinColumn(name = "video_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id", nullable = false)
     private Video video;
+
+    public PlaylistVideo(Playlist playlist, Video video) {
+        this.playlist = playlist;
+        this.video = video;
+    }
 }

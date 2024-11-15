@@ -13,7 +13,8 @@ public enum ExceptionType {
     EMPTY_FIELD(HttpStatus.BAD_REQUEST, "모든 필드를 입력해야 합니다."),
     PASSWORD_TOO_SHORT(HttpStatus.BAD_REQUEST, "비밀번호는 최소 8자리 이상이어야 합니다."),
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 확인 값이 일치하지 않습니다."),
-    EMPTY_CONTENT(HttpStatus.BAD_REQUEST, "내용이 비어있습니다.");
+    EMPTY_CONTENT(HttpStatus.BAD_REQUEST, "내용이 비어있습니다."),
+    PLAYLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "플레이리스트를 찾을 수 없습니다."); // 추가
 
     private final HttpStatus status;
     private final String message;
