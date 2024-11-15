@@ -87,7 +87,7 @@ const Chatbot = () => {
       <div className="icon">💬</div>
       <div
         className={`chatbot-content_login ${isOpen ? 'isOpen' : ''}`}
-        style={{ left: position.x - 620, top: position.y - 200, position: 'fixed' }}
+        style={{ left: position.x - 620, top: position.y - 300, position: 'fixed' }}
       >
         <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
           <p>{gptResponse}</p>
