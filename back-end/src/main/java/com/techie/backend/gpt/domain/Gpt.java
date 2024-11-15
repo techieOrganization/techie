@@ -18,6 +18,7 @@ public class Gpt {
     @Column(nullable = false)
     private String request;
 
+    @Lob
     @Column(nullable = false)
     private String response;
 
