@@ -6,6 +6,9 @@ import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.dto.MemoUpdateRequest;
 import com.techie.backend.memo.service.MemoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +40,10 @@ public class MemoController {
     }
 
     @GetMapping("/byVideo")
-    public ResponseEntity<List<MemoResponse>> getAllMemosByVideo(@RequestParam String vId,
-                                                                 @AuthenticationPrincipal UserDetailsCustom userDetails) {
-        return memoService.getAllMemosByVideoId(userDetails.getUsername(), vId);
+    public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideo(@RequestParam String vId,
+                                                                  @AuthenticationPrincipal UserDetailsCustom userDetails,
+                                                                  Pageable pageable) {
+        return memoService.getAllMemosByVideoId(userDetails.getUsername(), vId, pageable);
     }
 
     @PutMapping("/{id}")

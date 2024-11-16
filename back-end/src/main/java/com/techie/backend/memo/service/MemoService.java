@@ -3,6 +3,8 @@ package com.techie.backend.memo.service;
 import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.dto.MemoUpdateRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 
 import java.nio.file.AccessDeniedException;
@@ -13,8 +15,7 @@ public interface MemoService {
     public ResponseEntity<List<MemoResponse>> getMemoList(String username);
     public ResponseEntity<MemoResponse> getMemo(String username, Long id) throws AccessDeniedException;
 
-    // -- 영상 별 메모 조회
-    ResponseEntity<List<MemoResponse>> getAllMemosByVideoId(String username, String videoId);
+    ResponseEntity<Slice<MemoResponse>> getAllMemosByVideoId(String username, String videoId, Pageable pageable);
     public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoUpdateRequest updateRequest) throws AccessDeniedException;
     public ResponseEntity<String> deleteMemo(String username, Long id) throws AccessDeniedException;
 }

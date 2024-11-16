@@ -15,6 +15,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -92,24 +94,18 @@ public class MemoServiceImpl implements MemoService {
 
     // -- 영상 별 메모 조회
     @Override
-    public ResponseEntity<List<MemoResponse>> getAllMemosByVideoId(String username, String videoId) {
+    public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideoId(String username, String videoId, Pageable pageable) {
         User user = userRepository.findByEmail(username);
         Video video = videoRepository.findByVideoId(videoId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 영상이 없습니다."));
 
-        List<Memo> memoList = memoRepository.findByUserAndVideo(user, video);
+        Slice<Memo> sliceMemo = memoRepository.findByUserAndVideo(user, video, pageable);
 
-        if (memoList.isEmpty()) {
+        if (sliceMemo.isEmpty()) {
             throw new EntityNotFoundException("해당 영상에 작성한 메모가 없습니다.");
         }
-
-        List<MemoResponse> memoResponses = memoList.stream()
-                                                .map(memo -> modelMapper.map(memo, MemoResponse.class))
-                                                .toList();
-
-        return ResponseEntity.ok(memoResponses);
+        return ResponseEntity.ok(sliceMemo.map(MemoResponse::new));
     }
-
 
     // -- 메모 수정 --
     @Override
