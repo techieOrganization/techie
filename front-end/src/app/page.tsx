@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation, Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 import '@/styles/pages/home/home.scss';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,9 +10,10 @@ import { FiSearch } from 'react-icons/fi';
 
 import { fetchPlaylistVideos } from '@/app/api/youtubeAPI';
 import studentData from '@/data/studentData';
+import { Video } from '@/types/video';
 
 export default function Home() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
     const getVideos = async () => {
@@ -28,11 +29,8 @@ export default function Home() {
       <section className="section sec01">
         <h2 className="dn">메인 슬라이드 화면</h2>
         <Swiper
-          pagination={{
-            type: 'fraction',
-          }}
           navigation={true}
-          modules={[Pagination, Navigation, Autoplay]}
+          modules={[Navigation, Autoplay]}
           autoplay={{
             delay: 2500,
             disableOnInteraction: false,
@@ -40,24 +38,67 @@ export default function Home() {
           loop={true}
           className="mySwiper"
         >
-          <SwiperSlide>
-            <div className="slide-content">
-              <h2>Slide 1</h2>
+          <SwiperSlide className="n2">
+            <div className="inner">
+              <div className="slide-content">
+                <div className="left_cover">
+                  <div className="tag">
+                    <span>OPEN</span>
+                  </div>
+                  <h3>
+                    드디어 오픈!
+                    <br />
+                    누구나 공부할 수 있는 테키!
+                  </h3>
+                  <p>개발 공부를 언제 어디서나 즐겨보세요!</p>
+                </div>
+                <div className="right_cover">
+                  <img src="/assets/images/main/banner04.png" alt="" />
+                </div>
+              </div>
             </div>
           </SwiperSlide>
-          <SwiperSlide>
-            <div className="slide-content">
-              <h2>Slide 2</h2>
+          <SwiperSlide className="n1">
+            <div className="inner">
+              <div className="slide-content">
+                <div className="left_cover">
+                  <div className="tag">
+                    <span>고민은 이제 그만!</span>
+                  </div>
+                  <h3>
+                    누구나 쉬운 입문 강의
+                    <br />
+                    여기 다 모였다! 🐣
+                  </h3>
+                  <p>어디서부터 시작해야 할지 모르는 당신을 위한 입문 강의</p>
+                </div>
+                <div className="right_cover">
+                  <img src="/assets/images/main/banner01.webp" alt="" />
+                </div>
+              </div>
             </div>
           </SwiperSlide>
-          <SwiperSlide>
-            <div className="slide-content">
-              <h2>Slide 3</h2>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="slide-content">
-              <h2>Slide 4</h2>
+          <SwiperSlide className="n3">
+            <div className="inner">
+              <div className="slide-content">
+                <div className="left_cover">
+                  <div className="tag">
+                    <span>실시간 업데이트!</span>
+                  </div>
+                  <h3>
+                    무슨 강의 들을지 고민이라면? <br />
+                    현직자 강의 전체보기 👑
+                  </h3>
+                  <p>
+                    입문부터 실전까지,
+                    <br />
+                    믿고 보는 실무자 Pick!
+                  </p>
+                </div>
+                <div className="right_cover">
+                  <img src="/assets/images/main/banner03.png" alt="" />
+                </div>
+              </div>
             </div>
           </SwiperSlide>
         </Swiper>
@@ -142,10 +183,9 @@ export default function Home() {
             spaceBetween={20}
             slidesPerView={5}
             navigation={true}
-            pagination={{ clickable: true }}
             loop={true}
             grabCursor={true}
-            modules={[Navigation, Pagination]}
+            modules={[Navigation]}
             className="mySwiper"
           >
             {videos.map((video, index) => (

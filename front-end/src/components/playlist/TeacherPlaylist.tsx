@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import instructorData from '@/data/instructorData';
 
-import { fetchPlaylistVideos, fetchAllPlaylistsVideos, Video } from '@/libs/api/teacherAPI';
+import { fetchPlaylistVideos, fetchAllPlaylistsVideos, Video } from '@/app/api/teacherAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
 interface TeacherPlaylistProps {
