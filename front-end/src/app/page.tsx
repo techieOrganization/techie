@@ -53,7 +53,13 @@ export default function Home() {
                   <p>개발 공부를 언제 어디서나 즐겨보세요!</p>
                 </div>
                 <div className="right_cover">
-                  <img src="/assets/images/main/banner04.png" alt="" />
+                  <Image
+                    src="/assets/images/main/banner04.png"
+                    alt="테키 오픈 배너"
+                    width={700}
+                    height={500}
+                    priority
+                  />
                 </div>
               </div>
             </div>
@@ -73,7 +79,13 @@ export default function Home() {
                   <p>어디서부터 시작해야 할지 모르는 당신을 위한 입문 강의</p>
                 </div>
                 <div className="right_cover">
-                  <img src="/assets/images/main/banner01.webp" alt="" />
+                  <Image
+                    src="/assets/images/main/banner01.webp"
+                    alt="입문 강의 배너"
+                    width={700}
+                    height={500}
+                    priority
+                  />
                 </div>
               </div>
             </div>
@@ -96,7 +108,13 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="right_cover">
-                  <img src="/assets/images/main/banner03.png" alt="" />
+                  <Image
+                    src="/assets/images/main/banner03.png"
+                    alt="실시간 업데이트 배너"
+                    width={700}
+                    height={500}
+                    priority
+                  />
                 </div>
               </div>
             </div>
