@@ -2,39 +2,54 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-
 import instructorData from '@/data/instructorData';
+import { fetchLatestVideosByChannel, fetchAllPlaylistsVideos } from '@/app/api/teacherAPI';
+import { Video } from '@/types/video';
 
-import { fetchPlaylistVideos, fetchAllPlaylistsVideos, Video } from '@/libs/api/teacherAPI';
-import '@/styles/pages/playlist/playlist.scss';
-
-interface TeacherPlaylistProps {
-  playlistId: string;
-}
-
-const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ playlistId }) => {
+const TeacherPlaylist = () => {
   const [videos, setVideos] = useState<Video[]>([]);
+  const [selectedInstructor, setSelectedInstructor] = useState(instructorData[0]);
 
   useEffect(() => {
     const loadVideos = async () => {
-      const data = playlistId
-        ? await fetchPlaylistVideos(playlistId)
-        : await fetchAllPlaylistsVideos();
-      setVideos(data);
+      try {
+        if (selectedInstructor.name === '전체') {
+          console.log('Fetching all videos'); // 디버깅 로그
+          const data = await fetchAllPlaylistsVideos();
+          console.log('Fetched all videos:', data); // 확인용 로그
+          setVideos(data);
+        } else if (selectedInstructor.channeld) {
+          console.log(`Fetching videos for ${selectedInstructor.name}`); // 디버깅 로그
+          const data = await fetchLatestVideosByChannel(selectedInstructor.channeld);
+          setVideos(data);
+        } else {
+          console.warn(`No channel ID for ${selectedInstructor.name}`);
+          setVideos([]);
+        }
+      } catch (error) {
+        console.error('Error loading videos:', error);
+        setVideos([]);
+      }
     };
+
     loadVideos();
-  }, [playlistId]);
+  }, [selectedInstructor]);
 
   return (
     <div className="playlists_container">
       <ul className="dev_list teacher">
         {instructorData.map((instructor) => (
           <li key={instructor.name}>
-            <Link href={`/teacher-lists/${instructor.name}`}>
+            <button
+              type="button"
+              onClick={() => {
+                console.log('Instructor selected:', instructor); // 버튼 클릭 시 선택된 강사 정보 확인
+                setSelectedInstructor(instructor);
+              }}
+            >
               <Image src={instructor.img} alt={instructor.name} width={70} height={70} />
               <span>{instructor.name}</span>
-            </Link>
+            </button>
           </li>
         ))}
       </ul>
