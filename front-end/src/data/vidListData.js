@@ -9,7 +9,7 @@ const vidListData = [
   { id: 'AI', title: '인공지능', img: '/assets/images/main/dev_07.png' },
   { id: 'SEC', title: '보안', img: '/assets/images/main/dev_08.png' },
   { id: 'CS', title: 'CS', img: '/assets/images/main/dev_09.png' },
-  { id: 'CLOUD', title: '클라우드', img: '/assets/images/main/dev_11.png' }, // 클라우드 추가
+  { id: 'CLOUD', title: '클라우드', img: '/assets/images/main/dev_11.png' },
 ];
 
 export default vidListData;
