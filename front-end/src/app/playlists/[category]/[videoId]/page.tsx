@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 
 import { fetchVideoDetails } from '@/app/api/videoAPIDetail';
 // import { saveMemo, updateMemo, deleteMemo, getMemo, getAllMemos } from '@/app/api/memoAPI';
-import '@/styles/pages/playlist/playlist.scss';
 
 interface VideoDetails {
   title: string;

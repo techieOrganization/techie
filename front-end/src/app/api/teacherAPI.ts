@@ -5,7 +5,7 @@ import { Video } from '@/types/video';
 const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
 
-// 개별 강사의 최신 동영상을 가져오는 함수
+// 개별 강사의 최신 동영상 가져오기
 export const fetchLatestVideosByChannel = async (channelId: string): Promise<Video[]> => {
   try {
     const response = await axios.get(`${BASE_URL}/search`, {
@@ -36,18 +36,14 @@ export const fetchLatestVideosByChannel = async (channelId: string): Promise<Vid
   }
 };
 
-// 전체 강사의 최신 동영상을 가져오는 함수
-export const fetchAllPlaylistsVideos = async (): Promise<Video[]> => {
+// 전체 강사의 최신 동영상 가져오기
+export const fetchAllPlayVids = async (): Promise<Video[]> => {
   const allVideos: Video[] = [];
 
   for (const instructor of instructorData) {
     if (instructor.channeld) {
-      try {
-        const videos = await fetchLatestVideosByChannel(instructor.channeld);
-        allVideos.push(...videos);
-      } catch (error) {
-        console.error(`Failed to fetch videos for instructor: ${instructor.name}`, error);
-      }
+      const videos = await fetchLatestVideosByChannel(instructor.channeld);
+      allVideos.push(...videos);
     }
   }
 
