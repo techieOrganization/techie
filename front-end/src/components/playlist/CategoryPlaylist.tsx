@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Video } from '@/types/video';
 import vidListData from '@/data/vidListData';
 
-import { fetchVideosByCategory } from '@/libs/api/videoAPI';
+import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
 interface CategoryPlaylistProps {

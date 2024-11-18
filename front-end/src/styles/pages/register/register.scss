@@ -24,6 +24,12 @@ $bg-color: var(--bg-color);
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .error-message {
+    color: $error-color;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.3rem;
+  }
 
   span {
     font-size: 12px;

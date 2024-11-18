@@ -59,7 +59,10 @@ const Signup = () => {
   // 회원가입 오류 처리 함수
   const handleSignupError = (error: unknown) => {
     if (error instanceof AxiosError && error.response) {
-      const errorMessage = error.response.data || '회원가입 중 오류가 발생했습니다.';
+      const errorMessage =
+        typeof error.response.data === 'object' && error.response.data.message
+          ? error.response.data.message
+          : '회원가입 중 오류가 발생했습니다.';
       setError(errorMessage);
     } else {
       setError('회원가입 중 오류가 발생했습니다.');
@@ -103,9 +106,9 @@ const Signup = () => {
           value={formData.password}
           required
         />
-        <span>• 영문/숫자/특수문자 중, 2가지 이상 포함</span>
-        <span>• 8자 이상 32자 이하 입력 (공백 제외)</span>
-        <span>• 연속 3자 이상 동일한 문자/숫자 제외</span>
+        <span>• 비밀번호는 최소 8자리 이상이어야 합니다.</span>
+        <span></span>
+        <span></span>
         <span>비밀번호 확인</span>
         <input
           type="password"
