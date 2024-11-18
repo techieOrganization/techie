@@ -23,7 +23,7 @@ export interface Video {
   description: string;
   channelTitle: string;
   publishedAt: string;
-  duration: string;
+  duration?: string;
   videoId: string;
   thumbnails: {
     default: Thumbnail;
@@ -34,4 +34,11 @@ export interface Video {
   };
   snippet: VideoSnippet;
   category: string;
+  contentDetails: {
+    videoId: string;
+  };
+}
+
+export interface PlaylistResponse {
+  items: Video[];
 }
