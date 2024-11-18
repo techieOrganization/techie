@@ -61,12 +61,13 @@ public class MemoServiceImpl implements MemoService {
     @Override
     public ResponseEntity<Slice<MemoResponse>> getMemoList(String username, Pageable pageable) {
         User user = userRepository.findByEmail(username);
-        Slice<MemoResponse> memoSlice = memoRepository.findByUser(user, pageable).map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
+        Slice<MemoResponse> memoSlice = memoRepository.findByUser(user, pageable)
+                                        .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
 
-        // 현재 사용자가 작성한 메모가 없을 경우
         if(memoSlice.isEmpty()) {
             throw new EntityNotFoundException("현재 사용자가 작성한 메모가 없거나 모두 표시했습니다.");
         }
+
         return ResponseEntity.ok(memoSlice);
     }
 
