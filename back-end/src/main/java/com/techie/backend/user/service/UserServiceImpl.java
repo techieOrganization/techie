@@ -107,13 +107,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean deleteUser(String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            return false;
-        }
-        userRepository.delete(user);
+    public Boolean deleteUser(UserDetailsCustom userDetails, UserRequest.Delete request) {
+        User user = getUserFromSecurityContext(userDetails);
 
+        if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        userRepository.delete(user);
         return true;
     }
 }

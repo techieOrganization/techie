@@ -9,6 +9,6 @@ public interface UserService {
     Boolean joinProcess(UserRequest.Register request);
     UserResponse.Information getUser(UserDetailsCustom userDetails);
     Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request);
-    Boolean deleteUser(String email);
     User getUserFromSecurityContext(UserDetailsCustom userDetailsCustom);
+    Boolean deleteUser(UserDetailsCustom userDetails, UserRequest.Delete request);
 }

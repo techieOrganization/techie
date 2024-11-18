@@ -29,12 +29,16 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<Boolean> updateUser(@AuthenticationPrincipal UserDetailsCustom userDetails, @RequestBody UserRequest.Update request) {
+    public ResponseEntity<Boolean> updateUser(
+            @AuthenticationPrincipal UserDetailsCustom userDetails,
+            @RequestBody UserRequest.Update request) {
         return ResponseEntity.ok(userService.updateUser(userDetails, request));
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Boolean> deleteUser(@AuthenticationPrincipal UserDetailsCustom userDetails) {
-        return ResponseEntity.ok(userService.deleteUser(userDetails.getUsername()));
+    public ResponseEntity<Boolean> deleteUser(
+            @AuthenticationPrincipal UserDetailsCustom userDetails,
+            @RequestBody UserRequest.Delete request) {
+        return ResponseEntity.ok(userService.deleteUser(userDetails, request));
     }
 }
