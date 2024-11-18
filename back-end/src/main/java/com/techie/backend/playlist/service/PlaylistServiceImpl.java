@@ -8,8 +8,8 @@ import com.techie.backend.playlist.domain.Playlist;
 import com.techie.backend.playlist.dto.PlaylistRequest;
 import com.techie.backend.playlist.dto.PlaylistResponse;
 import com.techie.backend.playlist.repository.PlaylistRepository;
+import com.techie.backend.playlist_video.repository.PlaylistVideoRepository;
 import com.techie.backend.user.domain.User;
-import com.techie.backend.user.repository.UserRepository;
 import com.techie.backend.user.service.UserService;
 import com.techie.backend.video.domain.Video;
 import com.techie.backend.video.repository.VideoRepository;
@@ -18,16 +18,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistRepository playlistRepository;
+    private final PlaylistVideoRepository playlistVideoRepository;
     private final VideoRepository videoRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
-
-
 
     @Transactional
     @Override
@@ -40,26 +40,34 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .build();
         playlistRepository.save(playlist);
 
-        if (request.getVideoIds() != null && !request.getVideoIds().isEmpty()) {
-            List<Video> videos = videoRepository.findAllById(request.getVideoIds());
-            List<String> invalidIds = request.getVideoIds().stream()
-                    .filter(id -> videos.stream().noneMatch(video -> video.getVideoId().equals(id)))
-                    .toList();
-            if (!invalidIds.isEmpty()) {
-                throw new IllegalArgumentException("videoId가 유효하지 않습니다. : " + invalidIds);
-            }
-            for (Video video : videos) {
-                playlist.addVideo(video);
-            }
+        if (request.getVideoIds() == null || request.getVideoIds().isEmpty()) {
+            return true;
         }
 
+        Set<String> existIds = videoRepository.findAllById(request.getVideoIds())
+                .stream()
+                .map(Video::getVideoId)
+                .collect(Collectors.toSet());
+
+        List<String> invalidIds = request.getVideoIds().stream()
+                .filter(id -> !existIds.contains(id))
+                .toList();
+
+        if (!invalidIds.isEmpty()) {
+            throw new IllegalArgumentException("videoId가 유효하지 않습니다. : " + invalidIds);
+        }
+
+        List<Video> videos = videoRepository.findAllById(request.getVideoIds());
+
+        for (Video video : videos) {
+            playlist.addVideo(video);
+        }
         return true;
     }
 
     @Override
     public PlaylistResponse.Overview getPlaylists(UserDetailsCustom userDetails) {
         User user = userService.getUserFromSecurityContext(userDetails);
-
         List<Playlist> playlists = playlistRepository.findAllByUser(user);
         if (playlists.isEmpty()) {
             return new PlaylistResponse.Overview(List.of());
@@ -76,17 +84,20 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public PlaylistResponse.Details getPlaylistDetails(Long userId, Long playlistId, UserDetailsCustom userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
+        User user = userService.getUserFromSecurityContext(userDetails);
+
         if (user == null || !user.getId().equals(userId)) {
             throw new UserNotFoundException();
         }
 
         Playlist playlist = playlistRepository.findByUserIdAndId(userId, playlistId);
+
         if (playlist == null) {
             throw new PlaylistNotFoundException();
         }
 
         PlaylistResponse.Details response = new PlaylistResponse.Details();
+
         response.setPlaylistId(playlist.getId());
         response.setPlaylistName(playlist.getName());
 
@@ -96,11 +107,13 @@ public class PlaylistServiceImpl implements PlaylistService {
                     return new PlaylistResponse.PlaylistDetails(video);
                 })
                 .toList();
+
         response.setVideos(videos);
 
         return response;
     }
 
+    @Transactional
     @Override
     public PlaylistResponse.UpdatePlaylist updatePlaylist(UserDetailsCustom userDetails, PlaylistRequest.UpdatePlaylist request, Long playlistId) {
         User user = userService.getUserFromSecurityContext(userDetails);
@@ -116,7 +129,7 @@ public class PlaylistServiceImpl implements PlaylistService {
                 Video video = videoRepository.findById(videoId)
                         .orElseThrow(() -> new VideoNotFoundException());
 
-                if (!playlist.hasVideo(video)) {
+                if (!playlist.hasVideo(video, playlistVideoRepository)) {
                     playlist.addVideo(video);
                 }
             }
@@ -127,8 +140,8 @@ public class PlaylistServiceImpl implements PlaylistService {
                 Video video = videoRepository.findById(videoId)
                         .orElseThrow(() -> new VideoNotFoundException());
 
-                if (playlist.hasVideo(video)) {
-                    playlist.removeVideo(video);
+                if (playlist.hasVideo(video, playlistVideoRepository)) {
+                    playlist.removeVideo(video, playlistVideoRepository);
                 }
             }
         }
@@ -137,12 +150,12 @@ public class PlaylistServiceImpl implements PlaylistService {
         return new PlaylistResponse.UpdatePlaylist(playlist.getId(), playlist.getName());
     }
 
-    @Override
     @Transactional
+    @Override
     public Boolean deletePlaylist(UserDetailsCustom userDetails, Long playlistId) {
         User user = userService.getUserFromSecurityContext(userDetails);
-
         Playlist playlist = playlistRepository.findByIdAndUser(playlistId, user);
+
         if (playlist == null) {
             throw new PlaylistNotFoundException();
         }

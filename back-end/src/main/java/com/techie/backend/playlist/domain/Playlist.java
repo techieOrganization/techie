@@ -2,20 +2,19 @@ package com.techie.backend.playlist.domain;
 
 import com.techie.backend.global.exception.playlist.VideoNotFoundException;
 import com.techie.backend.playlist_video.domain.PlaylistVideo;
+import com.techie.backend.playlist_video.repository.PlaylistVideoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.video.domain.Video;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@Getter
-@Entity
 @Table(name = "playlists")
+@Entity
+@Getter
+@RequiredArgsConstructor
 public class Playlist {
 
     @Id
@@ -50,16 +49,14 @@ public class Playlist {
         this.name = newName;
     }
 
-    public void removeVideo(Video video) {
-        PlaylistVideo playlistVideo = playlistVideos.stream()
-                .filter(pv -> pv.getVideo().equals(video))
-                .findFirst()
+    public void removeVideo(Video video, PlaylistVideoRepository playlistVideoRepository) {
+        PlaylistVideo playlistVideo = playlistVideoRepository.findByPlaylistAndVideo(this, video)
                 .orElseThrow(VideoNotFoundException::new);
 
         playlistVideos.remove(playlistVideo);
     }
 
-    public boolean hasVideo(Video video) {
-        return playlistVideos.stream().anyMatch(pv -> pv.getVideo().equals(video));
+    public boolean hasVideo(Video video, PlaylistVideoRepository playlistVideoRepository) {
+        return playlistVideoRepository.existsByPlaylistAndVideo(this, video);
     }
 }

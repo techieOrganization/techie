@@ -6,10 +6,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@Getter
-@Entity
 @Table(name = "playlist_video")
+@Entity
+@Getter
+@NoArgsConstructor
 public class PlaylistVideo {
 
     @Id
