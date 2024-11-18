@@ -127,7 +127,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (request.getAddVideoIds() != null) {
             for (String videoId : request.getAddVideoIds()) {
                 Video video = videoRepository.findById(videoId)
-                        .orElseThrow(() -> new VideoNotFoundException());
+                        .orElseThrow(VideoNotFoundException::new);
 
                 if (!playlist.hasVideo(video, playlistVideoRepository)) {
                     playlist.addVideo(video);
@@ -138,7 +138,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (request.getRemoveVideoIds() != null) {
             for (String videoId : request.getRemoveVideoIds()) {
                 Video video = videoRepository.findById(videoId)
-                        .orElseThrow(() -> new VideoNotFoundException());
+                        .orElseThrow(VideoNotFoundException::new);
 
                 if (playlist.hasVideo(video, playlistVideoRepository)) {
                     playlist.removeVideo(video, playlistVideoRepository);
