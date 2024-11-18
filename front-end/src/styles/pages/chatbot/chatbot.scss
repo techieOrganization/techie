@@ -19,7 +19,7 @@
   width: 40vw;
   display: flex;
   flex-direction: row;
-  position: absolute;
+  position: fixed;
   opacity: 0;
   transform: scale(0) translateY(-10px);
   transform-origin: bottom right;
@@ -27,6 +27,7 @@
     opacity 0.3s ease,
     transform 0.3s ease;
   gap: 10px;
+  min-width: 620px;
 
   &.isOpen {
     opacity: 1;
@@ -37,10 +38,18 @@
     width: 50%;
     border: none;
     border-radius: 10px;
-    min-width: 200px;
-    min-height: 200px;
+    min-width: 300px;
+    min-height: 300px;
     resize: none;
     padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--btn-color) #f1f1f1;
+    border: none;
+    outline: none;
+    color: var(--btn-color);
+    :focus {
+      outline: none;
+    }
   }
 
   .chatbot-response {
@@ -50,17 +59,21 @@
     padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 200px;
+    max-height: 300px;
+    min-height: 300px;
     user-select: text;
+    scrollbar-width: thin;
+    scrollbar-color: var(--btn-color) #f1f1f1;
     cursor: auto;
     p {
       color: white;
+      cursor: text;
     }
   }
 
   button {
     position: absolute;
-    top: 80%;
+    top: 85%;
     right: 2%;
     cursor: pointer;
     width: 30px;
@@ -76,8 +89,9 @@
   width: 25vw;
   display: flex;
   flex-direction: row;
-  position: absolute;
+  position: fixed;
   opacity: 0;
+  min-width: 350px;
   transform: scale(0) translateY(-10px);
   transform-origin: bottom right;
   transition:
@@ -93,6 +107,7 @@
     border-radius: 10px;
     color: white;
     font-weight: 700;
+    min-width: 350px;
     .logout-link {
       color: rgb(255, 235, 59);
     }
