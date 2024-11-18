@@ -48,7 +48,7 @@ public class MemoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MemoResponse> updateMemo(@PathVariable Long id,
-                                                   @RequestBody MemoUpdateRequest updateRequest,
+                                                   @RequestBody MemoRequest.Update updateRequest,
                                                    @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
         return memoService.updateMemo(userDetails.getUsername(), id, updateRequest);
     }

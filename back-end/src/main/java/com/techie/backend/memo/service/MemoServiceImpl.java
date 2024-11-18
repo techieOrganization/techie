@@ -4,7 +4,6 @@ import com.techie.backend.global.exception.memo.EmptyContentException;
 import com.techie.backend.memo.domain.Memo;
 import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
-import com.techie.backend.memo.dto.MemoUpdateRequest;
 import com.techie.backend.memo.repository.MemoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.repository.UserRepository;
@@ -37,7 +36,7 @@ public class MemoServiceImpl implements MemoService {
     // -- 메모 생성 --
     @Override
     public ResponseEntity<MemoResponse> createMemo(MemoRequest request, String username) {
-        if (request.getContent() == null || request.getContent().trim().isEmpty()) {
+        if (request.getContent() == null || request.getContent().isBlank()) {
             throw new EmptyContentException();
         }
 
@@ -109,7 +108,7 @@ public class MemoServiceImpl implements MemoService {
 
     // -- 메모 수정 --
     @Override
-    public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoUpdateRequest updateRequest) throws AccessDeniedException {
+    public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoRequest.Update updateRequest) throws AccessDeniedException {
         Memo memo = memoRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("메모를 찾을 수 없습니다."));
 
@@ -119,6 +118,10 @@ public class MemoServiceImpl implements MemoService {
         }
 
         memo.changeTitle(updateRequest.getTitle());
+        String content = updateRequest.getContent();
+        if (content == null || content.isBlank()) {
+            throw new EmptyContentException();
+        }
         memo.changeContent(updateRequest.getContent());
         memoRepository.save(memo);
 
