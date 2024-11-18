@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 
 import { fetchVideoDetails } from '@/app/api/videoAPIDetail';
-// import { saveMemo, updateMemo, deleteMemo, getMemo, getAllMemos } from '@/libs/api/memoAPI';
+import { saveMemo, updateMemo, deleteMemo } from '@/app/api/memoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
 interface VideoDetails {
@@ -22,9 +22,12 @@ const loadYouTubeAPI = (onReady: () => void) => {
   if (!window.YT) {
     const script = document.createElement('script');
     script.src = 'https://www.youtube.com/iframe_api';
+    script.async = true;
     document.body.appendChild(script);
 
-    window.onYouTubeIframeAPIReady = onReady;
+    window.onYouTubeIframeAPIReady = () => {
+      onReady();
+    };
   } else {
     onReady();
   }
@@ -43,19 +46,16 @@ const VideoPlayerPage: React.FC = () => {
   const playerRef = useRef<YT.Player | null>(null);
   const isAddingMemoRef = useRef(isAddingMemo);
 
-  // YouTube API 초기화 및 로드
   useEffect(() => {
     loadYouTubeAPI(() => setIsYouTubeAPIReady(true));
   }, []);
-
-  // API가 로드된 후 YouTube Player 초기화
 
   useEffect(() => {
     isAddingMemoRef.current = isAddingMemo;
   }, [isAddingMemo]);
 
-  const handlePlayerStateChange = useCallback((event: YT.OnStateChangeEvent) => {
-    if (!isAddingMemoRef.current && event.data === YT.PlayerState.PAUSED && playerRef.current) {
+  const handlePlayerStateChange = useCallback((event: YT.PlayerStateChangeEvent) => {
+    if (event.data === YT.PlayerState.PAUSED && playerRef.current) {
       setMemoTime(formatTime(Math.floor(playerRef.current.getCurrentTime())));
     }
   }, []);
@@ -64,7 +64,10 @@ const VideoPlayerPage: React.FC = () => {
     if (isYouTubeAPIReady && videoId && !playerRef.current) {
       playerRef.current = new window.YT.Player('youtube-player', {
         videoId: videoId as string,
-        events: { onStateChange: handlePlayerStateChange },
+        events: {
+          onReady: () => {},
+          onStateChange: handlePlayerStateChange,
+        },
       });
     }
   }, [isYouTubeAPIReady, videoId, handlePlayerStateChange]);
@@ -82,63 +85,51 @@ const VideoPlayerPage: React.FC = () => {
     setEditIndex(null);
   };
 
-  // 메모 추가 핸들러
   const handleAddMemo = async () => {
-    if (playerRef.current) {
-      const timeInSeconds = Math.floor(playerRef.current.getCurrentTime());
-      setMemoTime(formatTime(timeInSeconds));
-      setIsAddingMemo(true);
+    if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
+      try {
+        const timeInSeconds = Math.floor(playerRef.current.getCurrentTime());
+        setMemoTime(formatTime(timeInSeconds));
+        setIsAddingMemo(true);
+      } catch (error) {
+        console.error('Error while getting current time:', error);
+      }
     }
   };
 
   const handleTimeClick = (time: string) => {
     if (playerRef.current) {
-      const [minutes, seconds] = time.split(':').map(Number); // "분:초" 형식의 시간을 분리
-      const timeInSeconds = minutes * 60 + seconds; // 분과 초를 합쳐서 초 단위로 변환
-      playerRef.current.seekTo(timeInSeconds, true); // YouTube 플레이어의 해당 시간으로 이동
+      const [minutes, seconds] = time.split(':').map(Number);
+      const timeInSeconds = minutes * 60 + seconds;
+      playerRef.current.seekTo(timeInSeconds, true);
     }
   };
 
   const handleSaveMemo = async () => {
     if (!memoText.trim() || !memoTime) return;
 
-    const newMemo = { time: memoTime, content: memoText };
-
-    if (editIndex !== null) {
-      /*
-      if (memoId) {
-        try {
-        //⭐ 메모 수정시, 백엔드 전달 정보
-          await updateMemo(memoId, { noteTime: memoTime, content: memoText }); // memoAPI에서 PUT 사용
+    try {
+      if (editIndex !== null) {
+        const memoId = memos[editIndex].id;
+        if (memoId) {
+          const response = await updateMemo(memoId, { noteTime: memoTime, content: memoText });
+          const updatedMemo = response.data;
           setMemos((prevMemos) =>
-            prevMemos.map((memo, idx) => (idx === editIndex ? { ...memo, ...newMemo } : memo))
+            prevMemos.map((memo, idx) => (idx === editIndex ? { ...updatedMemo } : memo)),
           );
-        } catch (error) {
-          console.error("Failed to update memo:", error);
         }
-      }
-      */
-
-      setMemos((prevMemos) =>
-        prevMemos.map((memo, idx) => (idx === editIndex ? { ...memo, ...newMemo } : memo)),
-      );
-    } else {
-      /*
-      try {
-      //⭐ 메모 추가시, 백엔드 전달 정보
+      } else {
         const response = await saveMemo({
-          title: 무슨 제목이 들어와야할까요?🌻,
+          title: videoDetails?.title || '',
           content: memoText,
           noteTime: memoTime,
-        }); 
+          videoId: videoId as string,
+        });
         const savedMemo = response.data;
-        setMemos((prevMemos) => [...prevMemos, { ...newMemo, id: savedMemo.id }]);
-      } catch (error) {
-        console.error("Failed to add memo:", error);
+        setMemos((prevMemos) => [...prevMemos, savedMemo]);
       }
-      */
-
-      setMemos((prevMemos) => [...prevMemos, newMemo]);
+    } catch (error) {
+      console.error('Failed to save memo:', error);
     }
 
     resetMemo();
@@ -152,56 +143,43 @@ const VideoPlayerPage: React.FC = () => {
   };
 
   const handleDeleteMemo = async (index: number) => {
-    // const memoId = memos[index].id;
+    const memoId = memos[index].id;
 
-    /*
-    if (memoId) {
-      try {
-        await deleteMemo(memoId); // memoAPI에서 DELETE 사용
-        setMemos((prevMemos) => prevMemos.filter((_, i) => i !== index));
-      } catch (error) {
-        console.error("Failed to delete memo:", error);
+    try {
+      if (memoId) {
+        await deleteMemo(memoId);
       }
+      setMemos((prevMemos) => prevMemos.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error('Failed to delete memo:', error);
     }
-    */
-
-    setMemos((prevMemos) => prevMemos.filter((_, i) => i !== index));
   };
 
-  // const handleFetchMemo = async (memoId: string) => {
-  //   /*
-  //   try {
-  //     const response = await getMemo(memoId); // memoAPI에서 GET 사용
-  //     const memo = response.data;
-  //     // 필요 시 memo를 처리하는 추가 로직
-  //   } catch (error) {
-  //     console.error("Failed to fetch memo:", error);
-  //   }
-  //   */
-  // };
-
-  // const fetchAllMemos = async () => {
-  //   /*
-  //   try {
-  //     const response = await getAllMemos(); // memoAPI에서 전체 메모 GET 사용
-  //     setMemos(response.data);
-  //   } catch (error) {
-  //     console.error("Failed to fetch all memos:", error);
-  //   }
-  //   */
-  // };
-
-  // useEffect(() => {
-  //   fetchAllMemos();
-  // }, []);
-
   useEffect(() => {
-    const loadVideoDetails = async () => {
-      if (videoId) {
-        const details = await fetchVideoDetails(videoId);
-        setVideoDetails(details);
+    const fetchAllMemosByVideo = async () => {
+      try {
+        if (videoId) {
+          const response = await fetch(`/api/memos/byVideo?vid=${videoId}`);
+          const data = await response.json();
+          setMemos(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch memos for video:', error);
       }
     };
+
+    const loadVideoDetails = async () => {
+      if (videoId) {
+        try {
+          const details = await fetchVideoDetails(videoId as string);
+          setVideoDetails(details);
+        } catch (error) {
+          console.error('Failed to fetch video details:', error);
+        }
+      }
+    };
+
+    fetchAllMemosByVideo();
     loadVideoDetails();
   }, [videoId]);
 

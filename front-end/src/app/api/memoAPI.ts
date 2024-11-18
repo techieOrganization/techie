@@ -4,6 +4,7 @@ interface MemoPayload {
   title: string;
   content: string;
   noteTime: string;
+  videoId: string;
 }
 
 export const saveMemo = (payload: MemoPayload) => {
