@@ -1,6 +1,5 @@
 package com.techie.backend.memo.dto;
 
-import com.techie.backend.memo.domain.Memo;
 import lombok.Data;
 
 @Data
