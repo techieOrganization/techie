@@ -9,6 +9,7 @@ import com.techie.backend.playlist.domain.Playlist;
 import com.techie.backend.playlist.dto.PlaylistRequest;
 import com.techie.backend.playlist.dto.PlaylistResponse;
 import com.techie.backend.playlist.repository.PlaylistRepository;
+import com.techie.backend.playlist_video.domain.PlaylistVideo;
 import com.techie.backend.playlist_video.repository.PlaylistVideoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.service.UserService;
@@ -130,7 +131,8 @@ public class PlaylistServiceImpl implements PlaylistService {
                 Video video = videoRepository.findById(videoId)
                         .orElseThrow(VideoNotFoundException::new);
 
-                if (!playlist.hasVideo(video, playlistVideoRepository)) {
+                boolean videoExists = playlistVideoRepository.existsByPlaylistAndVideo(playlist, video);
+                if (!videoExists) {
                     playlist.addVideo(video);
                 }
             }
@@ -141,7 +143,10 @@ public class PlaylistServiceImpl implements PlaylistService {
                 Video video = videoRepository.findById(videoId)
                         .orElseThrow(VideoNotFoundException::new);
 
-                if (playlist.hasVideo(video, playlistVideoRepository)) {
+                boolean videoExists = playlistVideoRepository.existsByPlaylistAndVideo(playlist, video);
+                if (videoExists) {
+                    PlaylistVideo playlistVideo = playlistVideoRepository.findByPlaylistAndVideo(playlist, video)
+                            .orElseThrow(VideoNotFoundException::new);
                     playlist.removeVideo(video, playlistVideoRepository);
                 }
             }

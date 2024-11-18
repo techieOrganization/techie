@@ -55,8 +55,4 @@ public class Playlist {
 
         playlistVideos.remove(playlistVideo);
     }
-
-    public boolean hasVideo(Video video, PlaylistVideoRepository playlistVideoRepository) {
-        return playlistVideoRepository.existsByPlaylistAndVideo(this, video);
-    }
 }
