@@ -1,5 +1,6 @@
 package com.techie.backend.playlist.service;
 
+import com.techie.backend.global.exception.playlist.InvalidVideoIdException;
 import com.techie.backend.global.exception.playlist.PlaylistNotFoundException;
 import com.techie.backend.global.exception.playlist.VideoNotFoundException;
 import com.techie.backend.global.exception.user.UserNotFoundException;
@@ -54,7 +55,7 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .toList();
 
         if (!invalidIds.isEmpty()) {
-            throw new IllegalArgumentException("videoId가 유효하지 않습니다. : " + invalidIds);
+            throw new InvalidVideoIdException();
         }
 
         List<Video> videos = videoRepository.findAllById(request.getVideoIds());
