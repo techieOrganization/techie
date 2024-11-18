@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -60,20 +59,15 @@ public class MemoServiceImpl implements MemoService {
 
     // --  메모 목록 조회 --
     @Override
-    public ResponseEntity<List<MemoResponse>> getMemoList(String username) {
+    public ResponseEntity<Slice<MemoResponse>> getMemoList(String username, Pageable pageable) {
         User user = userRepository.findByEmail(username);
-        List<Memo> memoList = memoRepository.findByUser(user);
+        Slice<MemoResponse> memoSlice = memoRepository.findByUser(user, pageable).map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
 
         // 현재 사용자가 작성한 메모가 없을 경우
-        if(memoList.isEmpty()) {
-            throw new EntityNotFoundException("현재 사용자가 작성한 메모가 없습니다.");
+        if(memoSlice.isEmpty()) {
+            throw new EntityNotFoundException("현재 사용자가 작성한 메모가 없거나 모두 표시했습니다.");
         }
-
-        List<MemoResponse> memoResponses = memoList.stream()
-                                                .map(memo -> modelMapper.map(memo, MemoResponse.class))
-                                                .toList();
-
-        return ResponseEntity.ok(memoResponses);
+        return ResponseEntity.ok(memoSlice);
     }
 
     // -- 메모 단건 조회 --
@@ -98,12 +92,12 @@ public class MemoServiceImpl implements MemoService {
         Video video = videoRepository.findByVideoId(videoId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 영상이 없습니다."));
 
-        Slice<Memo> sliceMemo = memoRepository.findByUserAndVideo(user, video, pageable);
-
-        if (sliceMemo.isEmpty()) {
-            throw new EntityNotFoundException("해당 영상에 작성한 메모가 없습니다.");
+        Slice<MemoResponse> memoSlice = memoRepository.findByUserAndVideo(user, video, pageable)
+                                                        .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
+        if (memoSlice.isEmpty()) {
+            throw new EntityNotFoundException("해당 영상에 작성한 메모가 없거나 모두 표시했습니다.");
         }
-        return ResponseEntity.ok(sliceMemo.map(MemoResponse::new));
+        return ResponseEntity.ok(memoSlice);
     }
 
     // -- 메모 수정 --

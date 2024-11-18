@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface MemoRepository extends JpaRepository<Memo, Long> {
     List<Memo> findByUser(User user);
-    // List<Memo> findByUserAndVideo(User user, Video video);
     Slice<Memo> findByUserAndVideo(User user, Video video, Pageable pageable);
+    Slice<Memo> findByUser(User user, Pageable pageable);
 }
