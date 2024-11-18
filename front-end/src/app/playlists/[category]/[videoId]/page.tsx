@@ -4,8 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 
 import { fetchVideoDetails } from '@/app/api/videoAPIDetail';
-// import { saveMemo, updateMemo, deleteMemo, getMemo, getAllMemos } from '@/libs/api/memoAPI';
-import '@/styles/pages/playlist/playlist.scss';
+// import { saveMemo, updateMemo, deleteMemo, getMemo, getAllMemos } from '@/app/api/memoAPI';
 
 interface VideoDetails {
   title: string;

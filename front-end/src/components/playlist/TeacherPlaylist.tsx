@@ -1,48 +1,51 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-
 import instructorData from '@/data/instructorData';
+import { useQuery } from '@tanstack/react-query';
+import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
+import { Video } from '@/types/video';
 
-import { fetchPlaylistVideos, fetchAllPlaylistsVideos, Video } from '@/app/api/teacherAPI';
-import '@/styles/pages/playlist/playlist.scss';
+const TeacherPlaylist = () => {
+  const [selected, setSelected] = useState(instructorData[0]);
 
-interface TeacherPlaylistProps {
-  playlistId: string;
-}
+  // 전체 강사의 동영상 가져오기
+  const allQuery = useQuery<Video[], Error>({
+    queryKey: ['allVideos'],
+    queryFn: getAllVideos,
+    enabled: selected.name === '전체',
+    staleTime: 1000 * 60 * 30,
+  });
 
-const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ playlistId }) => {
-  const [videos, setVideos] = useState<Video[]>([]);
+  // 특정 강사의 동영상을 가져오기
+  const instQuery = useQuery<Video[], Error>({
+    queryKey: ['instVideos', selected.channeld],
+    queryFn: () => getLatestVideos(selected.channeld!),
+    enabled: selected.name !== '전체' && !!selected.channeld,
+    staleTime: 1000 * 60 * 10,
+  });
 
-  useEffect(() => {
-    const loadVideos = async () => {
-      const data = playlistId
-        ? await fetchPlaylistVideos(playlistId)
-        : await fetchAllPlaylistsVideos();
-      setVideos(data);
-    };
-    loadVideos();
-  }, [playlistId]);
+  const videos = selected.name === '전체' ? allQuery.data || [] : instQuery.data || [];
 
   return (
     <div className="playlists_container">
       <ul className="dev_list teacher">
-        {instructorData.map((instructor) => (
-          <li key={instructor.name}>
-            <Link href={`/teacher-lists/${instructor.name}`}>
-              <Image src={instructor.img} alt={instructor.name} width={70} height={70} />
-              <span>{instructor.name}</span>
-            </Link>
+        {instructorData.map((inst) => (
+          <li key={inst.name}>
+            <button type="button" onClick={() => setSelected(inst)}>
+              <Image src={inst.img} alt={inst.name} width={70} height={70} />
+              <span>{inst.name}</span>
+            </button>
           </li>
         ))}
       </ul>
-
       <div className="video_list_cont">
         <div className="inner">
           <ul className="video_list">
-            {videos.length > 0 ? (
+            {allQuery.isLoading || instQuery.isLoading ? (
+              <p>로딩 중입니다...</p>
+            ) : videos.length > 0 ? (
               videos.map((video, index) => (
                 <li key={index} className="video_item">
                   <a
@@ -63,7 +66,7 @@ const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ playlistId }) => {
                 </li>
               ))
             ) : (
-              <p>해당 강사의 영상을 불러오는 중입니다...</p>
+              <p>동영상을 찾을 수 없습니다.</p>
             )}
           </ul>
         </div>
