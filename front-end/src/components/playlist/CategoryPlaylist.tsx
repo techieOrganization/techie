@@ -3,11 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Video } from '@/types/video';
 import vidListData from '@/data/vidListData';
-
 import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
@@ -17,15 +15,36 @@ interface CategoryPlaylistProps {
 
 const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
   const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('query'); // 검색어 가져오기
   const router = useRouter();
 
   useEffect(() => {
     const loadVideos = async () => {
-      const data = await fetchVideosByCategory(category);
-      setVideos(data);
+      setLoading(true);
+      setError('');
+      try {
+        let data;
+        if (searchQuery) {
+          // 검색어가 있는 경우
+          data = await fetchVideosByCategory({ query: searchQuery });
+        } else {
+          // 카테고리 기반 데이터 호출
+          data = await fetchVideosByCategory({ category });
+        }
+        setVideos(data);
+      } catch (err) {
+        console.error('Error fetching videos:', err);
+        setError('비디오를 불러오는 중 문제가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
     };
+
     loadVideos();
-  }, [category]);
+  }, [category, searchQuery]);
 
   const handleCategoryClick = (newCategory: string) => {
     router.push(`/playlists/${newCategory}`);
@@ -43,13 +62,19 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
           </li>
         ))}
       </ul>
+
       <div className="video_list_cont">
         <div className="inner">
-          <ul className="video_list">
-            {videos.length > 0 ? (
-              videos.map((video, index) => (
+          <h3 className="search_result">{searchQuery ? `검색 결과: '${searchQuery}'` : ''}</h3>
+          {loading ? (
+            <p>로딩 중...</p>
+          ) : error ? (
+            <p className="error_message">{error}</p>
+          ) : videos.length > 0 ? (
+            <ul className="video_list">
+              {videos.map((video, index) => (
                 <li key={index} className="video_item">
-                  <Link href={`/playlists/${category}/${video.videoId}`}>
+                  <Link href={`https://www.youtube.com/watch?v=${video.videoId}`}>
                     <Image
                       src={video.thumbnails.medium.url}
                       alt={video.title}
@@ -61,11 +86,11 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
                   </Link>
                 </li>
-              ))
-            ) : (
-              <p>해당 카테고리의 영상을 불러오는 중입니다...</p>
-            )}
-          </ul>
+              ))}
+            </ul>
+          ) : (
+            <p>결과를 찾을 수 없습니다.</p>
+          )}
         </div>
       </div>
     </div>

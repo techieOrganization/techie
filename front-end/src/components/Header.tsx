@@ -42,6 +42,14 @@ const Header = () => {
     dispatch(clearUserInfo());
   };
 
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(`/playlists?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
     <header id="header">
       <div className="inner">
@@ -62,8 +70,13 @@ const Header = () => {
           </ul>
         </div>
         <div className="search_box">
-          <input type="text" placeholder="검색어를 입력하세요" />
-          <button type="button">
+          <input
+            type="text"
+            placeholder="검색어를 입력하세요"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="button" onClick={handleSearch}>
             <FiSearch size={20} />
           </button>
         </div>
