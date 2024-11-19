@@ -53,6 +53,9 @@ const VideoPlayerPage: React.FC = () => {
   const [hasMoreMemos, setHasMoreMemos] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
 
+  // 삭제 확인 팝업을 위한 상태
+  const [memoToDelete, setMemoToDelete] = useState<string | null>(null);
+
   const playerRef = useRef<YT.Player | null>(null);
 
   useEffect(() => {
@@ -65,9 +68,6 @@ const VideoPlayerPage: React.FC = () => {
         ? Math.floor(playerRef.current.getCurrentTime())
         : 0;
       const formattedTime = formatTime(currentTime);
-
-      console.log('Paused at time (seconds):', currentTime);
-      console.log('Formatted memo time:', formattedTime);
 
       setMemoTime(formattedTime); // 일시정지 시간 설정
     }
@@ -122,18 +122,19 @@ const VideoPlayerPage: React.FC = () => {
       const payload = {
         title: videoDetails?.title || '',
         content: memoText,
-        noteTime: memoTime || '00:00', // noteTime 기본값 설정
+        noteTime: memoTime || '00:00', // 기본값 설정
         videoId,
       };
 
-      console.log('Saving new memo with payload:', payload);
-      const response = await saveMemo(payload);
-      console.log('Saved memo response:', response.data);
+      await saveMemo(payload); // response 변수 제거
 
       // 메모를 저장한 후 첫 페이지부터 다시 로드
+      const updatedResponse = await getMemosByVideo(videoId, 0);
+      setMemos(updatedResponse.data.content);
+
+      // 페이지네이션 상태 업데이트
       setCurrentPage(0);
-      setMemos([]);
-      setHasMoreMemos(true);
+      setHasMoreMemos(!updatedResponse.data.last);
     } catch (error) {
       console.error('Failed to save memo:', error);
     }
@@ -142,8 +143,6 @@ const VideoPlayerPage: React.FC = () => {
   };
 
   const handleEditMemo = (memo: Memo) => {
-    console.log('Editing memo:', memo);
-
     setEditingMemoId(memo.id || null);
     setEditedMemoContent(memo.content);
     setEditedMemoTime(memo.noteTime || '00:00');
@@ -169,14 +168,16 @@ const VideoPlayerPage: React.FC = () => {
         noteTime: editedMemoTime || '00:00',
         content: editedMemoContent,
       };
-      console.log('Updating memo with ID:', memoId, 'and payload:', payload);
-      const response = await updateMemo(memoId, payload);
-      console.log('Updated memo response:', response.data);
+
+      await updateMemo(memoId, payload);
 
       // 메모를 수정한 후 첫 페이지부터 다시 로드
+      const updatedResponse = await getMemosByVideo(videoId, 0);
+      setMemos(updatedResponse.data.content);
+
+      // 페이지네이션 상태 업데이트
       setCurrentPage(0);
-      setMemos([]);
-      setHasMoreMemos(true);
+      setHasMoreMemos(!updatedResponse.data.last);
     } catch (error) {
       console.error('Failed to update memo:', error);
     }
@@ -191,14 +192,27 @@ const VideoPlayerPage: React.FC = () => {
     }
 
     try {
-      console.log('Deleting memo with ID:', memoId);
       await deleteMemo(memoId);
-      console.log('Memo deleted successfully.');
 
       // 메모를 삭제한 후 첫 페이지부터 다시 로드
-      setCurrentPage(0);
-      setMemos([]);
-      setHasMoreMemos(true);
+      try {
+        const updatedResponse = await getMemosByVideo(videoId, 0);
+        setMemos(updatedResponse.data.content);
+
+        // 페이지네이션 상태 업데이트
+        setCurrentPage(0);
+        setHasMoreMemos(!updatedResponse.data.last);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+
+        if (axiosError.response?.status === 404) {
+          // 메모가 없을 경우
+          setMemos([]);
+          setHasMoreMemos(false);
+        } else {
+          console.error('Failed to fetch memos after deletion:', axiosError);
+        }
+      }
     } catch (error) {
       console.error('Failed to delete memo:', error);
     }
@@ -223,7 +237,9 @@ const VideoPlayerPage: React.FC = () => {
       try {
         const response = await getMemosByVideo(videoId, page);
 
-        setMemos((prevMemos) => [...prevMemos, ...response.data.content]);
+        setMemos((prevMemos) =>
+          page === 0 ? response.data.content : [...prevMemos, ...response.data.content],
+        );
 
         // 마지막 페이지인지 확인
         const isLastPage = response.data.last;
@@ -284,7 +300,7 @@ const VideoPlayerPage: React.FC = () => {
           <div id="youtube-player" className="video_frame"></div>
           <div className="memo_container">
             <h4 className="save_memo_title">메모 목록</h4>
-            <p>메모를 클릭하여 수정하거나 삭제할 수 있습니다.</p>
+            <p>메모를 클릭하여 수정하거나 삭제할 수 있습니다.✏️</p>
             <div className="memo_list">
               {memos.length > 0 ? (
                 memos.map((memo, index) => {
@@ -298,7 +314,6 @@ const VideoPlayerPage: React.FC = () => {
                       <span
                         className="memo_time"
                         onClick={() => {
-                          console.log('Memo time clicked:', memo.noteTime);
                           handleTimeClick(memo.noteTime);
                         }}
                       >
@@ -323,7 +338,7 @@ const VideoPlayerPage: React.FC = () => {
                           <p className="memo_content">{memo.content || '내용 없음'}</p>
                           <div className="memo_actions">
                             <button onClick={() => handleEditMemo(memo)}>수정</button>
-                            <button onClick={() => handleDeleteMemo(memo.id!)}>삭제</button>
+                            <button onClick={() => setMemoToDelete(memo.id!)}>삭제</button>
                           </div>
                         </>
                       )}
@@ -331,7 +346,7 @@ const VideoPlayerPage: React.FC = () => {
                   );
                 })
               ) : (
-                <p>메모가 없습니다. 메모를 추가해보세요!</p>
+                <p className="memo_notice">메모가 없습니다. 메모를 추가해보세요!</p>
               )}
             </div>
 
@@ -361,6 +376,28 @@ const VideoPlayerPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {memoToDelete && (
+        <div className="modal">
+          <div className="modal_content">
+            <p>정말 삭제하시겠습니까?</p>
+            <div className="modal_actions">
+              <button className="cancel_button" onClick={() => setMemoToDelete(null)}>
+                취소
+              </button>
+              <button
+                className="save_button"
+                onClick={() => {
+                  handleDeleteMemo(memoToDelete);
+                  setMemoToDelete(null);
+                }}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

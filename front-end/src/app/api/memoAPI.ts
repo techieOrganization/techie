@@ -1,10 +1,10 @@
 import apiClient from '@/components/axios/apiClient';
 
 interface MemoPayload {
-  title?: string; // 수정 시에는 제목이 필요 없을 수 있으므로 선택적으로 변경
+  title?: string;
   content: string;
   noteTime: string;
-  videoId?: string; // 수정 시에는 필요 없을 수 있음
+  videoId?: string;
 }
 
 // 메모 저장
