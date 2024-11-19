@@ -19,6 +19,7 @@ interface Memo {
   videoId: string;
 }
 
+// YouTube API를 동적으로 로드
 const loadYouTubeAPI = (onReady: () => void) => {
   if (!window.YT) {
     const script = document.createElement('script');
@@ -43,25 +44,20 @@ const VideoPlayerPage: React.FC = () => {
   const [memoTime, setMemoTime] = useState<string | null>(null);
   const [editingMemoId, setEditingMemoId] = useState<string | null>(null);
   const [isAddingMemo, setIsAddingMemo] = useState(false);
-
-  // 메모별 수정 내용을 저장하기 위한 상태
   const [editedMemoContent, setEditedMemoContent] = useState('');
   const [editedMemoTime, setEditedMemoTime] = useState<string | null>(null);
-
-  // 페이지네이션 상태 추가
   const [currentPage, setCurrentPage] = useState(0);
   const [hasMoreMemos, setHasMoreMemos] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
-
-  // 삭제 확인 팝업을 위한 상태
   const [memoToDelete, setMemoToDelete] = useState<string | null>(null);
-
   const playerRef = useRef<YT.Player | null>(null);
 
+  // YouTube API 로드
   useEffect(() => {
     loadYouTubeAPI(() => setIsYouTubeAPIReady(true));
   }, []);
 
+  // YouTube 플레이어 상태 변경 핸들러
   const handlePlayerStateChange = useCallback((event: YT.PlayerStateChangeEvent) => {
     if (event.data === YT.PlayerState.PAUSED && playerRef.current) {
       const currentTime = playerRef.current.getCurrentTime
@@ -69,10 +65,11 @@ const VideoPlayerPage: React.FC = () => {
         : 0;
       const formattedTime = formatTime(currentTime);
 
-      setMemoTime(formattedTime); // 일시정지 시간 설정
+      setMemoTime(formattedTime);
     }
   }, []);
 
+  // YouTube 플레이어 초기화
   useEffect(() => {
     if (isYouTubeAPIReady && videoId && !playerRef.current) {
       try {
@@ -88,30 +85,34 @@ const VideoPlayerPage: React.FC = () => {
     }
   }, [isYouTubeAPIReady, videoId, handlePlayerStateChange]);
 
+  // 시간을 포맷팅
   const formatTime = (seconds: number): string => {
     const date = new Date(0);
     date.setSeconds(seconds);
     return date.toISOString().substr(14, 5);
   };
 
+  // 메모 초기화
   const resetMemo = () => {
     setMemoText('');
     setIsAddingMemo(false);
     setMemoTime(null);
   };
 
+  // 메모 추가
   const handleAddMemo = () => {
     if (playerRef.current?.getCurrentTime) {
       const currentTime = Math.floor(playerRef.current.getCurrentTime());
       const formattedTime = formatTime(currentTime);
 
-      setMemoTime(formattedTime); // 유튜브에서 가져온 시간 설정
+      setMemoTime(formattedTime);
       setIsAddingMemo(true);
     } else {
       console.error('Player is not initialized. Cannot add memo.');
     }
   };
 
+  // 메모 저장
   const handleSaveMemo = async () => {
     if (!memoText.trim() || !memoTime) {
       console.warn('Memo text or time is missing:', { memoText, memoTime });
@@ -122,17 +123,14 @@ const VideoPlayerPage: React.FC = () => {
       const payload = {
         title: videoDetails?.title || '',
         content: memoText,
-        noteTime: memoTime || '00:00', // 기본값 설정
+        noteTime: memoTime || '00:00',
         videoId,
       };
 
-      await saveMemo(payload); // response 변수 제거
+      await saveMemo(payload);
 
-      // 메모를 저장한 후 첫 페이지부터 다시 로드
       const updatedResponse = await getMemosByVideo(videoId, 0);
       setMemos(updatedResponse.data.content);
-
-      // 페이지네이션 상태 업데이트
       setCurrentPage(0);
       setHasMoreMemos(!updatedResponse.data.last);
     } catch (error) {
@@ -142,18 +140,21 @@ const VideoPlayerPage: React.FC = () => {
     resetMemo();
   };
 
+  // 메모 수정 시작
   const handleEditMemo = (memo: Memo) => {
     setEditingMemoId(memo.id || null);
     setEditedMemoContent(memo.content);
     setEditedMemoTime(memo.noteTime || '00:00');
   };
 
+  // 메모 수정 취소
   const handleCancelEdit = () => {
     setEditingMemoId(null);
     setEditedMemoContent('');
     setEditedMemoTime(null);
   };
 
+  // 메모 수정 저장
   const handleSaveEditedMemo = async (memoId: string) => {
     if (!editedMemoContent.trim() || !editedMemoTime) {
       console.warn('Edited memo text or time is missing:', {
@@ -171,11 +172,8 @@ const VideoPlayerPage: React.FC = () => {
 
       await updateMemo(memoId, payload);
 
-      // 메모를 수정한 후 첫 페이지부터 다시 로드
       const updatedResponse = await getMemosByVideo(videoId, 0);
       setMemos(updatedResponse.data.content);
-
-      // 페이지네이션 상태 업데이트
       setCurrentPage(0);
       setHasMoreMemos(!updatedResponse.data.last);
     } catch (error) {
@@ -185,6 +183,7 @@ const VideoPlayerPage: React.FC = () => {
     handleCancelEdit();
   };
 
+  // 메모 삭제
   const handleDeleteMemo = async (memoId: string) => {
     if (!memoId) {
       console.warn('Memo ID is missing for deletion');
@@ -194,30 +193,16 @@ const VideoPlayerPage: React.FC = () => {
     try {
       await deleteMemo(memoId);
 
-      // 메모를 삭제한 후 첫 페이지부터 다시 로드
-      try {
-        const updatedResponse = await getMemosByVideo(videoId, 0);
-        setMemos(updatedResponse.data.content);
-
-        // 페이지네이션 상태 업데이트
-        setCurrentPage(0);
-        setHasMoreMemos(!updatedResponse.data.last);
-      } catch (error) {
-        const axiosError = error as AxiosError;
-
-        if (axiosError.response?.status === 404) {
-          // 메모가 없을 경우
-          setMemos([]);
-          setHasMoreMemos(false);
-        } else {
-          console.error('Failed to fetch memos after deletion:', axiosError);
-        }
-      }
+      const updatedResponse = await getMemosByVideo(videoId, 0);
+      setMemos(updatedResponse.data.content);
+      setCurrentPage(0);
+      setHasMoreMemos(!updatedResponse.data.last);
     } catch (error) {
       console.error('Failed to delete memo:', error);
     }
   };
 
+  // 특정 시간대로 이동
   const handleTimeClick = (time: string | undefined) => {
     if (!time) {
       console.error('Time is missing for memo');
@@ -225,13 +210,14 @@ const VideoPlayerPage: React.FC = () => {
     }
 
     if (playerRef.current?.seekTo) {
-      const [minutes, seconds] = time.split(':').map(Number); // 시간 분리
-      playerRef.current.seekTo(minutes * 60 + seconds, true); // 해당 시간으로 이동
+      const [minutes, seconds] = time.split(':').map(Number);
+      playerRef.current.seekTo(minutes * 60 + seconds, true);
     } else {
       console.error('Player is not initialized.');
     }
   };
 
+  // 메모 리스트 가져오기
   const fetchMemosForVideo = useCallback(
     async (page: number) => {
       try {
@@ -241,7 +227,6 @@ const VideoPlayerPage: React.FC = () => {
           page === 0 ? response.data.content : [...prevMemos, ...response.data.content],
         );
 
-        // 마지막 페이지인지 확인
         const isLastPage = response.data.last;
         setHasMoreMemos(!isLastPage);
       } catch (error) {
@@ -258,10 +243,12 @@ const VideoPlayerPage: React.FC = () => {
     [videoId],
   );
 
+  // 메모 페이지네이션
   useEffect(() => {
     fetchMemosForVideo(currentPage);
   }, [currentPage, fetchMemosForVideo]);
 
+  // 동영상 정보 가져오기
   useEffect(() => {
     const fetchVideoDetailsAsync = async () => {
       if (videoId) {
@@ -277,6 +264,7 @@ const VideoPlayerPage: React.FC = () => {
     fetchVideoDetailsAsync();
   }, [videoId]);
 
+  // 무한 스크롤 처리
   const lastMemoElementRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (observer.current) observer.current.disconnect();
