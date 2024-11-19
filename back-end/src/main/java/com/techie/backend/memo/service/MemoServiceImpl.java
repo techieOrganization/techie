@@ -64,10 +64,6 @@ public class MemoServiceImpl implements MemoService {
         Slice<MemoResponse> memoSlice = memoRepository.findByUser(user, pageable)
                                         .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
 
-        if(memoSlice.isEmpty()) {
-            throw new EntityNotFoundException("현재 사용자가 작성한 메모가 없거나 모두 표시했습니다.");
-        }
-
         return ResponseEntity.ok(memoSlice);
     }
 
@@ -95,9 +91,7 @@ public class MemoServiceImpl implements MemoService {
 
         Slice<MemoResponse> memoSlice = memoRepository.findByUserAndVideo(user, video, pageable)
                                                         .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
-        if (memoSlice.isEmpty()) {
-            throw new EntityNotFoundException("해당 영상에 작성한 메모가 없거나 모두 표시했습니다.");
-        }
+
         return ResponseEntity.ok(memoSlice);
     }
 
