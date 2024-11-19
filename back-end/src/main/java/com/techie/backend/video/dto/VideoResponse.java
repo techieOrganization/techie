@@ -8,6 +8,7 @@ import java.util.Map;
 
 @Data
 public class VideoResponse {
+    private String videoId;
     private String title;
     private String description;
     private String channelTitle;
