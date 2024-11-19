@@ -50,6 +50,12 @@ const Header = () => {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <header id="header">
       <div className="inner">
@@ -75,6 +81,7 @@ const Header = () => {
             placeholder="검색어를 입력하세요"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <button type="button" onClick={handleSearch}>
             <FiSearch size={20} />
