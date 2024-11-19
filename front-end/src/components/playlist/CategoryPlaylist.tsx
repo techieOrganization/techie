@@ -74,7 +74,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category }) => {
             <ul className="video_list">
               {videos.map((video, index) => (
                 <li key={index} className="video_item">
-                  <Link href={`https://www.youtube.com/watch?v=${video.videoId}`}>
+                  <Link href={`/playlists/${category}/${video.videoId}`}>
                     <Image
                       src={video.thumbnails.medium.url}
                       alt={video.title}

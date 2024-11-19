@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import '@/styles/common/common.scss';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -18,16 +19,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ReactQueryProvider>
-        <ClientProvider>
-          <body>
+      <body>
+        <ReactQueryProvider>
+          <ClientProvider>
             <Header />
             <ChatbotLayout />
             {children}
             <Footer />
-          </body>
-        </ClientProvider>
-      </ReactQueryProvider>
+          </ClientProvider>
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }
