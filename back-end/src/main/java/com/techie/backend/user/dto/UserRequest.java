@@ -18,4 +18,8 @@ public class UserRequest {
         private String nickname;
         private String newPassword;
     }
+    @Data
+    public static class Delete {
+        private String password;
+    }
 }

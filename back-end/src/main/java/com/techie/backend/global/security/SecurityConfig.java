@@ -52,10 +52,10 @@ public class SecurityConfig {
                                 "/static/**",
                                 "/log.png").permitAll()
                         .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/api/gpt/**").permitAll()
-                        .requestMatchers("/api/videos/**").permitAll()
                         .requestMatchers("/api/users/me").authenticated()
+                        .requestMatchers("/api/gpt/**").permitAll()
                         .requestMatchers("/api/gpt/qna").authenticated()
+                        .requestMatchers("/api/videos/**").permitAll()
                         .requestMatchers("/api/users/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)

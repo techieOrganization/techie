@@ -4,16 +4,16 @@ import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.gpt.dto.GptRequest;
 import com.techie.backend.gpt.dto.GptResponse;
 import com.techie.backend.gpt.service.GptService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Tag(name = "GPT 관리 API", description = "GPT 관련 API 엔드포인트")
 @RequestMapping("/api/gpt")
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
 @RequiredArgsConstructor
 public class GptController {
     private final GptService gptService;

@@ -16,6 +16,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public User getUserFromSecurityContext(UserDetailsCustom userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        return user;
+    }
+
     @Override
     public Boolean joinProcess(UserRequest.Register request) {
         String email = request.getEmail();
@@ -23,9 +31,6 @@ public class UserServiceImpl implements UserService {
         String confirmPassword = request.getConfirmPassword();
         String nickname = request.getNickname();
 
-        if (email == null || email.isEmpty() || password == null || password.isEmpty() || nickname == null || nickname.isEmpty()) {
-            throw new EmptyFieldException();
-        }
         if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
             throw new InvalidEmailFormatException();
         }
@@ -43,7 +48,7 @@ public class UserServiceImpl implements UserService {
                     .email(email)
                     .password(bCryptPasswordEncoder.encode(password))
                     .nickname(nickname)
-                    .role("ROLE_ADMIN")
+                    .role("ROLE_USER")
                     .build();
             userRepository.save(data);
 
@@ -53,42 +58,63 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse.Information getUser(UserDetailsCustom userDetails) {
-        String email = userDetails.getUsername();
-        String nickname = userDetails.getNickname();
-
-        return new UserResponse.Information(email, nickname);
+        User user = getUserFromSecurityContext(userDetails);
+        return new UserResponse.Information(user.getEmail(), user.getNickname());
     }
 
     @Override
     public Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
+        try {
+            if (isRequestEmpty(request)) {
+                throw new NoChangesException();
+            }
 
-        if (user == null) {
-            return false;
+            User user = getUserFromSecurityContext(userDetails);
+            boolean isUpdated = false;
+
+            if (request.getNickname() != null && !request.getNickname().isEmpty() &&
+                    !request.getNickname().equals(user.getNickname())) {
+                user = user.toBuilder()
+                        .nickname(request.getNickname())
+                        .build();
+                isUpdated = true;
+            }
+
+            if (request.getNewPassword() != null && !request.getNewPassword().isEmpty() &&
+                    !bCryptPasswordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+                String encodedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
+                user = user.toBuilder()
+                        .password(encodedPassword)
+                        .build();
+                isUpdated = true;
+            }
+
+            if (isUpdated) {
+                userRepository.save(user);
+                return true;
+            }
+
+            throw new NoChangesException();
+
+        } catch (UserNotFoundException e) {
+            throw new NoChangesException();
         }
-        if (request.getNewPassword() == null || request.getNewPassword().equals(user.getPassword())) {
-            return false;
-        }
+    }
 
-        String updatedNickname = request.getNickname() != null ? request.getNickname() : user.getNickname();
-        String updatedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
-        User updatedUser = user.toBuilder()
-                .nickname(updatedNickname)
-                .password(updatedPassword)
-                .build();
-        userRepository.save(updatedUser);
-
-        return true;
+    private boolean isRequestEmpty(UserRequest.Update request) {
+        return (request.getNickname() == null || request.getNickname().isEmpty()) &&
+                (request.getNewPassword() == null || request.getNewPassword().isEmpty());
     }
 
     @Override
-    public Boolean deleteUser(String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            return false;
-        }
-        userRepository.delete(user);
+    public Boolean deleteUser(UserDetailsCustom userDetails, UserRequest.Delete request) {
+        User user = getUserFromSecurityContext(userDetails);
 
+        if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+
+        userRepository.delete(user);
         return true;
     }
 }

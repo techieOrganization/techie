@@ -4,7 +4,6 @@ import com.techie.backend.global.exception.memo.EmptyContentException;
 import com.techie.backend.memo.domain.Memo;
 import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
-import com.techie.backend.memo.dto.MemoUpdateRequest;
 import com.techie.backend.memo.repository.MemoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.repository.UserRepository;
@@ -15,11 +14,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -35,7 +35,7 @@ public class MemoServiceImpl implements MemoService {
     // -- 메모 생성 --
     @Override
     public ResponseEntity<MemoResponse> createMemo(MemoRequest request, String username) {
-        if (request.getContent() == null || request.getContent().trim().isEmpty()) {
+        if (request.getContent() == null || request.getContent().isBlank()) {
             throw new EmptyContentException();
         }
 
@@ -59,20 +59,16 @@ public class MemoServiceImpl implements MemoService {
 
     // --  메모 목록 조회 --
     @Override
-    public ResponseEntity<List<MemoResponse>> getMemoList(String username) {
+    public ResponseEntity<Slice<MemoResponse>> getMemoList(String username, Pageable pageable) {
         User user = userRepository.findByEmail(username);
-        List<Memo> memoList = memoRepository.findByUser(user);
+        Slice<MemoResponse> memoSlice = memoRepository.findByUser(user, pageable)
+                                        .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
 
-        // 현재 사용자가 작성한 메모가 없을 경우
-        if(memoList.isEmpty()) {
-            throw new EntityNotFoundException("현재 사용자가 작성한 메모가 없습니다.");
+        if(memoSlice.isEmpty()) {
+            throw new EntityNotFoundException("현재 사용자가 작성한 메모가 없거나 모두 표시했습니다.");
         }
 
-        List<MemoResponse> memoResponses = memoList.stream()
-                                                .map(memo -> modelMapper.map(memo, MemoResponse.class))
-                                                .toList();
-
-        return ResponseEntity.ok(memoResponses);
+        return ResponseEntity.ok(memoSlice);
     }
 
     // -- 메모 단건 조회 --
@@ -92,28 +88,22 @@ public class MemoServiceImpl implements MemoService {
 
     // -- 영상 별 메모 조회
     @Override
-    public ResponseEntity<List<MemoResponse>> getAllMemosByVideoId(String username, String videoId) {
+    public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideoId(String username, String videoId, Pageable pageable) {
         User user = userRepository.findByEmail(username);
         Video video = videoRepository.findByVideoId(videoId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 영상이 없습니다."));
 
-        List<Memo> memoList = memoRepository.findByUserAndVideo(user, video);
-
-        if (memoList.isEmpty()) {
-            throw new EntityNotFoundException("해당 영상에 작성한 메모가 없습니다.");
+        Slice<MemoResponse> memoSlice = memoRepository.findByUserAndVideo(user, video, pageable)
+                                                        .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
+        if (memoSlice.isEmpty()) {
+            throw new EntityNotFoundException("해당 영상에 작성한 메모가 없거나 모두 표시했습니다.");
         }
-
-        List<MemoResponse> memoResponses = memoList.stream()
-                                                .map(memo -> modelMapper.map(memo, MemoResponse.class))
-                                                .toList();
-
-        return ResponseEntity.ok(memoResponses);
+        return ResponseEntity.ok(memoSlice);
     }
-
 
     // -- 메모 수정 --
     @Override
-    public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoUpdateRequest updateRequest) throws AccessDeniedException {
+    public ResponseEntity<MemoResponse> updateMemo(String username, Long id, MemoRequest.Update updateRequest) throws AccessDeniedException {
         Memo memo = memoRepository.findById(id)
                 .orElseThrow(()->new EntityNotFoundException("메모를 찾을 수 없습니다."));
 
@@ -123,6 +113,10 @@ public class MemoServiceImpl implements MemoService {
         }
 
         memo.changeTitle(updateRequest.getTitle());
+        String content = updateRequest.getContent();
+        if (content == null || content.isBlank()) {
+            throw new EmptyContentException();
+        }
         memo.changeContent(updateRequest.getContent());
         memoRepository.save(memo);
 

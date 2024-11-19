@@ -6,21 +6,26 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@Getter
-@Entity
 @Table(name = "playlist_video")
+@Entity
+@Getter
+@NoArgsConstructor
 public class PlaylistVideo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "playlist_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_id", nullable = false)
     private Playlist playlist;
 
-    @JoinColumn(name = "video_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id", nullable = false)
     private Video video;
+
+    public PlaylistVideo(Playlist playlist, Video video) {
+        this.playlist = playlist;
+        this.video = video;
+    }
 }
