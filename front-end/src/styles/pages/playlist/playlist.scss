@@ -119,6 +119,11 @@
     .memo_container {
       width: 80%;
       padding: 0 5rem;
+
+      .memo_item {
+        border-bottom: 1px solid #ccc;
+        padding: 2rem 0;
+      }
     }
     .save_button {
       background: var(--sub-btn-color);
