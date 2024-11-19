@@ -66,3 +66,35 @@
     text-decoration: underline;
   }
 }
+
+.mypage_cont_all {
+  display: flex;
+
+  .left_cont {
+    width: 20%;
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 5rem;
+    }
+  }
+
+  .right_cont {
+    width: 80%;
+  }
+
+  ul {
+    li {
+      font-size: 1.6rem;
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+
+      &.active {
+        background: #f9f9f9;
+        font-weight: 700;
+      }
+    }
+  }
+}
