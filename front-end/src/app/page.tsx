@@ -11,6 +11,7 @@ import { FiSearch } from 'react-icons/fi';
 import { fetchPlaylistVideos } from '@/app/api/youtubeAPI';
 import studentData from '@/data/studentData';
 import { Video } from '@/types/video';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -23,6 +24,21 @@ export default function Home() {
 
     getVideos();
   }, []);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(`/playlists?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return (
     <>
@@ -186,8 +202,14 @@ export default function Home() {
             </li>
           </ul>
           <div className="search_box">
-            <input type="text" placeholder="검색어를 입력하세요" />
-            <button type="button">
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button type="button" onClick={handleSearch}>
               <FiSearch size={20} />
             </button>
           </div>

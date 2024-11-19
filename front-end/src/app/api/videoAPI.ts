@@ -1,8 +1,27 @@
 import { Video } from '@/types/video';
 
-export const fetchVideosByCategory = async (category: string): Promise<Video[]> => {
+interface FetchVideosOptions {
+  category?: string; // 카테고리 이름 (선택)
+  query?: string; // 검색어 (선택)
+}
+
+export const fetchVideosByCategory = async ({
+  category = 'all',
+  query = '',
+}: FetchVideosOptions): Promise<Video[]> => {
   try {
-    const url = category === 'all' ? '/api/videos?query=' : `/api/videos/${category}`;
+    let url;
+
+    if (query) {
+      // 검색어가 있는 경우
+      url = `/api/videos?query=${encodeURIComponent(query)}`;
+    } else if (category === 'all') {
+      // 전체 비디오 호출
+      url = '/api/videos?query=';
+    } else {
+      // 카테고리별 호출
+      url = `/api/videos/${category}`;
+    }
 
     const response = await fetch(url);
 
