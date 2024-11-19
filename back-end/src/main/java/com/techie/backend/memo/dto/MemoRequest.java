@@ -8,4 +8,10 @@ public class MemoRequest {
     private String content;
     private String noteTime;
     private String videoId;
+
+    @Data
+    public static class Update {
+        private String title;
+        private String content;
+    }
 }
