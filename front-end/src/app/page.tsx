@@ -181,7 +181,7 @@ export default function Home() {
               <SwiperSlide key={index}>
                 <Link href={`/playlists/all/${video.videoId}`} className="vid_desc">
                   <div>
-                    <img
+                    <Image
                       src={video.thumbnails.medium.url}
                       alt={video.title}
                       width={video.thumbnails.medium.width}
