@@ -29,7 +29,7 @@ export const getMemo = (memoId: string) => {
 
 // 모든 메모 가져오기 (페이지네이션 지원)
 export const getAllMemos = (page: number = 1) => {
-  return apiClient.get('/memo', {
+  return apiClient.get('/memo/list', {
     params: { page },
   });
 };

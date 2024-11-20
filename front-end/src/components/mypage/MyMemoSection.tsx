@@ -1,15 +1,9 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { getAllMemos } from '@/app/api/memoAPI';
-
-interface Memo {
-  id: string;
-  title?: string;
-  content: string;
-  noteTime: string;
-  videoId?: string;
-}
+import { Memo } from '@/types/memo';
 
 const MyMemoSection: React.FC = () => {
   const [memos, setMemos] = useState<Memo[]>([]);
@@ -17,13 +11,12 @@ const MyMemoSection: React.FC = () => {
   const [hasMoreMemos, setHasMoreMemos] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
+  const router = useRouter();
 
-  // 메모 데이터를 가져오는 함수
   const fetchMemos = useCallback(async (page: number) => {
     setIsLoading(true);
     try {
       const response = await getAllMemos(page);
-      console.log('Fetched memos:', response.data.content);
       const newMemos = response.data.content;
 
       setMemos((prev) => [...prev, ...newMemos]);
@@ -35,7 +28,6 @@ const MyMemoSection: React.FC = () => {
     }
   }, []);
 
-  // 페이지네이션
   const lastMemoRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (observer.current) observer.current.disconnect();
@@ -62,12 +54,22 @@ const MyMemoSection: React.FC = () => {
       <div className="memo_list">
         {memos.map((memo, index) => {
           const isLastMemo = index === memos.length - 1;
+          const videoUrl = `/playlists/all/${memo.videoId}`;
 
           return (
             <div key={memo.id} className="memo_item" ref={isLastMemo ? lastMemoRef : null}>
-              <h4>{memo.title || '제목 없음'}</h4>
-              <p>{memo.content}</p>
-              <span>{memo.noteTime}</span>
+              <a
+                href={videoUrl}
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push(videoUrl);
+                }}
+                style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+              >
+                <h4>{memo.title || '제목 없음'}</h4>
+                <p>{memo.content}</p>
+                <span>{memo.noteTime}</span>
+              </a>
             </div>
           );
         })}
