@@ -119,6 +119,20 @@
     .memo_container {
       width: 80%;
       padding: 0 5rem;
+
+      .memo_item {
+        border-bottom: 1px solid #ccc;
+        padding: 2rem 0;
+      }
+
+      .memo_notice {
+        color: #444;
+        margin-top: 1rem;
+      }
+
+      .memo_form {
+        margin-top: 3rem;
+      }
     }
     .save_button {
       background: var(--sub-btn-color);
@@ -176,4 +190,49 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-top: 1rem;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100vh;
+
+  .modal_content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 5rem;
+    border-radius: 1rem;
+    border: 1px solid #ccc;
+  }
+
+  p {
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .modal_actions {
+    margin-top: 3rem;
+
+    button {
+      width: 8rem;
+      padding: 0.5rem;
+      border-radius: 1rem;
+      border: 1px solid #ccc;
+      margin-right: 1rem;
+      font-size: 1.4rem;
+    }
+    .save_button {
+      background: var(--sub-btn-color);
+      border-radius: 1rem;
+      color: #fff;
+      border: none;
+    }
+  }
 }
