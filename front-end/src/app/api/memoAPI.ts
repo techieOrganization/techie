@@ -36,8 +36,6 @@ export const getAllMemos = (page: number = 1) => {
 
 // 특정 동영상에 대한 메모 가져오기
 export const getMemosByVideo = (videoId: string, page: number = 1) => {
-  console.log('Requesting memos for videoId:', videoId);
-
   return apiClient.get('/memo/byVideo', {
     params: {
       vId: videoId, // API 요청 시 동영상 ID 전달

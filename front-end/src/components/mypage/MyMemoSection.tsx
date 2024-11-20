@@ -7,7 +7,7 @@ import { Memo } from '@/types/memo';
 
 const MyMemoSection: React.FC = () => {
   const [memos, setMemos] = useState<Memo[]>([]);
-  const [currentPage, setCurrentPage] = useState(0); // 페이지 0부터 시작
+  const [currentPage, setCurrentPage] = useState(0);
   const [hasMoreMemos, setHasMoreMemos] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -17,7 +17,7 @@ const MyMemoSection: React.FC = () => {
     setIsLoading(true);
     try {
       const response = await getAllMemos(page);
-      const newMemos = response.data.content; // 데이터 확인 필요
+      const newMemos = response.data.content;
       setMemos((prev) => [...prev, ...newMemos]);
       setHasMoreMemos(!response.data.last);
     } catch (error) {
