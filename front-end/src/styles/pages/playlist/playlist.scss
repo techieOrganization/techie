@@ -1,4 +1,44 @@
 .playlists_container {
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    z-index: 1001; // 모달이 다른 요소 위에 표시되도록
+
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input[type='text'] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #6ab5ffd5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin: 0.5rem 0;
+
+      &:hover {
+        background-color: #5a9bdb; // 버튼 호버 색상
+      }
+    }
+  }
+
   .inner {
     // padding: 10rem 0;
   }
@@ -91,6 +131,51 @@
       .date {
         color: #444;
         font-size: 1.25rem;
+      }
+      .button {
+        background-color: #6ab5ffd5;
+        font-size: 1.8rem;
+        color: white;
+        border-radius: 100%;
+        padding: 0px 1rem;
+        font-weight: bold;
+        text-align: center;
+        position: relative;
+        margin-left: 80%;
+        cursor: pointer;
+        transition: 0.5s ease;
+        &:hover {
+          transform: rotateZ(-45deg);
+        }
+      }
+      .bar-nav {
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        background-color: #6ab5ffd5;
+        margin-left: 35%;
+        margin-top: 2%;
+        border-radius: 10px;
+        transition: all 0.5s;
+        li {
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          text-align: center;
+          font-size: 1.2rem;
+          padding: 0.3rem;
+          cursor: pointer;
+          color: white;
+          font-weight: 600;
+          &:hover {
+            opacity: 0.5;
+          }
+        }
+      }
+      .bar-nav.isOpen {
+        opacity: 1;
+        transform: scale(1) translateY(5px);
       }
     }
   }

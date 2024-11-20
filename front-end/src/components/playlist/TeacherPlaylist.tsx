@@ -6,9 +6,16 @@ import instructorData from '@/data/instructorData';
 import { useQuery } from '@tanstack/react-query';
 import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
 import { Video } from '@/types/video';
+import '@/styles/pages/playlist/playlist.scss';
+import { saveVideo } from '@/app/api/teacherAPI';
+import Cookies from 'js-cookie';
 
 const TeacherPlaylist = () => {
   const [selected, setSelected] = useState(instructorData[0]);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [playlistName, setPlayListName] = useState('');
+  const [showModal, setShowModal] = useState(false); // 모달 상태 추가
+  const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]); // 선택된 비디오 ID 저장
 
   // 전체 강사의 동영상 가져오기
   const allQuery = useQuery<Video[], Error>({
@@ -25,6 +32,46 @@ const TeacherPlaylist = () => {
     enabled: selected.name !== '전체' && !!selected.channeld,
     staleTime: 1000 * 60 * 10,
   });
+
+  const openModal = () => {
+    setShowModal(true); // 모달 열기
+  };
+
+  const closeModal = () => {
+    setShowModal(false); // 모달 닫기
+    setPlayListName(''); // 입력 필드 초기화
+    setSelectedVideoIds([]); // 선택된 비디오 ID 초기화
+  };
+
+  const toggleBottomBar = (index: number) => {
+    setIsOpen(isOpen === index ? null : index);
+  };
+
+  const handleVideoSelect = (videoId: string) => {
+    // 비디오 ID를 선택된 비디오 ID 배열에 추가
+    if (selectedVideoIds.includes(videoId)) {
+      setSelectedVideoIds(selectedVideoIds.filter((id) => id !== videoId)); // 이미 선택된 경우 제거
+    } else {
+      setSelectedVideoIds([...selectedVideoIds, videoId]); // 새로 선택된 경우 추가
+    }
+  };
+
+  const handleSaveVideo = async () => {
+    const token = Cookies.get('token');
+    if (selectedVideoIds.length === 0) {
+      alert('선택된 비디오가 없습니다. 비디오를 선택해 주세요.');
+      return; // 선택된 비디오가 없으면 함수 종료
+    }
+
+    try {
+      await saveVideo(selectedVideoIds, playlistName, token); // 선택된 비디오 ID와 재생목록 이름 전송
+      alert('비디오가 재생목록에 저장되었습니다.');
+      closeModal(); // 저장 후 모달 닫기
+    } catch (error) {
+      console.error('Error saving video:', error);
+      alert('비디오 저장에 실패했습니다.');
+    }
+  };
 
   const videos = selected.name === '전체' ? allQuery.data || [] : instQuery.data || [];
 
@@ -63,6 +110,24 @@ const TeacherPlaylist = () => {
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
                   </a>
+                  <button
+                    className="button"
+                    onClick={() => {
+                      toggleBottomBar(index); // 하단 바 토글
+                    }}
+                  >
+                    +
+                  </button>
+                  <ul className={`bar-nav ${isOpen === index ? 'isOpen' : ''}`}>
+                    <li
+                      onClick={() => {
+                        handleVideoSelect(video.videoId); // 비디오 선택
+                        openModal();
+                      }}
+                    >
+                      재생목록에 저장
+                    </li>
+                  </ul>
                 </li>
               ))
             ) : (
@@ -71,6 +136,22 @@ const TeacherPlaylist = () => {
           </ul>
         </div>
       </div>
+      {/* 모달 */}
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>재생목록 이름 입력</h2>
+            <input
+              type="text"
+              value={playlistName}
+              onChange={(e) => setPlayListName(e.target.value)}
+              placeholder="재생목록 이름 입력"
+            />
+            <button onClick={handleSaveVideo}>저장</button>
+            <button onClick={closeModal}>닫기</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
