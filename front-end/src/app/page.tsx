@@ -10,6 +10,8 @@ import { FiSearch } from 'react-icons/fi';
 
 import { fetchPlaylistVideos } from '@/app/api/youtubeAPI';
 import studentData from '@/data/studentData';
+import vidListData from '@/data/vidListData';
+import instructorData from '@/data/instructorData';
 import { Video } from '@/types/video';
 import { useRouter } from 'next/navigation';
 
@@ -141,65 +143,14 @@ export default function Home() {
         <h2 className="dn">강의 목록</h2>
         <div className="inner">
           <ul className="dev_list">
-            <li>
-              <Link href="/playlists/language">
-                <Image src="/assets/images/main/dev_01.png" alt="언어" width={50} height={50} />
-                <span>언어</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/gameDev">
-                <Image src="/assets/images/main/dev_02.png" alt="게임개발" width={50} height={50} />
-                <span>게임개발</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/backend">
-                <Image src="/assets/images/main/dev_03.png" alt="백엔드" width={50} height={50} />
-                <span>백엔드</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/mobile">
-                <Image src="/assets/images/main/dev_04.png" alt="모바일" width={50} height={50} />
-                <span>모바일</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/frontend">
-                <Image
-                  src="/assets/images/main/dev_05.png"
-                  alt="프론트엔드"
-                  width={50}
-                  height={50}
-                />
-                <span>프론트엔드</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/data">
-                <Image src="/assets/images/main/dev_06.png" alt="데이터" width={50} height={50} />
-                <span>데이터</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/ai">
-                <Image src="/assets/images/main/dev_07.png" alt="인공지능" width={50} height={50} />
-                <span>인공지능</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/security">
-                <Image src="/assets/images/main/dev_08.png" alt="보안" width={50} height={50} />
-                <span>보안</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/playlists/cs">
-                <Image src="/assets/images/main/dev_09.png" alt="CS" width={50} height={50} />
-                <span>CS</span>
-              </Link>
-            </li>
+            {vidListData.map((tab) => (
+              <li key={tab.id}>
+                <Link href={`/playlists/${tab.id}`}>
+                  <Image src={tab.img} alt={tab.title} width={50} height={50} />
+                  <span>{tab.title}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
           <div className="search_box">
             <input
@@ -253,54 +204,21 @@ export default function Home() {
           <h2>당신의 멘토가 될 강사님들을 소개합니다🥳</h2>
           <p className="sub_title">각 분야의 멘토와 함께 실력을 쌓아 보세요!</p>
           <ul className="instructor_list">
-            <li>
-              <Link href="/teacher-lists/생활코딩">
-                <Image src="/assets/images/main/logo01.jpg" alt="강사" width={100} height={100} />
-                <div className="txt_box">
-                  <span>생활코딩</span>
-                  <p>프로그래밍 기초부터 고급까지, 누구나 쉽게 배울 수 있는 강좌 제공</p>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link href="/teacher-lists/드림코딩">
-                <Image src="/assets/images/main/logo02.jpg" alt="강사" width={100} height={100} />
-                <div className="txt_box">
-                  <span>드림코딩</span>
-                  <p>초보자를 위한 친절한 강의로 웹 개발 전반을 배울 수 있어요</p>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link href="/teacher-lists/조코딩">
-                <Image src="/assets/images/main/logo03.jpg" alt="강사" width={100} height={100} />
-                <div className="txt_box">
-                  <span>조코딩</span>
-                  <p>파이썬과 AI, 데이터 분석 등 최신 기술을 다루는 실용적 강좌</p>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link href="/teacher-lists/코딩 알려주는 누나">
-                <Image src="/assets/images/main/logo04.jpg" alt="강사" width={100} height={100} />
-                <div className="txt_box">
-                  <span>코딩 알려주는 누나</span>
-                  <p>비전공자도 쉽게 접근할 수 있는 다양한 프로그래밍 강좌</p>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link href="/teacher-lists/애플코딩">
-                <Image src="/assets/images/main/logo05.jpg" alt="강사" width={100} height={100} />
-                <div className="txt_box">
-                  <span>애플코딩</span>
-                  <p>iOS 개발자와 앱 개발자를 위한 Swift와 다양한 앱 개발 강의</p>
-                </div>
-              </Link>
-            </li>
+            {instructorData.slice(0, 5).map((instructor, index) => (
+              <li key={index}>
+                <Link href={`/teacher-lists/${instructor.name}`}>
+                  <Image src={instructor.img} alt={instructor.name} width={100} height={100} />
+                  <div className="txt_box">
+                    <span>{instructor.name}</span>
+                    <p>{instructor.description}</p>
+                  </div>
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </section>
+
       <section className="section sec05">
         <h2>성장한 수강생들의 진솔한 후기✍️</h2>
         <p className="sub_title">함께 이룬 성장을 자랑스럽게 소개합니다.</p>
