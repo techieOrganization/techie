@@ -9,6 +9,10 @@ import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,16 +37,16 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final ObjectMapper objectMapper;
 
-    public List<VideoResponse> fetchVideosByCategory(Category category) {
+    public Slice<VideoResponse> fetchVideosByCategory(Category category, Pageable pageable) {
         String videoIds = getVideoIds(videoRepository.findByCategory(category));
         ResponseEntity<String> response = getYoutubeResponse(videoIds);
-        return convertJsonToVideoDTO(response.getBody());
+        return convertJsonToVideoDTO(response.getBody(), pageable);
     }
 
-    public List<VideoResponse> fetchVideosByQuery(String query) {
+    public Slice<VideoResponse> fetchVideosByQuery(String query, Pageable pageable) {
         String videoIds = getVideoIds(videoRepository.findByTitleContaining(query));
         ResponseEntity<String> response = getYoutubeResponse(videoIds);
-        return convertJsonToVideoDTO(response.getBody());
+        return convertJsonToVideoDTO(response.getBody(), pageable);
     }
 
     private String getVideoIds(List<Video> findVideos) {
@@ -68,27 +72,41 @@ public class VideoService {
                 .toEntity(String.class);
     }
 
-    public List<VideoResponse> convertJsonToVideoDTO(String jsonResponse) {
+    public Slice<VideoResponse> convertJsonToVideoDTO(String jsonResponse, Pageable pageable) {
         List<VideoResponse> videoResponses = new ArrayList<>();
+        int start = (int) pageable.getOffset();
+        int end = start + pageable.getPageSize();
+        boolean hasNext = false;
 
         try {
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode itemsNode = rootNode.get("items");
             if (itemsNode.isArray()) {
+                int current = 0;  // 현재 위치
+
                 for (JsonNode itemNode : itemsNode) {
-                    JsonNode snippetNode = itemNode.get("snippet");
-                    VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
-                    String duration = itemNode.get("contentDetails").get("duration").asText();
-                    videoResponse.setVideoId(itemNode.get("id").asText());
-                    videoResponse.setDuration(duration);
-                    videoResponses.add(videoResponse);
+                    if (current >= end) break;
+
+                    if (current >= start) {
+                        JsonNode snippetNode = itemNode.get("snippet");
+                        VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
+
+                        String duration = itemNode.get("contentDetails").get("duration").asText();
+                        videoResponse.setDuration(duration);
+                        videoResponse.setVideoId(itemNode.get("id").asText());
+
+                        videoResponses.add(videoResponse);
+                    }
+                    current++;
                 }
             }
+            hasNext = end < rootNode.get("items").size();
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to convert itemNode to VideoResponse: " + e.getMessage());
         }
 
-        return videoResponses;
+        return new SliceImpl<>(videoResponses, pageable, hasNext);
     }
 
 }

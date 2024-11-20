@@ -6,6 +6,8 @@ import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,12 +20,12 @@ public class VideoController {
     private final VideoService videoService;
 
     @GetMapping("/{category}")
-    public List<VideoResponse> listCategoryVideo(@PathVariable Category category) throws JsonProcessingException {
-        return videoService.fetchVideosByCategory(category);
+    public Slice<VideoResponse> listCategoryVideo(@PathVariable Category category, Pageable pageable) throws JsonProcessingException {
+        return videoService.fetchVideosByCategory(category, pageable);
     }
 
     @GetMapping
-    public List<VideoResponse> searchVideo(@RequestParam String query) throws JsonProcessingException {
-        return videoService.fetchVideosByQuery(query);
+    public Slice<VideoResponse> searchVideo(@RequestParam String query, Pageable pageable) throws JsonProcessingException {
+        return videoService.fetchVideosByQuery(query, pageable);
     }
 }
