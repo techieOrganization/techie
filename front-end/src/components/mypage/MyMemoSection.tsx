@@ -56,7 +56,11 @@ const MyMemoSection: React.FC = () => {
           const videoUrl = `/playlists/all/${memo.videoId}`;
 
           return (
-            <div key={memo.id} className="memo_item" ref={isLastMemo ? lastMemoRef : null}>
+            <div
+              key={`${memo.id}-${index}`}
+              className="memo_item"
+              ref={isLastMemo ? lastMemoRef : null}
+            >
               <a
                 href={videoUrl}
                 onClick={(e) => {
