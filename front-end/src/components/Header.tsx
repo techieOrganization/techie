@@ -78,7 +78,7 @@ const Header = () => {
         <div className="search_box">
           <input
             type="text"
-            placeholder="검색어를 입력하세요"
+            placeholder="배우고 싶은 개발 지식을 검색해보세요."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
