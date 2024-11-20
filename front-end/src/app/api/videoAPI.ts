@@ -1,8 +1,8 @@
 import { Video } from '@/types/video';
 
 interface FetchVideosOptions {
-  category?: string; // 카테고리 이름 (선택)
-  query?: string; // 검색어 (선택)
+  category?: string;
+  query?: string;
 }
 
 export const fetchVideosByCategory = async ({

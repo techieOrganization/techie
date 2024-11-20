@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { AxiosError } from 'axios';
 import { fetchVideoDetails } from '@/app/api/videoAPIDetail';
 import { saveMemo, updateMemo, deleteMemo, getMemosByVideo } from '@/app/api/memoAPI';
 import '@/styles/pages/playlist/playlist.scss';
@@ -227,17 +226,10 @@ const VideoPlayerPage: React.FC = () => {
           page === 0 ? response.data.content : [...prevMemos, ...response.data.content],
         );
 
-        const isLastPage = response.data.last;
-        setHasMoreMemos(!isLastPage);
+        const isEmptyContent = response.data.empty || response.data.content.length === 0;
+        setHasMoreMemos(!isEmptyContent && !response.data.last);
       } catch (error) {
-        const axiosError = error as AxiosError;
-
-        if (axiosError.response?.status === 404) {
-          setMemos([]);
-          setHasMoreMemos(false);
-        } else {
-          console.error('Failed to fetch memos for video:', axiosError);
-        }
+        console.error('Failed to fetch memos for video:', error);
       }
     },
     [videoId],
@@ -289,6 +281,7 @@ const VideoPlayerPage: React.FC = () => {
           <div className="memo_container">
             <h4 className="save_memo_title">메모 목록</h4>
             <p>메모를 클릭하여 수정하거나 삭제할 수 있습니다.✏️</p>
+            <p>내 전체 메모는 마이페이지에서 확인이 가능합니다.🍀</p>
             <div className="memo_list">
               {memos.length > 0 ? (
                 memos.map((memo, index) => {

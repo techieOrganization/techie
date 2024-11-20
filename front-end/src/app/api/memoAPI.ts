@@ -29,15 +29,13 @@ export const getMemo = (memoId: string) => {
 
 // 모든 메모 가져오기 (페이지네이션 지원)
 export const getAllMemos = (page: number = 1) => {
-  return apiClient.get('/memo', {
+  return apiClient.get('/memo/list', {
     params: { page },
   });
 };
 
 // 특정 동영상에 대한 메모 가져오기
 export const getMemosByVideo = (videoId: string, page: number = 1) => {
-  console.log('Requesting memos for videoId:', videoId);
-
   return apiClient.get('/memo/byVideo', {
     params: {
       vId: videoId, // API 요청 시 동영상 ID 전달
