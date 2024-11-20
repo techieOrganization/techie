@@ -138,17 +138,19 @@ const TeacherPlaylist = () => {
       </div>
       {/* 모달 */}
       {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>재생목록 이름 입력</h2>
-            <input
-              type="text"
-              value={playlistName}
-              onChange={(e) => setPlayListName(e.target.value)}
-              placeholder="재생목록 이름 입력"
-            />
-            <button onClick={handleSaveVideo}>저장</button>
-            <button onClick={closeModal}>닫기</button>
+        <div className="overlay" onClick={closeModal}>
+          {/* 오버레이 추가 */}
+          <div className="modal" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <input
+                type="text"
+                value={playlistName}
+                onChange={(e) => setPlayListName(e.target.value)}
+                placeholder="재생목록 이름 입력"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <button onClick={handleSaveVideo}>저장</button>
+            </div>
           </div>
         </div>
       )}

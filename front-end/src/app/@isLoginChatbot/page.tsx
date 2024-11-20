@@ -97,6 +97,7 @@ const Chatbot = () => {
           onChange={handleTextArea}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
+          placeholder="Techie 에게 물어보세요!"
         ></textarea>
         <button onMouseDown={(e) => e.stopPropagation()} onClick={handleSubmit}>
           ➡️
