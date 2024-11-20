@@ -6,24 +6,19 @@ $sub-btn-color: var(--sub-btn-color);
 $bg-color: var(--bg-color);
 
 .register-container {
+  padding: 10rem 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 25vw;
-  height: 100vh;
-  gap: 2rem;
-  margin: 50px auto;
-  padding: 1.5rem;
-  border-radius: 10px;
 }
 
 .register-wrapper {
-  width: 100%;
-  height: 80%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-width: 50rem;
+  margin: 0 auto;
+
+  strong {
+    font-size: 1.7rem;
+    font-weight: 700;
+  }
   .error-message {
     color: $error-color;
     margin-bottom: 1rem;
@@ -36,16 +31,16 @@ $bg-color: var(--bg-color);
     font-weight: 600;
     margin: 1%;
     color: $border-color;
+    display: block;
   }
 
   input {
-    margin: 3%;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
     width: 100%;
-    height: 5.5vh;
-    border-radius: $border-radius;
-    border: 0.3px solid $border-color;
-    padding: 0.5rem 1rem;
-    font-size: 1.3rem;
+    height: 4.5rem;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
 
     &:focus {
       outline: none;
@@ -61,21 +56,18 @@ $bg-color: var(--bg-color);
   align-items: center;
 
   & > h2 {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 4rem;
+    font-weight: 700;
   }
 
   button {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-    align-items: center;
-    background-color: $sub-btn-color;
-    border-radius: $border-radius;
-    color: white;
-    font-weight: 500;
+    border-radius: 0.5rem;
+    background: var(--sub-btn-color);
+    color: #fff;
+    min-width: 10rem;
     cursor: pointer;
-    padding: 1.5rem 0px;
+    width: 100%;
+    height: 4.5rem;
+    margin-bottom: 3rem;
   }
 }

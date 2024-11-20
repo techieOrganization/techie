@@ -100,11 +100,11 @@ const Login = () => {
       </div>
       <form className="input-wrapper" onSubmit={handleLogin}>
         <div className="email-wrapper">
-          <span>이메일</span>
+          <strong>이메일</strong>
           <input type="text" name="email" onChange={onChange} value={formData.email} required />
         </div>
         <div className="password-wrapper">
-          <span>비밀번호</span>
+          <strong>비밀번호</strong>
           <input
             type="password"
             name="password"
