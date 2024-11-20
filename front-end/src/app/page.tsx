@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
 
-import { fetchPlaylistVideos } from '@/app/api/youtubeAPI';
+import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import studentData from '@/data/studentData';
 import vidListData from '@/data/vidListData';
 import instructorData from '@/data/instructorData';
@@ -20,8 +20,9 @@ export default function Home() {
 
   useEffect(() => {
     const getVideos = async () => {
-      const data = await fetchPlaylistVideos();
-      setVideos(data);
+      // 전체 비디오 데이터 가져오기
+      const allVideos = await fetchVideosByCategory({ category: 'all' });
+      setVideos(allVideos.slice(0, 10)); // 최대 10개 제한
     };
 
     getVideos();
@@ -90,11 +91,11 @@ export default function Home() {
                     <span>고민은 이제 그만!</span>
                   </div>
                   <h3>
-                    누구나 쉬운 입문 강의
+                    무엇을 배워야 할지
                     <br />
-                    여기 다 모였다! 🐣
+                    고민된다면? 🐣
                   </h3>
-                  <p>어디서부터 시작해야 할지 모르는 당신을 위한 입문 강의</p>
+                  <p>다양한 주제로 기초부터 실전까지 모두 경험하세요.</p>
                 </div>
                 <div className="right_cover">
                   <Image
@@ -113,16 +114,13 @@ export default function Home() {
               <div className="slide-content">
                 <div className="left_cover">
                   <div className="tag">
-                    <span>실시간 업데이트!</span>
+                    <span>지금 이 순간 업데이트!</span>
                   </div>
-                  <h3>
-                    무슨 강의 들을지 고민이라면? <br />
-                    현직자 강의 전체보기 👑
-                  </h3>
+                  <h3>믿고 보는 유튜버 Pick! 👑</h3>
                   <p>
-                    입문부터 실전까지,
+                    핫한 개발 주제를 다룬 강의들로
                     <br />
-                    믿고 보는 실무자 Pick!
+                    최신 트렌드를 따라잡으세요!
                   </p>
                 </div>
                 <div className="right_cover">
@@ -155,7 +153,7 @@ export default function Home() {
           <div className="search_box">
             <input
               type="text"
-              placeholder="검색어를 입력하세요"
+              placeholder="배우고 싶은 개발 지식을 검색해보세요."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -181,19 +179,21 @@ export default function Home() {
           >
             {videos.map((video, index) => (
               <SwiperSlide key={index}>
-                <iframe
-                  width="560"
-                  height="315"
-                  src={`https://www.youtube.com/embed/${video.snippet.resourceId.videoId}`}
-                  title={video.snippet.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-                <div className="vid_info">
-                  <h3>{video.snippet.title}</h3>
-                  <p>{video.snippet.channelTitle}</p>
-                </div>
+                <Link href={`/playlists/all/${video.videoId}`} className="vid_desc">
+                  <div>
+                    <img
+                      src={video.thumbnails.medium.url}
+                      alt={video.title}
+                      width={video.thumbnails.medium.width}
+                      height={video.thumbnails.medium.height}
+                      className="thumbnail"
+                    />
+                    <div className="vid_info">
+                      <h3>{video.title}</h3>
+                      <p>{video.channelTitle}</p>
+                    </div>
+                  </div>
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -204,7 +204,7 @@ export default function Home() {
           <h2>당신의 멘토가 될 강사님들을 소개합니다🥳</h2>
           <p className="sub_title">각 분야의 멘토와 함께 실력을 쌓아 보세요!</p>
           <ul className="instructor_list">
-            {instructorData.slice(0, 5).map((instructor, index) => (
+            {instructorData.slice(1, 6).map((instructor, index) => (
               <li key={index}>
                 <Link href={`/teacher-lists/${instructor.name}`}>
                   <Image src={instructor.img} alt={instructor.name} width={100} height={100} />
