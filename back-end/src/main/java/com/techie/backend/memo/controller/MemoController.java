@@ -7,6 +7,7 @@ import com.techie.backend.memo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,14 @@ public class MemoController {
 
     @GetMapping("/list")
     public ResponseEntity<Slice<MemoResponse>> getAllMemos(@AuthenticationPrincipal UserDetailsCustom userDetails,
-                                                          Pageable pageable) {
+                                                           @PageableDefault(size = 10) Pageable pageable) {
         return memoService.getMemoList(userDetails.getUsername(), pageable);
     }
 
     @GetMapping("/byVideo")
     public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideo(@RequestParam String vId,
                                                                   @AuthenticationPrincipal UserDetailsCustom userDetails,
-                                                                  Pageable pageable) {
+                                                                  @PageableDefault(size = 10) Pageable pageable) {
         return memoService.getAllMemosByVideoId(userDetails.getUsername(), vId, pageable);
     }
 
