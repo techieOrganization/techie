@@ -20,9 +20,8 @@ public class Video {
     @Column(nullable = false)
     private String title;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Category category;
+    private String category;
 
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlaylistVideo> playlistVideos = new ArrayList<>();

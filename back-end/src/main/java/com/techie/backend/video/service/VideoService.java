@@ -37,7 +37,7 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final ObjectMapper objectMapper;
 
-    public Slice<VideoResponse> fetchVideosByCategory(Category category, Pageable pageable) {
+    public Slice<VideoResponse> fetchVideosByCategory(String category, Pageable pageable) {
         String videoIds = getVideoIds(videoRepository.findByCategory(category));
         ResponseEntity<String> response = getYoutubeResponse(videoIds);
         return convertJsonToVideoDTO(response.getBody(), pageable);
