@@ -22,5 +22,6 @@ public class VideoResponse {
         private int width;
         private int height;
     }
+
 }
 
