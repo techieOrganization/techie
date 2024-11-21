@@ -4,12 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techie.backend.video.domain.Category;
-import com.techie.backend.video.domain.Video;
 import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -22,7 +20,6 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -37,9 +34,27 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final ObjectMapper objectMapper;
 
-    public Slice<VideoResponse> fetchVideosByCategory(Category category, Pageable pageable) {
-        ResponseEntity<String> response = getYoutubeResponse(category.getPlaylistId());
-        return convertJsonToVideoDTO(response.getBody(), pageable);
+    public Slice<VideoResponse> fetchVideosByCategory(Category category, Pageable pageable) throws JsonProcessingException {
+        String playlistUri = UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/playlistItems")
+                .queryParam("part", "snippet, contentDetails")
+                .queryParam("playlistId", category.getPlaylistId())
+                .queryParam("maxResults", 50)
+                .queryParam("key", apiKey)
+                .build()
+                .toUriString();
+
+        ResponseEntity<String> playlistRes = getYoutubeResponse(playlistUri);
+        String videoIds = getVideoIds(playlistRes.getBody());
+
+        String videoUri = UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/videos")
+                .queryParam("part", "snippet,contentDetails")
+                .queryParam("id", videoIds)
+                .queryParam("key", apiKey)
+                .build()
+                .toUriString();
+
+        ResponseEntity<String> videoRes = getYoutubeResponse(videoUri);
+        return convertJsonToVideoDTO(videoRes.getBody(), pageable);
     }
 
     public Slice<VideoResponse> fetchVideosByQuery(String query, Pageable pageable) {
@@ -48,18 +63,17 @@ public class VideoService {
         return convertJsonToVideoDTO(response.getBody(), pageable);
     }
 
-    private String getVideoIds(List<Video> findVideos) {
-        return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
+    private String getVideoIds(String jsonResponse) throws JsonProcessingException {
+        JsonNode rootNode = objectMapper.readTree(jsonResponse);
+        JsonNode itemsNode = rootNode.get("items");
+        List<String> videoIds = new ArrayList<>();
+        for (JsonNode itemNode : itemsNode) {
+            videoIds.add(itemNode.get("contentDetails").get("videoId").asText());
+        }
+        return String.join(",", videoIds);
     }
 
-    private ResponseEntity<String> getYoutubeResponse(String playlistId) {
-        String uri = UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/playlistItems")
-                .queryParam("part", "snippet,contentDetails")
-                .queryParam("playlistId", playlistId)
-                .queryParam("key", apiKey)
-                .build()
-                .toUriString();
-
+    private ResponseEntity<String> getYoutubeResponse(String uri) {
         return restClient.get()
                 .uri(uri)
                 .header("Content-Type", "application/json")

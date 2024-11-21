@@ -24,8 +24,8 @@ public class VideoController {
         return videoService.fetchVideosByCategory(category, pageable);
     }
 
-    @GetMapping
-    public Slice<VideoResponse> searchVideo(@RequestParam String query, Pageable pageable) throws JsonProcessingException {
-        return videoService.fetchVideosByQuery(query, pageable);
-    }
+//    @GetMapping
+//    public Slice<VideoResponse> searchVideo(@RequestParam String query, Pageable pageable) throws JsonProcessingException {
+//        return videoService.fetchVideosByQuery(query, pageable);
+//    }
 }
