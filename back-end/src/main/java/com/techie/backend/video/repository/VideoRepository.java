@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VideoRepository extends JpaRepository<Video, String> {
-    List<Video> findByCategory(String category);
+    List<Video> findByCategory(Category category);
     List<Video> findByTitleContaining(String keyword);
     Optional<Video> findByVideoId(String videoId);
 }

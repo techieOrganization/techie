@@ -20,7 +20,7 @@ public class VideoController {
     private final VideoService videoService;
 
     @GetMapping("/{category}")
-    public Slice<VideoResponse> listCategoryVideo(@PathVariable String category, Pageable pageable) throws JsonProcessingException {
+    public Slice<VideoResponse> listCategoryVideo(@PathVariable Category category, Pageable pageable) throws JsonProcessingException {
         return videoService.fetchVideosByCategory(category, pageable);
     }
 

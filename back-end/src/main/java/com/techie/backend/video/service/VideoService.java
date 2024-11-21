@@ -37,9 +37,8 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final ObjectMapper objectMapper;
 
-    public Slice<VideoResponse> fetchVideosByCategory(String category, Pageable pageable) {
-        String videoIds = getVideoIds(videoRepository.findByCategory(category));
-        ResponseEntity<String> response = getYoutubeResponse(videoIds);
+    public Slice<VideoResponse> fetchVideosByCategory(Category category, Pageable pageable) {
+        ResponseEntity<String> response = getYoutubeResponse(category.getPlaylistId());
         return convertJsonToVideoDTO(response.getBody(), pageable);
     }
 
@@ -53,10 +52,10 @@ public class VideoService {
         return findVideos.stream().map(Video::getVideoId).collect(Collectors.joining(","));
     }
 
-    private ResponseEntity<String> getYoutubeResponse(String videoIds) {
-        String uri = UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/videos")
+    private ResponseEntity<String> getYoutubeResponse(String playlistId) {
+        String uri = UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/playlistItems")
                 .queryParam("part", "snippet,contentDetails")
-                .queryParam("id", videoIds)
+                .queryParam("playlistId", playlistId)
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
