@@ -43,14 +43,14 @@ export const updateUserNickname = async (nickname: string): Promise<string> => {
 
 // 비밀번호 업데이트
 export const updateUserPassword = async (
-  currentPassword: string,
+  oldPassword: string,
   newPassword: string,
 ): Promise<string> => {
   try {
     const token = Cookies.get('token');
     if (!token) throw new Error('로그인이 필요합니다.');
 
-    const payload = { password: currentPassword, newPassword };
+    const payload = { oldPassword, newPassword };
 
     await axios.put('/api/users/me', payload, {
       headers: { Authorization: `Bearer ${token}` },
