@@ -20,6 +20,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 
 @Service
@@ -33,16 +34,16 @@ public class VideoService {
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
-    private String buildPlaylistUri(Category category) {
+    public String buildPlaylistUri(String playlistId) {
         return UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/playlistItems")
                 .queryParam("part", "snippet,contentDetails")
-                .queryParam("playlistId", category.getPlaylistId())
+                .queryParam("playlistId", playlistId)
                 .queryParam("maxResults", 50)
                 .queryParam("key", apiKey)
                 .toUriString();
     }
 
-    private String buildVideoUri(String videoIds) {
+    public String buildVideoUri(String videoIds) {
         return UriComponentsBuilder.fromHttpUrl("https://www.googleapis.com/youtube/v3/videos")
                 .queryParam("part", "snippet,contentDetails")
                 .queryParam("id", videoIds)
@@ -52,7 +53,7 @@ public class VideoService {
 
     public Slice<VideoResponse> fetchVideosByCategory(Category category, Pageable pageable) throws JsonProcessingException {
         // youtube api [재생목록을 통한] 영상 조회 요청 url
-        String playlistUri = buildPlaylistUri(category);
+        String playlistUri = buildPlaylistUri(category.getPlaylistId());
 
         // 응답에서 영상 id 만을 추출
         String videoIds = getVideoIds(getYoutubeResponse(playlistUri).getBody());
@@ -65,7 +66,7 @@ public class VideoService {
     }
 
     public Slice<VideoResponse> fetchVideosByQuery(String query, Category category, Pageable pageable) throws JsonProcessingException {
-        String playlistUri = buildPlaylistUri(category);
+        String playlistUri = buildPlaylistUri(category.getPlaylistId());
 
         JsonNode rootNode = objectMapper.readTree(getYoutubeResponse(playlistUri).getBody());
         JsonNode itemsNode = rootNode.get("items");
@@ -86,7 +87,7 @@ public class VideoService {
         return convertJsonToVideoDTO(getYoutubeResponse(videoUri).getBody(), pageable);
     }
 
-    private String getVideoIds(String jsonResponse) throws JsonProcessingException {
+    public String getVideoIds(String jsonResponse) throws JsonProcessingException {
         JsonNode rootNode = objectMapper.readTree(jsonResponse);
         JsonNode itemsNode = rootNode.get("items");
         List<String> videoIds = new ArrayList<>();
@@ -96,7 +97,7 @@ public class VideoService {
         return String.join(",", videoIds);
     }
 
-    private ResponseEntity<String> getYoutubeResponse(String uri) {
+    public ResponseEntity<String> getYoutubeResponse(String uri) {
         return restClient.get()
                 .uri(uri)
                 .header("Content-Type", "application/json")
@@ -145,4 +146,58 @@ public class VideoService {
         return new SliceImpl<>(videoResponses, pageable, hasNext);
     }
 
+    public Slice<VideoResponse> fetchVideosFromAllCategories(Pageable pageable) throws JsonProcessingException {
+        List<VideoResponse> allVideos = new ArrayList<>();
+
+        // 모든 카테고리 순회하며 영상 수집
+        for (Category category : Category.values()) {
+            String playlistUri = buildPlaylistUri(category.getPlaylistId());
+            String videoIds = getVideoIds(getYoutubeResponse(playlistUri).getBody());
+            String videoUri = buildVideoUri(videoIds);
+
+            // 영상 데이터를 DTO로 변환하여 리스트에 추가
+            List<VideoResponse> categoryVideos = convertJsonToVideoDTOWithoutPaging(getYoutubeResponse(videoUri).getBody());
+            allVideos.addAll(categoryVideos);
+        }
+
+        // 전체 리스트를 페이징 처리하여 Slice로 반환
+        return createSlice(allVideos, pageable);
+    }
+
+    // JSON 응답을 VideoResponse 리스트로 변환 (페이징 처리 없이 모든 데이터 반환)
+    private List<VideoResponse> convertJsonToVideoDTOWithoutPaging(String jsonResponse) {
+        List<VideoResponse> videoResponses = new ArrayList<>();
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            JsonNode itemsNode = rootNode.get("items");
+
+            if (itemsNode.isArray()) {
+                for (JsonNode itemNode : itemsNode) {
+                    JsonNode snippetNode = itemNode.get("snippet");
+                    VideoResponse videoResponse = objectMapper.treeToValue(snippetNode, VideoResponse.class);
+
+                    String duration = itemNode.get("contentDetails").get("duration").asText();
+                    videoResponse.setDuration(duration);
+                    videoResponse.setVideoId(itemNode.get("id").asText());
+
+                    videoResponses.add(videoResponse);
+                }
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert JSON to VideoResponse: " + e.getMessage());
+        }
+
+        return videoResponses;
+    }
+
+    // 전체 리스트를 페이징하여 반환
+    private Slice<VideoResponse> createSlice(List<VideoResponse> videoResponses, Pageable pageable) {
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), videoResponses.size());
+
+        List<VideoResponse> pagedList = videoResponses.subList(start, end);
+        boolean hasNext = end < videoResponses.size();
+
+        return new SliceImpl<>(pagedList, pageable, hasNext);
+    }
 }

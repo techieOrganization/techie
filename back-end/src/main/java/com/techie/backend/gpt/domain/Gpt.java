@@ -15,6 +15,7 @@ public class Gpt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Lob
     @Column(nullable = false)
     private String request;
 
