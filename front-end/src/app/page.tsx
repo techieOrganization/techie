@@ -20,9 +20,15 @@ export default function Home() {
 
   useEffect(() => {
     const getVideos = async () => {
-      // 전체 비디오 데이터 가져오기
-      const allVideos = await fetchVideosByCategory({ category: 'all' });
-      setVideos(allVideos.slice(0, 10)); // 최대 10개 제한
+      try {
+        const allVideosResponse = await fetchVideosByCategory({ category: 'all', page: 0 });
+
+        const latestVideos = allVideosResponse.content.slice(0, 10);
+
+        setVideos(latestVideos);
+      } catch (error) {
+        console.error('Failed to fetch videos:', error);
+      }
     };
 
     getVideos();
