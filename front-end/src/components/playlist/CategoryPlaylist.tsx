@@ -25,6 +25,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
 
+  // API 호출 함수
   const loadVideos = useCallback(
     async (currentPage: number) => {
       setLoading(true);
@@ -32,11 +33,16 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       try {
         const data = await fetchVideosByCategory({ category, query, page: currentPage });
 
-        if (data.content.length === 0) {
-          setHasMore(false);
-        } else {
-          setVideos((prevVideos) => [...prevVideos, ...data.content]);
-        }
+        // API 응답의 'last' 값을 사용하여 hasMore 상태 업데이트
+        setHasMore(!data.last);
+
+        // 중복된 비디오 제거 후 상태 업데이트
+        setVideos((prevVideos) => [
+          ...prevVideos,
+          ...data.content.filter(
+            (newVideo) => !prevVideos.some((oldVideo) => oldVideo.videoId === newVideo.videoId),
+          ),
+        ]);
       } catch (err) {
         console.error('Error fetching videos:', err);
         setError('비디오를 불러오는 중 문제가 발생했습니다.');
@@ -47,6 +53,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     [category, query],
   );
 
+  // 카테고리 또는 검색어 변경 시 초기화 및 데이터 로드
   useEffect(() => {
     setPage(0);
     setVideos([]);
@@ -54,35 +61,47 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     loadVideos(0);
   }, [category, query, loadVideos]);
 
+  // 페이지 변경 시 데이터 로드
   useEffect(() => {
     if (page > 0) {
       loadVideos(page);
     }
   }, [page, loadVideos]);
 
+  // 카테고리 변경 처리
   const handleCategoryClick = (newCategory: string) => {
     if (newCategory === category) return;
 
-    // 검색어 초기화
     setCategory(newCategory);
-    router.push(`/playlists/${newCategory}`); // query 파라미터 제거
+    router.push(`/playlists/${newCategory}?query=${encodeURIComponent(query)}`);
   };
 
+  // IntersectionObserver를 사용한 무한 스크롤
   const lastVideoElementRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading || !hasMore) return;
       if (observer.current) observer.current.disconnect();
 
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      });
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+          }
+        },
+        { threshold: 0.1 },
+      );
 
       if (node) observer.current.observe(node);
     },
     [loading, hasMore],
   );
+
+  // 옵저버 정리
+  useEffect(() => {
+    return () => {
+      if (observer.current) observer.current.disconnect();
+    };
+  }, []);
 
   return (
     <div className="playlists_container">

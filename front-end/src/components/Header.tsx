@@ -77,7 +77,6 @@ const Header = () => {
 
         <div className="search_box">
           <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-            <option value="ALL">전체</option>
             <option value="LANG">언어</option>
             <option value="GAME">게임 개발</option>
             <option value="BACK">백엔드</option>
