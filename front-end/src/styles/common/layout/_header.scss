@@ -53,6 +53,13 @@
   .search_box {
     width: 50%;
     position: relative;
+    display: flex;
+    gap: 1rem;
+    select {
+      border-radius: 1rem;
+      border: 1px solid #ccc;
+      padding: 0 1rem;
+    }
     input {
       width: 100%;
       height: 100%;

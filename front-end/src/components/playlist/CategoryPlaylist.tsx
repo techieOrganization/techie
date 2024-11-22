@@ -3,38 +3,39 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Video } from '@/types/video';
 import vidListData from '@/data/vidListData';
 import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 
 interface CategoryPlaylistProps {
-  category: string; // 상위 컴포넌트에서 전달받은 카테고리
+  category: string;
 }
 
 const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCategory }) => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [category, setCategory] = useState(initialCategory); // 현재 카테고리 상태
-  const [page, setPage] = useState(0); // 현재 페이지
-  const [hasMore, setHasMore] = useState(true); // 추가 데이터 여부
+  const [category, setCategory] = useState(initialCategory);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query') || '';
 
-  // API 호출 함수
   const loadVideos = useCallback(
     async (currentPage: number) => {
       setLoading(true);
       setError('');
       try {
-        const data = await fetchVideosByCategory({ category, page: currentPage });
+        const data = await fetchVideosByCategory({ category, query, page: currentPage });
 
         if (data.content.length === 0) {
-          setHasMore(false); // 더 이상 데이터가 없음을 설정
+          setHasMore(false);
         } else {
-          setVideos((prevVideos) => [...prevVideos, ...data.content]); // 데이터 추가
+          setVideos((prevVideos) => [...prevVideos, ...data.content]);
         }
       } catch (err) {
         console.error('Error fetching videos:', err);
@@ -43,32 +44,30 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         setLoading(false);
       }
     },
-    [category],
+    [category, query],
   );
 
-  // 카테고리 변경 시 초기화 및 데이터 로드
   useEffect(() => {
     setPage(0);
     setVideos([]);
     setHasMore(true);
     loadVideos(0);
-  }, [category, loadVideos]);
+  }, [category, query, loadVideos]);
 
-  // 페이지 변경 시 데이터 로드
   useEffect(() => {
     if (page > 0) {
       loadVideos(page);
     }
   }, [page, loadVideos]);
 
-  // 버튼 클릭으로 카테고리 변경
   const handleCategoryClick = (newCategory: string) => {
-    if (newCategory === category) return; // 현재 카테고리와 같으면 실행 안 함
+    if (newCategory === category) return;
+
+    // 검색어 초기화
     setCategory(newCategory);
-    router.push(`/playlists/${newCategory}`); // URL 업데이트
+    router.push(`/playlists/${newCategory}`); // query 파라미터 제거
   };
 
-  // IntersectionObserver를 사용한 무한 스크롤
   const lastVideoElementRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading || !hasMore) return;
@@ -87,7 +86,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
   return (
     <div className="playlists_container">
-      {/* 카테고리 버튼 리스트 */}
       <ul className="dev_list">
         {vidListData.map((tab) => (
           <li key={tab.id}>
@@ -103,7 +101,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         ))}
       </ul>
 
-      {/* 동영상 리스트 */}
       <div className="video_list_cont">
         <div className="inner">
           {loading && videos.length === 0 && <p>로딩 중...</p>}

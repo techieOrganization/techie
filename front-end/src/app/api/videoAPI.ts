@@ -11,10 +11,13 @@ export const fetchVideosByCategory = async ({
     let url;
 
     if (query) {
-      url = `${baseUrl}/api/videos?query=${encodeURIComponent(query)}&page=${page}`;
+      // 검색어와 카테고리가 모두 있는 경우
+      url = `${baseUrl}/api/videos?query=${encodeURIComponent(query)}&category=${category}&page=${page}`;
     } else if (category.toUpperCase() === 'ALL') {
+      // 전체 영상 조회
       url = `${baseUrl}/api/videos/list?page=${page}`;
     } else {
+      // 카테고리별 조회
       url = `${baseUrl}/api/videos/${category}?page=${page}`;
     }
 

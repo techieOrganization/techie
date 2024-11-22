@@ -12,11 +12,10 @@ import { clearUserInfo } from '@/redux/reducer';
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('ALL'); // 선택한 카테고리 상태 추가
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // 로그인 상태 확인 함수
   const checkLoginStatus = () => {
     try {
       const token = Cookies.get('token');
@@ -44,13 +43,9 @@ const Header = () => {
     dispatch(clearUserInfo());
   };
 
-  // 검색 실행 함수
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      // 선택된 카테고리를 포함한 검색 URL 생성
-      router.push(
-        `/playlists?query=${encodeURIComponent(searchQuery)}&category=${selectedCategory}`,
-      );
+      router.push(`/playlists/${selectedCategory}?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -80,9 +75,7 @@ const Header = () => {
           </ul>
         </div>
 
-        {/* 검색 박스 */}
         <div className="search_box">
-          {/* 카테고리 선택 드롭다운 */}
           <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
             <option value="ALL">전체</option>
             <option value="LANG">언어</option>
@@ -109,7 +102,6 @@ const Header = () => {
           </button>
         </div>
 
-        {/* 로그인/로그아웃 박스 */}
         <div className="auth_box">
           <ul className="auth_list">
             {isLoggedIn ? (
