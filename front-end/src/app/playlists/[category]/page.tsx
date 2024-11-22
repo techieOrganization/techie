@@ -11,7 +11,7 @@ interface CategoryPageProps {
 const CategoryPage: React.FC<CategoryPageProps> = ({ params }) => {
   return (
     <div>
-      <CategoryPlaylist category={params.category} />
+      <CategoryPlaylist category={params.category.toUpperCase()} />
     </div>
   );
 };

@@ -12,7 +12,7 @@ export const fetchVideosByCategory = async ({
 
     if (query) {
       url = `${baseUrl}/api/videos?query=${encodeURIComponent(query)}&page=${page}`;
-    } else if (category === 'ALL') {
+    } else if (category.toUpperCase() === 'ALL') {
       url = `${baseUrl}/api/videos/list?page=${page}`;
     } else {
       url = `${baseUrl}/api/videos/${category}?page=${page}`;
