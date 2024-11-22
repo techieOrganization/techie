@@ -73,6 +73,7 @@ const UserInfoSection: React.FC = () => {
       alert('회원 탈퇴가 성공적으로 처리되었습니다.');
       Cookies.remove('token');
       dispatch(clearUserInfo());
+      window.dispatchEvent(new Event('loginStatusChanged'));
       router.push('/');
     } catch (error: unknown) {
       console.error('Error during account deletion:', error);

@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FiSearch } from 'react-icons/fi';
@@ -16,30 +14,27 @@ const Header = () => {
 
   // 로그인 상태 확인 함수
   const checkLoginStatus = () => {
-    try {
-      const token = Cookies.get('token');
-      setIsLoggedIn(!!token);
-    } catch (error) {
-      console.error('Error accessing Cookies:', error);
-      setIsLoggedIn(false);
-    }
+    const token = Cookies.get('token');
+    setIsLoggedIn(!!token); // 토큰 유무에 따라 상태 업데이트
   };
 
   useEffect(() => {
-    checkLoginStatus();
-    window.addEventListener('loginStatusChanged', checkLoginStatus);
+    checkLoginStatus(); // 초기 로그인 상태 확인
+    const handleLoginStatusChange = () => checkLoginStatus();
+
+    window.addEventListener('loginStatusChanged', handleLoginStatusChange);
 
     return () => {
-      window.removeEventListener('loginStatusChanged', checkLoginStatus);
+      window.removeEventListener('loginStatusChanged', handleLoginStatusChange);
     };
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove('token');
-    setIsLoggedIn(false);
-    window.dispatchEvent(new Event('loginStatusChanged'));
-    router.push('/');
-    dispatch(clearUserInfo());
+    Cookies.remove('token'); // 쿠키 제거
+    dispatch(clearUserInfo()); // Redux 상태 초기화
+    setIsLoggedIn(false); // 상태 업데이트
+    window.dispatchEvent(new Event('loginStatusChanged')); // 상태 변경 이벤트 트리거
+    router.push('/'); // 메인 페이지로 이동
   };
 
   const [searchQuery, setSearchQuery] = useState('');
