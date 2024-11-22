@@ -13,7 +13,8 @@ interface CategoryPlaylistProps {
   category: string;
 }
 
-const formatDuration = (duration: string): string => {
+const formatDuration = (duration: string | undefined): string => {
+  if (!duration) return '0:00'; // duration이 없을 경우 0:00으로 표시
   const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
   if (!match) return '0:00';
 
@@ -83,7 +84,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   };
 
   const lastVideoElementRef = useCallback(
-    (node: HTMLDivElement | null) => {
+    (node: HTMLLIElement | null) => {
       if (loading || !hasMore) return;
       if (observer.current) observer.current.disconnect();
 
@@ -144,7 +145,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                       width={video.thumbnails.medium.width}
                       height={video.thumbnails.medium.height}
                     />
-                    <p className="duration">{formatDuration(video.duration)}</p>
+                    <p className="duration">{formatDuration(video.duration ?? '')}</p>
                     <h3 className="title">{video.title}</h3>
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>

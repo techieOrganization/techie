@@ -16,6 +16,7 @@ export interface VideoSnippet {
     standard?: Thumbnail;
     maxres?: Thumbnail;
   };
+  duration?: string;
 }
 
 export interface Video {
@@ -36,6 +37,7 @@ export interface Video {
   category: string;
   contentDetails: {
     videoId: string;
+    duration?: string;
   };
 }
 
