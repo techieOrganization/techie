@@ -64,41 +64,51 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request) {
-        try {
-            if (isRequestEmpty(request)) {
-                throw new NoChangesException();
-            }
+        User user = getUserFromSecurityContext(userDetails);
 
-            User user = getUserFromSecurityContext(userDetails);
-            boolean isUpdated = false;
+        String newNickname = request.getNickname();
+        String oldPassword = request.getOldPassword();
+        String newPassword = request.getNewPassword();
 
-            if (request.getNickname() != null && !request.getNickname().isEmpty() &&
-                    !request.getNickname().equals(user.getNickname())) {
-                user = user.toBuilder()
-                        .nickname(request.getNickname())
-                        .build();
-                isUpdated = true;
-            }
-
-            if (request.getNewPassword() != null && !request.getNewPassword().isEmpty() &&
-                    !bCryptPasswordEncoder.matches(request.getNewPassword(), user.getPassword())) {
-                String encodedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
-                user = user.toBuilder()
-                        .password(encodedPassword)
-                        .build();
-                isUpdated = true;
-            }
-
-            if (isUpdated) {
-                userRepository.save(user);
-                return true;
-            }
-
-            throw new NoChangesException();
-
-        } catch (UserNotFoundException e) {
+        if (isRequestEmpty(request)) {
             throw new NoChangesException();
         }
+
+        boolean isUpdated = false;
+
+        if (newNickname != null && !newNickname.isEmpty() && !newNickname.equals(user.getNickname())) {
+            user = user.toBuilder()
+                    .nickname(newNickname)
+                    .build();
+            isUpdated = true;
+        }
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            if (oldPassword == null || !bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+                throw new InvalidOldPasswordException();
+            }
+
+            if (bCryptPasswordEncoder.matches(newPassword, user.getPassword())) {
+                throw new NewPasswordMisMatchException();
+            }
+            if (newPassword.length() < 8 || !isPasswordValid(newPassword)) {
+                throw new PasswordTooShortException();
+            }
+            user = user.toBuilder()
+                    .password(bCryptPasswordEncoder.encode(newPassword))
+                    .build();
+            isUpdated = true;
+        }
+        if (isUpdated) {
+            userRepository.save(user);
+            return true;
+        }
+        throw new NoChangesException();
+    }
+
+    private boolean isPasswordValid(String password) {
+        String passwordRegex = "^(?=.*[0-9]).{8,}$";
+        return password.matches(passwordRegex);
     }
 
     private boolean isRequestEmpty(UserRequest.Update request) {
@@ -109,11 +119,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean deleteUser(UserDetailsCustom userDetails, UserRequest.Delete request) {
         User user = getUserFromSecurityContext(userDetails);
-
         if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException();
         }
-
         userRepository.delete(user);
         return true;
     }
