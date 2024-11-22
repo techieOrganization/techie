@@ -13,9 +13,21 @@ interface CategoryPlaylistProps {
   category: string;
 }
 
+const formatDuration = (duration: string): string => {
+  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+  if (!match) return '0:00';
+
+  const hours = parseInt(match[1]?.replace('H', '') || '0', 10);
+  const minutes = parseInt(match[2]?.replace('M', '') || '0', 10);
+  const seconds = parseInt(match[3]?.replace('S', '') || '0', 10);
+
+  const totalMinutes = hours * 60 + minutes;
+  return `${totalMinutes}:${seconds.toString().padStart(2, '0')}`;
+};
+
 const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCategory }) => {
   const [videos, setVideos] = useState<Video[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [category, setCategory] = useState(initialCategory);
   const [page, setPage] = useState(0);
@@ -25,7 +37,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
 
-  // API 호출 함수
   const loadVideos = useCallback(
     async (currentPage: number) => {
       setLoading(true);
@@ -33,10 +44,8 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       try {
         const data = await fetchVideosByCategory({ category, query, page: currentPage });
 
-        // API 응답의 'last' 값을 사용하여 hasMore 상태 업데이트
         setHasMore(!data.last);
 
-        // 중복된 비디오 제거 후 상태 업데이트
         setVideos((prevVideos) => [
           ...prevVideos,
           ...data.content.filter(
@@ -53,7 +62,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     [category, query],
   );
 
-  // 카테고리 또는 검색어 변경 시 초기화 및 데이터 로드
   useEffect(() => {
     setPage(0);
     setVideos([]);
@@ -61,22 +69,19 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     loadVideos(0);
   }, [category, query, loadVideos]);
 
-  // 페이지 변경 시 데이터 로드
   useEffect(() => {
     if (page > 0) {
       loadVideos(page);
     }
   }, [page, loadVideos]);
 
-  // 카테고리 변경 처리
   const handleCategoryClick = (newCategory: string) => {
     if (newCategory === category) return;
 
     setCategory(newCategory);
-    router.push(`/playlists/${newCategory}?query=${encodeURIComponent(query)}`);
+    router.push(`/playlists/${newCategory}`);
   };
 
-  // IntersectionObserver를 사용한 무한 스크롤
   const lastVideoElementRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (loading || !hasMore) return;
@@ -96,7 +101,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     [loading, hasMore],
   );
 
-  // 옵저버 정리
   useEffect(() => {
     return () => {
       if (observer.current) observer.current.disconnect();
@@ -140,6 +144,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                       width={video.thumbnails.medium.width}
                       height={video.thumbnails.medium.height}
                     />
+                    <p className="duration">{formatDuration(video.duration)}</p>
                     <h3 className="title">{video.title}</h3>
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
@@ -149,7 +154,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
             })}
           </ul>
           {loading && page > 0 && <p>추가 로딩 중...</p>}
-          {!loading && videos.length === 0 && <p>결과를 찾을 수 없습니다.</p>}
+          {!loading && !error && videos.length === 0 && <p>결과를 찾을 수 없습니다.</p>}
         </div>
       </div>
     </div>
