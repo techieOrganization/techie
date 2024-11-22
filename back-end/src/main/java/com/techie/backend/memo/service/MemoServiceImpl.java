@@ -1,12 +1,14 @@
 package com.techie.backend.memo.service;
 
 import com.techie.backend.global.exception.memo.EmptyContentException;
+import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.memo.domain.Memo;
 import com.techie.backend.memo.dto.MemoRequest;
 import com.techie.backend.memo.dto.MemoResponse;
 import com.techie.backend.memo.repository.MemoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.repository.UserRepository;
+import com.techie.backend.user.service.UserService;
 import com.techie.backend.video.domain.Video;
 import com.techie.backend.video.repository.VideoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +32,7 @@ public class MemoServiceImpl implements MemoService {
     private final MemoRepository memoRepository;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     // -- 메모 생성 --
@@ -59,8 +62,8 @@ public class MemoServiceImpl implements MemoService {
 
     // --  메모 목록 조회 --
     @Override
-    public ResponseEntity<Slice<MemoResponse>> getMemoList(String username, Pageable pageable) {
-        User user = userRepository.findByEmail(username);
+    public ResponseEntity<Slice<MemoResponse>> getMemoList(UserDetailsCustom userDetails, String username, Pageable pageable) {
+        User user = userService.getUserFromSecurityContext(userDetails);
         Slice<MemoResponse> memoSlice = memoRepository.findByUser(user, pageable)
                                         .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
 
@@ -84,8 +87,8 @@ public class MemoServiceImpl implements MemoService {
 
     // -- 영상 별 메모 조회
     @Override
-    public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideoId(String username, String videoId, Pageable pageable) {
-        User user = userRepository.findByEmail(username);
+    public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideoId(UserDetailsCustom userDetails, String username, String videoId, Pageable pageable) {
+        User user = userService.getUserFromSecurityContext(userDetails);
         Video video = videoRepository.findByVideoId(videoId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 영상이 없습니다."));
 
@@ -132,6 +135,4 @@ public class MemoServiceImpl implements MemoService {
         memoRepository.deleteById(memo.getId());
         return ResponseEntity.ok("메모가 정상적으로 삭제되었습니다.");
     }
-
-
 }
