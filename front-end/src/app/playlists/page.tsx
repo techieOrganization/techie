@@ -8,7 +8,7 @@ import '@/styles/pages/playlist/playlist.scss';
 const AllPlaylistsPage: React.FC = () => {
   return (
     <div>
-      <CategoryPlaylist category="all" />
+      <CategoryPlaylist category="ALL" />
     </div>
   );
 };

@@ -9,10 +9,11 @@ import { clearUserInfo } from '@/redux/reducer';
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // 로그인 상태 확인 함수
   const checkLoginStatus = () => {
     const token = Cookies.get('token');
     setIsLoggedIn(!!token); // 토큰 유무에 따라 상태 업데이트
@@ -37,11 +38,9 @@ const Header = () => {
     router.push('/'); // 메인 페이지로 이동
   };
 
-  const [searchQuery, setSearchQuery] = useState('');
-
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      router.push(`/playlists?query=${encodeURIComponent(searchQuery)}`);
+      router.push(`/playlists/${selectedCategory}?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -60,7 +59,7 @@ const Header = () => {
           </h1>
           <ul className="menu_list">
             <li className="menu_item">
-              <Link href="/playlists">강의 탐색 🔍</Link>
+              <Link href="/playlists/ALL">강의 탐색 🔍</Link>
             </li>
             <li className="menu_item">
               <Link href="/teacher-lists">성장 멘토 🌱</Link>
@@ -70,7 +69,21 @@ const Header = () => {
             </li>
           </ul>
         </div>
+
         <div className="search_box">
+          <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+            <option value="LANG">언어</option>
+            <option value="GAME">게임 개발</option>
+            <option value="BACK">백엔드</option>
+            <option value="MOBILE">모바일</option>
+            <option value="FRONT">프론트엔드</option>
+            <option value="DATA">데이터</option>
+            <option value="AI">인공지능</option>
+            <option value="SEC">보안</option>
+            <option value="CS">CS</option>
+            <option value="CLOUD">클라우드</option>
+          </select>
+
           <input
             type="text"
             placeholder="배우고 싶은 개발 지식을 검색해보세요."
@@ -82,6 +95,7 @@ const Header = () => {
             <FiSearch size={20} />
           </button>
         </div>
+
         <div className="auth_box">
           <ul className="auth_list">
             {isLoggedIn ? (

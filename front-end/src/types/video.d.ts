@@ -16,6 +16,7 @@ export interface VideoSnippet {
     standard?: Thumbnail;
     maxres?: Thumbnail;
   };
+  duration?: string;
 }
 
 export interface Video {
@@ -36,9 +37,39 @@ export interface Video {
   category: string;
   contentDetails: {
     videoId: string;
+    duration?: string;
   };
 }
 
-export interface PlaylistResponse {
-  items: Video[];
+export interface FetchVideosOptions {
+  category?: string;
+  query?: string;
+  page?: number;
+}
+
+export interface Sort {
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
+}
+
+export interface Pageable {
+  sort: Sort;
+  offset: number;
+  pageNumber: number;
+  pageSize: number;
+  paged: boolean;
+  unpaged: boolean;
+}
+
+export interface ApiResponse {
+  content: Video[];
+  pageable: Pageable;
+  size: number;
+  number: number;
+  sort: Sort;
+  numberOfElements: number;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
 }

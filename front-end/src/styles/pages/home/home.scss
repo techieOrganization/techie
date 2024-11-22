@@ -137,6 +137,9 @@
       gap: 2rem;
 
       li {
+        &.active {
+          background: var(--bg-color);
+        }
         a {
           display: flex;
           flex-direction: column;

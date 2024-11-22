@@ -1,37 +1,37 @@
-import { Video } from '@/types/video';
+import { FetchVideosOptions, ApiResponse } from '@/types/video';
 
-interface FetchVideosOptions {
-  category?: string;
-  query?: string;
-}
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const fetchVideosByCategory = async ({
-  category = 'all',
+  category = 'ALL',
   query = '',
-}: FetchVideosOptions): Promise<Video[]> => {
+  page = 0,
+}: FetchVideosOptions): Promise<ApiResponse> => {
   try {
     let url;
 
     if (query) {
-      // 검색어가 있는 경우
-      url = `/api/videos?query=${encodeURIComponent(query)}`;
-    } else if (category === 'all') {
-      // 전체 비디오 호출
-      url = '/api/videos?query=';
+      // 검색어와 카테고리가 모두 있는 경우
+      url = `${baseUrl}/api/videos?query=${encodeURIComponent(query)}&category=${category}&page=${page}`;
+    } else if (category.toUpperCase() === 'ALL') {
+      // 전체 영상 조회
+      url = `${baseUrl}/api/videos/list?page=${page}`;
     } else {
-      // 카테고리별 호출
-      url = `/api/videos/${category}`;
+      // 카테고리별 조회
+      url = `${baseUrl}/api/videos/${category}?page=${page}`;
     }
 
     const response = await fetch(url);
 
     if (!response.ok) {
+      console.error(`API response error: ${response.statusText}`);
       throw new Error(`Failed to fetch videos for category: ${category}`);
     }
 
-    return await response.json();
+    const data: ApiResponse = await response.json();
+    return data;
   } catch (error) {
     console.error('Error fetching videos:', error);
-    return [];
+    throw error;
   }
 };
