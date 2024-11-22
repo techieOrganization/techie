@@ -67,29 +67,3 @@ export const getAllVideos = async (): Promise<Video[]> => {
   const results = await Promise.all(promises);
   return results.flat();
 };
-
-// 영상 저장 기능
-export const saveVideo = async (
-  videoIds: string[],
-  name: string,
-  token: string | undefined,
-): Promise<void> => {
-  try {
-    const reponse = await axios.post(
-      'http://localhost:8080/api/playlists',
-      {
-        name,
-        videoIds,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    console.log('영상저장 성공');
-    return reponse.data;
-  } catch (error) {
-    console.error('Error saving video:', error);
-  }
-};

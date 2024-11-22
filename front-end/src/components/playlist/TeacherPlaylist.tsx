@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
 import { Video } from '@/types/video';
 import '@/styles/pages/playlist/playlist.scss';
-import { saveVideo } from '@/app/api/teacherAPI';
+import { saveVideo } from '@/app/api/playlistApi';
 import Cookies from 'js-cookie';
 
 const TeacherPlaylist = () => {
@@ -59,21 +59,23 @@ const TeacherPlaylist = () => {
   const handleSaveVideo = async () => {
     const token = Cookies.get('token');
     if (selectedVideoIds.length === 0) {
-      alert('선택된 비디오가 없습니다. 비디오를 선택해 주세요.');
+      alert('선택된 영상이 없습니다.');
       return; // 선택된 비디오가 없으면 함수 종료
     }
 
     try {
       await saveVideo(selectedVideoIds, playlistName, token); // 선택된 비디오 ID와 재생목록 이름 전송
-      alert('비디오가 재생목록에 저장되었습니다.');
+      alert('영상이 재생목록에 저장되었습니다.');
       closeModal(); // 저장 후 모달 닫기
     } catch (error) {
       console.error('Error saving video:', error);
-      alert('비디오 저장에 실패했습니다.');
+      alert('영상 저장에 실패했습니다.');
     }
   };
 
   const videos = selected.name === '전체' ? allQuery.data || [] : instQuery.data || [];
+
+  const token = Cookies.get('token');
 
   return (
     <div className="playlists_container">
@@ -110,14 +112,16 @@ const TeacherPlaylist = () => {
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
                   </a>
-                  <button
-                    className="button"
-                    onClick={() => {
-                      toggleBottomBar(index); // 하단 바 토글
-                    }}
-                  >
-                    +
-                  </button>
+                  {token && (
+                    <button
+                      className="button"
+                      onClick={() => {
+                        toggleBottomBar(index); // 하단 바 토글
+                      }}
+                    >
+                      +
+                    </button>
+                  )}
                   <ul className={`bar-nav ${isOpen === index ? 'isOpen' : ''}`}>
                     <li
                       onClick={() => {
@@ -149,7 +153,7 @@ const TeacherPlaylist = () => {
                 placeholder="재생목록 이름 입력"
                 onClick={(e) => e.stopPropagation()}
               />
-              <button onClick={handleSaveVideo}>저장</button>
+              <button onClick={handleSaveVideo}>재생목록 추가</button>
             </div>
           </div>
         </div>
