@@ -91,4 +91,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleInvalidVideoIdException(InvalidVideoIdException ex) {
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidOldPasswordException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidOldPasswordException(InvalidOldPasswordException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NewPasswordMisMatchException.class)
+    public ResponseEntity<Map<String, Object>> handleNewPasswordMisMatchException(NewPasswordMisMatchException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

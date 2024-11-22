@@ -16,6 +16,7 @@ public class UserRequest {
     @Data
     public static class Update {
         private String nickname;
+        private String oldPassword;
         private String newPassword;
     }
     @Data
