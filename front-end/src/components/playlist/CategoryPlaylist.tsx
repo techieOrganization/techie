@@ -112,7 +112,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     <div className="playlists_container">
       <ul className="dev_list">
         {vidListData.map((tab) => (
-          <li key={tab.id}>
+          <li key={tab.id} className={tab.id === category ? 'active' : ''}>
             <button
               type="button"
               onClick={() => handleCategoryClick(tab.id)}
@@ -124,7 +124,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           </li>
         ))}
       </ul>
-
       <div className="video_list_cont">
         <div className="inner">
           {loading && videos.length === 0 && <p>로딩 중...</p>}
