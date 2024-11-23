@@ -48,10 +48,11 @@ public class MemoServiceImpl implements MemoService {
         User user = userRepository.findByEmail(username);
         memo.assignUser(user);
 
+        String videoId = request.getVideoId();
         // 메모 연관 동영상 할당
-        if (request.getVideoId() != null) {
-            Video video = videoRepository.findByVideoId(request.getVideoId())
-                    .orElseThrow(() -> new NoSuchElementException("해당 영상을 찾을 수 없습니다."));
+        if (videoId != null) {
+            Video video = videoRepository.findByVideoId(videoId).orElse(
+                    videoRepository.save(new Video(videoId)));
             memo.assignVideo(video);
         }
 
