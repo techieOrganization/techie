@@ -15,14 +15,4 @@ public class MemoResponse {
     private String content;
     private String noteTime;
     private String videoId;
-
-    public static MemoResponse MemoToResponse(Memo memo, Video video) {
-        return new MemoResponse(
-                memo.getId(),
-                memo.getTitle() != null ? memo.getTitle() : null,
-                memo.getContent(),
-                memo.getNoteTime() != null ? memo.getNoteTime() : null,
-                video != null ? video.getVideoId() : null
-        );
-    }
 }
