@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -90,11 +91,12 @@ public class MemoServiceImpl implements MemoService {
     @Override
     public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideoId(UserDetailsCustom userDetails, String username, String videoId, Pageable pageable) {
         User user = userService.getUserFromSecurityContext(userDetails);
-        Video video = videoRepository.findByVideoId(videoId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 영상이 없습니다."));
+        Video video = videoRepository.findByVideoId(videoId).orElse(null);
 
-        Slice<MemoResponse> memoSlice = memoRepository.findByUserAndVideo(user, video, pageable)
-                                                        .map(m -> MemoResponse.MemoToResponse(m, m.getVideo()));
+        Slice<MemoResponse> memoSlice = Optional.ofNullable(video)
+                .map(v -> memoRepository.findByUserAndVideo(user, v, pageable)
+                        .map(m -> MemoResponse.MemoToResponse(m, m.getVideo())))
+                .orElseThrow(() -> new EntityNotFoundException("해당 영상에 쓴 메모가 없습니다"));
 
         return ResponseEntity.ok(memoSlice);
     }
