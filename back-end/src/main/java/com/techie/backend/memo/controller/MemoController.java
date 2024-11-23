@@ -35,14 +35,14 @@ public class MemoController {
     @GetMapping("/list")
     public ResponseEntity<Slice<MemoResponse>> getAllMemos(@AuthenticationPrincipal UserDetailsCustom userDetails,
                                                            @PageableDefault(size = 10) Pageable pageable) {
-        return memoService.getMemoList(userDetails.getUsername(), pageable);
+        return memoService.getMemoList(userDetails, userDetails.getUsername(), pageable);
     }
 
     @GetMapping("/byVideo")
     public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideo(@RequestParam String vId,
                                                                   @AuthenticationPrincipal UserDetailsCustom userDetails,
                                                                   @PageableDefault(size = 10) Pageable pageable) {
-        return memoService.getAllMemosByVideoId(userDetails.getUsername(), vId, pageable);
+        return memoService.getAllMemosByVideoId(userDetails, userDetails.getUsername(), vId, pageable);
     }
 
     @PutMapping("/{id}")

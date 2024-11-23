@@ -35,7 +35,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public Boolean createPlaylist(UserDetailsCustom userDetails, PlaylistRequest.CreatePlaylist request) {
         User user = userService.getUserFromSecurityContext(userDetails);
-
         Playlist playlist = Playlist.builder()
                 .name(request.getName())
                 .user(user)
@@ -87,7 +86,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public PlaylistResponse.Details getPlaylistDetails(Long userId, Long playlistId, UserDetailsCustom userDetails) {
         User user = userService.getUserFromSecurityContext(userDetails);
-
         if (user == null || !user.getId().equals(userId)) {
             throw new UserNotFoundException();
         }
@@ -99,7 +97,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
 
         PlaylistResponse.Details response = new PlaylistResponse.Details();
-
         response.setPlaylistId(playlist.getId());
         response.setPlaylistName(playlist.getName());
 
@@ -119,7 +116,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public PlaylistResponse.UpdatePlaylist updatePlaylist(UserDetailsCustom userDetails, PlaylistRequest.UpdatePlaylist request, Long playlistId) {
         User user = userService.getUserFromSecurityContext(userDetails);
-
         Playlist playlist = playlistRepository.findByIdAndUser(playlistId, user);
 
         if (request.getName() != null && !request.getName().isBlank()) {

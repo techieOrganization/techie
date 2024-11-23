@@ -76,7 +76,7 @@ const Signup = () => {
         <h2>회원가입</h2>
       </div>
       <form className="register-wrapper" onSubmit={handleSubmit}>
-        <span>닉네임</span>
+        <strong>닉네임</strong>
         <input
           type="text"
           name="nickname"
@@ -86,7 +86,7 @@ const Signup = () => {
           value={formData.nickname}
           required
         />
-        <span>이메일</span>
+        <strong>이메일</strong>
         <input
           type="email"
           name="email"
@@ -96,7 +96,7 @@ const Signup = () => {
           value={formData.email}
           required
         />
-        <span>비밀번호</span>
+        <strong>비밀번호</strong>
         <input
           type="password"
           name="password"
@@ -109,7 +109,7 @@ const Signup = () => {
         <span>• 비밀번호는 최소 8자리 이상이어야 합니다.</span>
         <span></span>
         <span></span>
-        <span>비밀번호 확인</span>
+        <strong>비밀번호 확인</strong>
         <input
           type="password"
           name="confirmPassword"
