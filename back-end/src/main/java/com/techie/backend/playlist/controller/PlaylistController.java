@@ -28,9 +28,11 @@ public class PlaylistController {
     }
 
     @GetMapping
-    public ResponseEntity<PlaylistResponse.Overview> getPlaylists(@AuthenticationPrincipal UserDetailsCustom userDetails) {
+    public ResponseEntity<PlaylistResponse.Overview> getPlaylists(
+            @AuthenticationPrincipal UserDetailsCustom userDetails) {
         return ResponseEntity.ok(playlistService.getPlaylists(userDetails));
     }
+
 
     @GetMapping("/users/{userId}/playlists/{playlistId}")
     public ResponseEntity<PlaylistResponse.Details> getPlaylistDetails(
