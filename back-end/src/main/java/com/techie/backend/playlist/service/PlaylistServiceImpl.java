@@ -40,6 +40,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public Boolean createPlaylist(UserDetailsCustom userDetails, PlaylistRequest.CreatePlaylist request) {
         User user = userService.getUserFromSecurityContext(userDetails);
+
         Playlist playlist = Playlist.builder()
                 .name(request.getPlaylistName())
                 .user(user)
@@ -51,25 +52,23 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
 
         String videoId = request.getVideoId();
-
-        // 1. videoId를 통해 비디오 상세 정보를 가져오기
-        String videoUri = videoService.buildVideoUri(videoId);  // VideoService의 buildVideoUri 사용
-        String videoResponseJson = videoService.getYoutubeResponse(videoUri).getBody();  // YouTube API 호출
-        List<VideoResponse> videoResponses = videoService.convertJsonToVideoDTOWithoutPaging(videoResponseJson);  // VideoResponse로 변환
+        String videoUri = videoService.buildVideoUri(videoId);
+        String videoResponseJson = videoService.getYoutubeResponse(videoUri).getBody();
+        List<VideoResponse> videoResponses = videoService.convertJsonToVideoDTOWithoutPaging(videoResponseJson);
 
         if (videoResponses.isEmpty()) {
-            return false;  // 비디오 정보가 없으면 실패
+            return false;
         }
 
-        // 2. 비디오 정보를 Video 엔티티로 저장하기
-        VideoResponse videoResponse = videoResponses.get(0);  // 첫 번째 비디오 정보 사용
+        VideoResponse videoResponse = videoResponses.get(0);
         Video video = videoRepository.findByVideoId(videoId)
                 .orElseGet(() -> {
-                    Video newVideo = new Video(videoId, videoResponse.getTitle(), videoResponse.getDuration());
-                    return videoRepository.save(newVideo);  // 새 비디오 저장
+                    return Video.builder()
+                            .videoId(videoId)
+                            .title(videoResponse.getTitle())
+                            .build();
                 });
 
-        // 3. Playlist에 비디오 추가
         playlist.addVideo(video);
         playlistRepository.save(playlist);
 

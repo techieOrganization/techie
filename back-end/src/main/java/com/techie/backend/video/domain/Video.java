@@ -2,6 +2,7 @@ package com.techie.backend.video.domain;
 
 import com.techie.backend.playlist_video.domain.PlaylistVideo;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,5 +30,11 @@ public class Video {
 
     public Video(String videoId){
         this.videoId = videoId;
+    }
+
+    @Builder
+    public Video(String videoId, String title) {
+        this.videoId = videoId;
+        this.title = title;
     }
 }
