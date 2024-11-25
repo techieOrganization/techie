@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import instructorData from '@/data/instructorData';
 import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
@@ -20,7 +21,7 @@ const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ channelId }) => {
   const allQuery = useQuery<Video[], Error>({
     queryKey: ['allVideos'],
     queryFn: getAllVideos,
-    enabled: selected.name === '전체', // "전체" 강사가 선택된 경우만 실행
+    enabled: selected.name === 'ALL', // "전체" 강사가 선택된 경우만 실행
     staleTime: 1000 * 60 * 30, // 30분 동안 데이터 캐시
   });
 
@@ -67,11 +68,7 @@ const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ channelId }) => {
             ) : videos.length > 0 ? (
               videos.map((video) => (
                 <li key={video.videoId} className="video_item">
-                  <a
-                    href={`https://www.youtube.com/watch?v=${video.videoId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Link href={`/playlists/${selected.name}/${video.videoId}`}>
                     <Image
                       src={video.thumbnails.medium.url}
                       alt={video.title}
@@ -81,7 +78,7 @@ const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ channelId }) => {
                     <h3 className="title">{video.title}</h3>
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
-                  </a>
+                  </Link>
                 </li>
               ))
             ) : (
