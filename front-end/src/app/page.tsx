@@ -6,42 +6,30 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import '@/styles/pages/home/home.scss';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiSearch } from 'react-icons/fi';
-
 import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import studentData from '@/data/studentData';
 import vidListData from '@/data/vidListData';
 import instructorData from '@/data/instructorData';
 import { Video } from '@/types/video';
-import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
     const getVideos = async () => {
-      // 전체 비디오 데이터 가져오기
-      const allVideos = await fetchVideosByCategory({ category: 'all' });
-      setVideos(allVideos.slice(0, 10)); // 최대 10개 제한
+      try {
+        const allVideosResponse = await fetchVideosByCategory({ category: 'all', page: 0 });
+
+        const latestVideos = allVideosResponse.content.slice(0, 10);
+
+        setVideos(latestVideos);
+      } catch (error) {
+        console.error('Failed to fetch videos:', error);
+      }
     };
 
     getVideos();
   }, []);
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const router = useRouter();
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      router.push(`/playlists?query=${encodeURIComponent(searchQuery)}`);
-    }
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleSearch();
-    }
-  };
 
   return (
     <>
@@ -150,18 +138,6 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          <div className="search_box">
-            <input
-              type="text"
-              placeholder="배우고 싶은 개발 지식을 검색해보세요."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <button type="button" onClick={handleSearch}>
-              <FiSearch size={20} />
-            </button>
-          </div>
         </div>
       </section>
       <section className="section sec03">
