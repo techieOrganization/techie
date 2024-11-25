@@ -14,7 +14,9 @@ import com.techie.backend.playlist_video.repository.PlaylistVideoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.service.UserService;
 import com.techie.backend.video.domain.Video;
+import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.repository.VideoRepository;
+import com.techie.backend.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -31,6 +33,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistVideoRepository playlistVideoRepository;
     private final VideoRepository videoRepository;
     private final UserService userService;
+    private final VideoService videoService;
     private final ModelMapper modelMapper;
 
     @Transactional
@@ -48,14 +51,31 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
 
         String videoId = request.getVideoId();
-        Video video = videoRepository.findByVideoId(videoId)
-                .orElseGet(() -> videoRepository.save(new Video(videoId)));
 
-        PlaylistVideo playlistVideo = new PlaylistVideo(playlist, video);
-        playlistVideoRepository.save(playlistVideo);
+        // 1. videoId를 통해 비디오 상세 정보를 가져오기
+        String videoUri = videoService.buildVideoUri(videoId);  // VideoService의 buildVideoUri 사용
+        String videoResponseJson = videoService.getYoutubeResponse(videoUri).getBody();  // YouTube API 호출
+        List<VideoResponse> videoResponses = videoService.convertJsonToVideoDTOWithoutPaging(videoResponseJson);  // VideoResponse로 변환
+
+        if (videoResponses.isEmpty()) {
+            return false;  // 비디오 정보가 없으면 실패
+        }
+
+        // 2. 비디오 정보를 Video 엔티티로 저장하기
+        VideoResponse videoResponse = videoResponses.get(0);  // 첫 번째 비디오 정보 사용
+        Video video = videoRepository.findByVideoId(videoId)
+                .orElseGet(() -> {
+                    Video newVideo = new Video(videoId, videoResponse.getTitle(), videoResponse.getDuration());
+                    return videoRepository.save(newVideo);  // 새 비디오 저장
+                });
+
+        // 3. Playlist에 비디오 추가
+        playlist.addVideo(video);
+        playlistRepository.save(playlist);
 
         return true;
     }
+
 
     @Override
     public PlaylistResponse.Overview getPlaylists(UserDetailsCustom userDetails) {
@@ -84,7 +104,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         return new PlaylistResponse.Overview(playlistSummaries);
     }
 
-
     @Override
     public PlaylistResponse.Details getPlaylistDetails(Long userId, Long playlistId, UserDetailsCustom userDetails) {
         User user = userService.getUserFromSecurityContext(userDetails);
@@ -95,15 +114,9 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (playlist == null) {
             throw new PlaylistNotFoundException();
         }
-        modelMapper.addMappings(new PropertyMap<Playlist, PlaylistResponse.Details>() {
-            @Override
-            protected void configure() {
-                map(source.getId(), destination.getPlaylistId());
-                map(source.getName(), destination.getPlaylistName());
-            }
-        });
 
         PlaylistResponse.Details response = modelMapper.map(playlist, PlaylistResponse.Details.class);
+
         List<PlaylistResponse.PlaylistDetails> videos = playlist.getPlaylistVideos().stream()
                 .map(playlistVideo -> modelMapper.map(playlistVideo.getVideo(), PlaylistResponse.PlaylistDetails.class))
                 .collect(Collectors.toList());
