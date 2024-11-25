@@ -18,7 +18,15 @@ const MyMemoSection: React.FC = () => {
     try {
       const response = await getAllMemos(page);
       const newMemos = response.data.content;
-      setMemos((prev) => [...prev, ...newMemos]);
+
+      // 중복 제거
+      setMemos((prev) => {
+        const uniqueMemos = newMemos.filter(
+          (memo) => !prev.some((prevMemo) => prevMemo.id === memo.id),
+        );
+        return [...prev, ...uniqueMemos];
+      });
+
       setHasMoreMemos(!response.data.last);
     } catch (error) {
       console.error('Failed to fetch memos:', error);
@@ -32,14 +40,14 @@ const MyMemoSection: React.FC = () => {
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMoreMemos) {
+        if (entries[0].isIntersecting && hasMoreMemos && !isLoading) {
           setCurrentPage((prevPage) => prevPage + 1);
         }
       });
 
       if (node) observer.current.observe(node);
     },
-    [hasMoreMemos],
+    [hasMoreMemos, isLoading],
   );
 
   useEffect(() => {
