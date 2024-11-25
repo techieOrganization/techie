@@ -108,6 +108,11 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: all 0.3s;
+
+      &:hover {
+        transform: translateY(-10px);
+      }
 
       a {
         display: block;
