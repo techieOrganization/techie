@@ -8,7 +8,11 @@ import TeacherPlaylist from '@/components/playlist/TeacherPlaylist';
 
 const TeacherCategoryPage: React.FC = () => {
   const params = useParams();
-  const teacherName = decodeURIComponent(params.category);
+
+  // category 값을 안전하게 string으로 변환
+  const teacherName = Array.isArray(params.category)
+    ? decodeURIComponent(params.category[0])
+    : decodeURIComponent(params.category);
 
   const instructor = instructorData.find((instructor) => instructor.name === teacherName);
 
@@ -18,7 +22,7 @@ const TeacherCategoryPage: React.FC = () => {
 
   return (
     <div className="playlists_container">
-      <TeacherPlaylist playlistId={instructor.playlistId} />
+      <TeacherPlaylist channelId={instructor.channeld} />
     </div>
   );
 };
