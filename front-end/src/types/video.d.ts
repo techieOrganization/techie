@@ -44,6 +44,7 @@ export interface Video {
 export interface PlaylistResponse {
   kind: string;
   etag: string;
+  nextPageToken?: string;
   items: {
     kind: string;
     etag: string;
@@ -52,6 +53,25 @@ export interface PlaylistResponse {
     contentDetails: {
       videoId: string;
       videoPublishedAt: string;
+    };
+  }[];
+  pageInfo: {
+    totalResults: number;
+    resultsPerPage: number;
+  };
+}
+
+export interface ChannelResponse {
+  kind: string;
+  etag: string;
+  items: {
+    kind: string;
+    etag: string;
+    id: string;
+    contentDetails: {
+      relatedPlaylists: {
+        uploads: string;
+      };
     };
   }[];
   pageInfo: {
