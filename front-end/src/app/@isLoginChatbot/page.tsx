@@ -5,7 +5,7 @@ import fetchChatBot from '../api/chatBotApi';
 import Cookies from 'js-cookie';
 
 const Chatbot = () => {
-  const [position, setPosition] = useState({ x: 1450, y: 650 });
+  const [position, setPosition] = useState({ x: 1850, y: 1020 });
   const [isOpen, setIsOpen] = useState(false);
   const [textarea, setTextarea] = useState('');
   const [gptResponse, setGptResponse] = useState('');

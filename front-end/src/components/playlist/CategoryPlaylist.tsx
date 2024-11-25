@@ -8,6 +8,9 @@ import { Video } from '@/types/video';
 import vidListData from '@/data/vidListData';
 import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { saveVideo } from '@/app/api/playlistApi';
 
 interface CategoryPlaylistProps {
   category: string;
@@ -33,6 +36,8 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const [category, setCategory] = useState(initialCategory);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [selectVideo, setSelectVideo] = useState<string[]>([]);
+  const [playlistNmae, setPlayListName] = useState('');
   const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -108,6 +113,27 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     };
   }, []);
 
+  const handleSelectVideo = (videoId: string) => {
+    if (selectVideo.includes(videoId)) {
+      setSelectVideo(selectVideo.filter((id) => id !== videoId)); // 이미 선택된 경우 제거
+    } else {
+      setSelectVideo([...selectVideo, videoId]); // 새로 선택된 경우 추가
+    }
+  };
+
+  const handleSaveVideo = async () => {
+    const token = Cookies.get('token');
+    try {
+      await saveVideo(selectVideo, playlistNmae, token);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(selectVideo);
+  }, [selectVideo]);
+
   return (
     <div className="playlists_container">
       <ul className="dev_list">
@@ -149,6 +175,20 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
                   </Link>
+                  <button
+                    onClick={() => {
+                      handleSelectVideo(video.videoId);
+                    }}
+                  >
+                    +
+                  </button>
+                  <button onClick={handleSaveVideo}>추가</button>
+
+                  <input
+                    type="text"
+                    onChange={(e) => setPlayListName(e.target.value)}
+                    value={playlistNmae}
+                  />
                 </li>
               );
             })}

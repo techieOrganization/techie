@@ -7,22 +7,23 @@ export const saveVideo = async (
   token: string | undefined,
 ): Promise<void> => {
   try {
-    const reponse = await axios.post(
+    const response = await axios.post(
       'http://localhost:8080/api/playlists',
       {
-        name,
-        videoIds,
+        name: name,
+        videoIds: videoIds,
       },
       {
         headers: {
+          ContentType: 'application/json',
           Authorization: `Bearer ${token}`,
         },
       },
     );
     console.log('영상저장 성공');
-    return reponse.data;
+    return;
   } catch (error) {
-    console.error('Error saving video:', error);
+    console.error('Unexpected error:', error);
   }
 };
 
