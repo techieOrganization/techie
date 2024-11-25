@@ -9,28 +9,28 @@ import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
 import { Video } from '@/types/video';
 
 interface TeacherPlaylistProps {
-  channelId: string; // 강사의 채널 ID를 받는 Prop
+  channelId: string;
 }
 
 const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ channelId }) => {
   const [selected, setSelected] = useState(
     instructorData.find((inst) => inst.channeld === channelId) || instructorData[0],
-  ); // 선택된 강사 상태 관리
+  );
 
   // React Query로 전체 강사의 동영상 가져오기
   const allQuery = useQuery<Video[], Error>({
     queryKey: ['allVideos'],
     queryFn: getAllVideos,
-    enabled: selected.name === 'ALL', // "전체" 강사가 선택된 경우만 실행
-    staleTime: 1000 * 60 * 30, // 30분 동안 데이터 캐시
+    enabled: selected.name === 'ALL',
+    staleTime: 1000 * 60 * 30,
   });
 
   // React Query로 특정 강사의 최신 동영상 가져오기
   const instQuery = useQuery<Video[], Error>({
     queryKey: ['instVideos', selected.channeld],
     queryFn: () => getLatestVideos(selected.channeld!),
-    enabled: selected.name !== '전체' && !!selected.channeld, // 특정 강사가 선택된 경우 실행
-    staleTime: 1000 * 60 * 10, // 10분 동안 데이터 캐시
+    enabled: selected.name !== '전체' && !!selected.channeld,
+    staleTime: 1000 * 60 * 10,
   });
 
   // 선택된 강사에 따라 동영상 데이터 결정
@@ -39,7 +39,7 @@ const TeacherPlaylist: React.FC<TeacherPlaylistProps> = ({ channelId }) => {
   useEffect(() => {
     const matchedInstructor = instructorData.find((inst) => inst.channeld === channelId);
     if (matchedInstructor) {
-      setSelected(matchedInstructor); // channelId에 따라 상태 초기화
+      setSelected(matchedInstructor);
     }
   }, [channelId]);
 

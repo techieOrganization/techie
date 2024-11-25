@@ -2,14 +2,12 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-
 import instructorData from '@/data/instructorData';
 import TeacherPlaylist from '@/components/playlist/TeacherPlaylist';
 
 const TeacherCategoryPage: React.FC = () => {
   const params = useParams();
 
-  // category 값을 안전하게 string으로 변환
   const teacherName = Array.isArray(params.category)
     ? decodeURIComponent(params.category[0])
     : decodeURIComponent(params.category);
