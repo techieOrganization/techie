@@ -165,7 +165,7 @@ public class VideoService {
     }
 
     // JSON 응답을 VideoResponse 리스트로 변환 (페이징 처리 없이 모든 데이터 반환)
-    private List<VideoResponse> convertJsonToVideoDTOWithoutPaging(String jsonResponse) {
+    public List<VideoResponse> convertJsonToVideoDTOWithoutPaging(String jsonResponse) {
         List<VideoResponse> videoResponses = new ArrayList<>();
         try {
             JsonNode rootNode = objectMapper.readTree(jsonResponse);

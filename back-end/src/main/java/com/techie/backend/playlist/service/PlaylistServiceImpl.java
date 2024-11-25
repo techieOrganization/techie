@@ -1,6 +1,6 @@
 package com.techie.backend.playlist.service;
 
-import com.techie.backend.global.exception.playlist.InvalidVideoIdException;
+
 import com.techie.backend.global.exception.playlist.PlaylistNotFoundException;
 import com.techie.backend.global.exception.playlist.VideoNotFoundException;
 import com.techie.backend.global.exception.user.UserNotFoundException;
@@ -14,13 +14,16 @@ import com.techie.backend.playlist_video.repository.PlaylistVideoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.service.UserService;
 import com.techie.backend.video.domain.Video;
+import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.repository.VideoRepository;
+import com.techie.backend.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,55 +33,72 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistVideoRepository playlistVideoRepository;
     private final VideoRepository videoRepository;
     private final UserService userService;
+    private final VideoService videoService;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override
     public Boolean createPlaylist(UserDetailsCustom userDetails, PlaylistRequest.CreatePlaylist request) {
         User user = userService.getUserFromSecurityContext(userDetails);
+
         Playlist playlist = Playlist.builder()
-                .name(request.getName())
+                .name(request.getPlaylistName())
                 .user(user)
                 .build();
         playlistRepository.save(playlist);
 
-        if (request.getVideoIds() == null || request.getVideoIds().isEmpty()) {
+        if (request.getVideoId() == null || request.getVideoId().isEmpty()) {
             return true;
         }
 
-        Set<String> existIds = videoRepository.findAllById(request.getVideoIds())
-                .stream()
-                .map(Video::getVideoId)
-                .collect(Collectors.toSet());
+        String videoId = request.getVideoId();
+        String videoUri = videoService.buildVideoUri(videoId);
+        String videoResponseJson = videoService.getYoutubeResponse(videoUri).getBody();
+        List<VideoResponse> videoResponses = videoService.convertJsonToVideoDTOWithoutPaging(videoResponseJson);
 
-        List<String> invalidIds = request.getVideoIds().stream()
-                .filter(id -> !existIds.contains(id))
-                .toList();
-
-        if (!invalidIds.isEmpty()) {
-            throw new InvalidVideoIdException();
+        if (videoResponses.isEmpty()) {
+            return false;
         }
 
-        List<Video> videos = videoRepository.findAllById(request.getVideoIds());
+        VideoResponse videoResponse = videoResponses.get(0);
+        Video video = videoRepository.findByVideoId(videoId)
+                .orElseGet(() -> {
+                    return Video.builder()
+                            .videoId(videoId)
+                            .title(videoResponse.getTitle())
+                            .build();
+                });
 
-        for (Video video : videos) {
-            playlist.addVideo(video);
-        }
+        playlist.addVideo(video);
+        playlistRepository.save(playlist);
+
         return true;
     }
+
 
     @Override
     public PlaylistResponse.Overview getPlaylists(UserDetailsCustom userDetails) {
         User user = userService.getUserFromSecurityContext(userDetails);
         List<Playlist> playlists = playlistRepository.findAllByUser(user);
+
         if (playlists.isEmpty()) {
             return new PlaylistResponse.Overview(List.of());
         }
+
         List<PlaylistResponse.Overview.PlaylistSummary> playlistSummaries = playlists.stream()
-                .map(playlist -> new PlaylistResponse.Overview.PlaylistSummary(
-                        playlist.getId(),
-                        playlist.getName()
-                ))
-                .toList();
+                .map(playlist -> {
+                    List<Video> videos = playlistVideoRepository.findVideosByPlaylist(playlist);
+
+                    List<String> videoNames = videos.stream()
+                            .map(Video::getTitle)
+                            .toList();
+
+                    return new PlaylistResponse.Overview.PlaylistSummary(
+                            playlist.getId(),
+                            playlist.getName(),
+                            videoNames.size());
+                })
+                .collect(Collectors.toList());
 
         return new PlaylistResponse.Overview(playlistSummaries);
     }
@@ -89,28 +109,21 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (user == null || !user.getId().equals(userId)) {
             throw new UserNotFoundException();
         }
-
         Playlist playlist = playlistRepository.findByUserIdAndId(userId, playlistId);
-
         if (playlist == null) {
             throw new PlaylistNotFoundException();
         }
 
-        PlaylistResponse.Details response = new PlaylistResponse.Details();
-        response.setPlaylistId(playlist.getId());
-        response.setPlaylistName(playlist.getName());
+        PlaylistResponse.Details response = modelMapper.map(playlist, PlaylistResponse.Details.class);
 
         List<PlaylistResponse.PlaylistDetails> videos = playlist.getPlaylistVideos().stream()
-                .map(playlistVideo -> {
-                    Video video = playlistVideo.getVideo();
-                    return new PlaylistResponse.PlaylistDetails(video);
-                })
-                .toList();
-
+                .map(playlistVideo -> modelMapper.map(playlistVideo.getVideo(), PlaylistResponse.PlaylistDetails.class))
+                .collect(Collectors.toList());
         response.setVideos(videos);
 
         return response;
     }
+
 
     @Transactional
     @Override
@@ -118,8 +131,8 @@ public class PlaylistServiceImpl implements PlaylistService {
         User user = userService.getUserFromSecurityContext(userDetails);
         Playlist playlist = playlistRepository.findByIdAndUser(playlistId, user);
 
-        if (request.getName() != null && !request.getName().isBlank()) {
-            playlist.updateName(request.getName());
+        if (request.getPlaylistName() != null && !request.getPlaylistName().isBlank()) {
+            playlist.updateName(request.getPlaylistName());
         }
 
         if (request.getAddVideoIds() != null) {
