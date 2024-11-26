@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { getAllMemos } from '@/app/api/memoAPI';
 import { Memo } from '@/types/memo';
 
@@ -11,14 +11,20 @@ const MyMemoSection: React.FC = () => {
   const [hasMoreMemos, setHasMoreMemos] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
-  const router = useRouter();
 
   const fetchMemos = useCallback(async (page: number) => {
     setIsLoading(true);
     try {
       const response = await getAllMemos(page);
       const newMemos = response.data.content;
-      setMemos((prev) => [...prev, ...newMemos]);
+
+      setMemos((prev) => {
+        const uniqueMemos = newMemos.filter(
+          (memo) => !prev.some((prevMemo) => prevMemo.id === memo.id),
+        );
+        return [...prev, ...uniqueMemos];
+      });
+
       setHasMoreMemos(!response.data.last);
     } catch (error) {
       console.error('Failed to fetch memos:', error);
@@ -32,14 +38,14 @@ const MyMemoSection: React.FC = () => {
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMoreMemos) {
+        if (entries[0].isIntersecting && hasMoreMemos && !isLoading) {
           setCurrentPage((prevPage) => prevPage + 1);
         }
       });
 
       if (node) observer.current.observe(node);
     },
-    [hasMoreMemos],
+    [hasMoreMemos, isLoading],
   );
 
   useEffect(() => {
@@ -51,7 +57,7 @@ const MyMemoSection: React.FC = () => {
       <h2>내 메모 모음</h2>
       {isLoading && <p>메모를 불러오는 중입니다...</p>}
       <div className="memo_list">
-        {memos.map((memo, index) => {
+        {memos.map((memo: Memo, index: number) => {
           const isLastMemo = index === memos.length - 1;
           const videoUrl = `/playlists/all/${memo.videoId}`;
 
@@ -61,18 +67,11 @@ const MyMemoSection: React.FC = () => {
               className="memo_item"
               ref={isLastMemo ? lastMemoRef : null}
             >
-              <a
-                href={videoUrl}
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push(videoUrl);
-                }}
-                style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
-              >
+              <Link href={videoUrl}>
                 <h4>{memo.title || '제목 없음'}</h4>
                 <p>{memo.content}</p>
                 <span>{memo.noteTime}</span>
-              </a>
+              </Link>
             </div>
           );
         })}

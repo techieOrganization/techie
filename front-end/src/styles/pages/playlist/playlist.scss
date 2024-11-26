@@ -126,6 +126,15 @@
       width: 80%;
       padding: 0 5rem;
 
+      .memo_list {
+        height: 50rem;
+        overflow-y: scroll;
+        border: 1px solid #eee;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+
       .memo_item {
         border-bottom: 1px solid #ccc;
         padding: 2rem 0;
