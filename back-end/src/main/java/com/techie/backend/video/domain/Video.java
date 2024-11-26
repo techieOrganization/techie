@@ -28,10 +28,6 @@ public class Video {
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlaylistVideo> playlistVideos = new ArrayList<>();
 
-    public Video(String videoId){
-        this.videoId = videoId;
-    }
-
     @Builder
     public Video(String videoId, String title) {
         this.videoId = videoId;

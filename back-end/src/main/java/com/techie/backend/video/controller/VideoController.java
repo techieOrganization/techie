@@ -32,7 +32,7 @@ public class VideoController {
     }
 
     @GetMapping("/list")
-    public Slice<VideoResponse> AllVideos (Pageable pageable) throws JsonProcessingException {
+    public Slice<VideoResponse> allVideos (Pageable pageable) throws JsonProcessingException {
         return videoService.fetchVideosFromAllCategories(pageable);
     }
 }
