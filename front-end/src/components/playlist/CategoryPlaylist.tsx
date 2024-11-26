@@ -45,7 +45,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
   const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined);
-  const [upDatePlayList, setUpdataPlayList] = useState(false);
 
   const loadVideos = useCallback(
     async (currentPage: number) => {
@@ -178,7 +177,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     };
 
     fetchData(); // 데이터 가져오기 호출
-  }, [upDatePlayList]);
+  }, []);
 
   // put api로 수정해야하는 부분
   const onClickCheckBox = async (playlistId: string) => {
