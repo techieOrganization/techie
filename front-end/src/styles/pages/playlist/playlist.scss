@@ -303,16 +303,46 @@
   width: 100%;
   height: 100vh;
 
-  .modal_content {
+  .modal-content {
     position: absolute;
     top: 50%;
     left: 50%;
     z-index: 1000;
     transform: translate(-50%, -50%);
     background: #fff;
-    padding: 5rem;
+    padding: 3rem;
     border-radius: 1rem;
     border: 1px solid #ccc;
+    width: 30vw;
+    gap: 2rem;
+    color: #5a9bdb;
+    font-size: 2rem;
+    font-weight: bold;
+    overflow: scroll;
+    max-height: 70vh;
+    overflow-x: auto;
+    .playlist_content_container {
+      width: 100%;
+      .playlist_item {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+        justify-content: space-between;
+        input {
+          width: 2rem;
+          height: 2rem;
+          cursor: pointer;
+        }
+        .deleteBtn {
+          background-color: red;
+          text-align: center;
+          font-size: 1rem;
+          font-weight: 600;
+        }
+      }
+    }
   }
 
   p {

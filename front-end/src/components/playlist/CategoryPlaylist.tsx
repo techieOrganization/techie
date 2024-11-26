@@ -8,9 +8,9 @@ import { Video } from '@/types/video';
 import vidListData from '@/data/vidListData';
 import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
-import axios from 'axios';
 import Cookies from 'js-cookie';
-import { saveVideo } from '@/app/api/playlistApi';
+import { editVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
+import { PlayLists } from '@/types/playlist';
 
 interface CategoryPlaylistProps {
   category: string;
@@ -36,12 +36,16 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const [category, setCategory] = useState(initialCategory);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [selectVideo, setSelectVideo] = useState<string[]>([]);
+  const [selectVideo, setSelectVideo] = useState<string>('');
   const [playlistNmae, setPlayListName] = useState('');
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
+  const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined);
+  const [upDatePlayList, setUpdataPlayList] = useState(false);
 
   const loadVideos = useCallback(
     async (currentPage: number) => {
@@ -113,26 +117,98 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     };
   }, []);
 
-  const handleSelectVideo = (videoId: string) => {
-    if (selectVideo.includes(videoId)) {
-      setSelectVideo(selectVideo.filter((id) => id !== videoId)); // 이미 선택된 경우 제거
-    } else {
-      setSelectVideo([...selectVideo, videoId]); // 새로 선택된 경우 추가
-    }
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setPlayListName('');
   };
 
   const handleSaveVideo = async () => {
     const token = Cookies.get('token');
+    if (selectVideo.length === 0) {
+      alert('선택된 영상이 없습니다.');
+      return;
+    }
+
     try {
       await saveVideo(selectVideo, playlistNmae, token);
+      alert('영상이 재생목록에 저장되었습니다.');
+      closeModal();
+      const data = await getVideo(token);
+      setPlaylists(data); // playlists 상태 업데이트
     } catch (error) {
-      console.error(error);
+      console.error('Error saving video:', error);
+      alert('영상 저장에 실패했습니다.');
+    }
+  };
+
+  const handleVideoSelect = (videoId: string) => {
+    if (selectVideo.includes(videoId)) {
+      setSelectVideo(selectVideo.replace(videoId, ''));
+    } else {
+      setSelectVideo(videoId);
     }
   };
 
   useEffect(() => {
     console.log(selectVideo);
   }, [selectVideo]);
+
+  const token = Cookies.get('token');
+
+  const toggleBottomBar = (index: number) => {
+    setIsOpen(isOpen === index ? null : index);
+  };
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    const fetchData = async () => {
+      try {
+        const data = await getVideo(token);
+        console.log(data);
+        setPlaylists(data);
+      } catch (error) {
+        console.error(error); // 오류 메시지를 상태에 저장
+      } finally {
+        setLoading(false); // 로딩 상태를 false로 설정
+      }
+    };
+
+    fetchData(); // 데이터 가져오기 호출
+  }, [upDatePlayList]);
+
+  // put api로 수정해야하는 부분
+  const onClickCheckBox = async (playlistId: string) => {
+    const token = Cookies.get('token');
+    if (selectVideo.length === 0) {
+      alert('선택된 영상이 없습니다.');
+      return;
+    }
+
+    if (!token) return;
+    try {
+      await editVideo(playlistNmae, selectVideo, playlistId, token);
+    } catch (error) {
+      console.log(error);
+    }
+    closeModal();
+    setSelectVideo('');
+  };
+  // 재생목록 삭제
+  const onClickDelete = async (playlistId: string) => {
+    const token = Cookies.get('token');
+    if (!token) return;
+    try {
+      await deletepPlaylist(playlistId, token);
+    } catch (error) {
+      console.log(error);
+    }
+    closeModal();
+    setSelectVideo('');
+  };
 
   return (
     <div className="playlists_container">
@@ -175,20 +251,28 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
                   </Link>
-                  <button
-                    onClick={() => {
-                      handleSelectVideo(video.videoId);
-                    }}
-                  >
-                    +
-                  </button>
-                  <button onClick={handleSaveVideo}>추가</button>
+                  {token && (
+                    <button
+                      className="button"
+                      onClick={() => {
+                        toggleBottomBar(index);
+                        handleVideoSelect(video.videoId);
+                      }}
+                    >
+                      +
+                    </button>
+                  )}
 
-                  <input
-                    type="text"
-                    onChange={(e) => setPlayListName(e.target.value)}
-                    value={playlistNmae}
-                  />
+                  <ul className={`bar-nav ${isOpen === index ? 'isOpen' : ''}`}>
+                    <li
+                      onClick={() => {
+                        openModal();
+                        toggleBottomBar(index);
+                      }}
+                    >
+                      재생목록에 저장
+                    </li>
+                  </ul>
                 </li>
               );
             })}
@@ -197,6 +281,57 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           {!loading && !error && videos.length === 0 && <p>결과를 찾을 수 없습니다.</p>}
         </div>
       </div>
+      {/* 모달 */}
+      {showModal && (
+        <div
+          className="overlay"
+          onClick={() => {
+            closeModal();
+          }}
+        >
+          {/* 오버레이 추가 */}
+          <div className="modal" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              사용자 재생목록
+              <input
+                type="text"
+                value={playlistNmae}
+                onChange={(e) => setPlayListName(e.target.value)}
+                placeholder="재생목록 이름 입력"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <button onClick={handleSaveVideo}>재생목록 추가</button>
+              <div className="playlist_content_container">
+                {playlists ? (
+                  playlists.playlists.map((playlist) => (
+                    <div key={playlist.playlistId} className="playlist_item">
+                      <input
+                        type="checkbox"
+                        key={playlist.playlistId}
+                        onClick={() => {
+                          onClickCheckBox(playlist.playlistId);
+                        }}
+                      />
+                      <h3>{playlist.playlistName}</h3>
+                      <button
+                        className="deleteBtn"
+                        onClick={() => {
+                          onClickDelete(playlist.playlistId);
+                        }}
+                        key={`delete-${playlist.playlistId}`}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div>재생목록이 없습니다.</div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

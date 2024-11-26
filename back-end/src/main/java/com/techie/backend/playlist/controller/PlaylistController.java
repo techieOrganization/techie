@@ -47,7 +47,7 @@ public class PlaylistController {
     public ResponseEntity<PlaylistResponse.UpdatePlaylist> updatePlaylist(
             @AuthenticationPrincipal UserDetailsCustom userDetails,
             @RequestBody PlaylistRequest.UpdatePlaylist request,
-            @PathVariable Long playlistId) {
+            @PathVariable("playlistId") Long playlistId) {
         PlaylistResponse.UpdatePlaylist response = playlistService.updatePlaylist(userDetails, request, playlistId);
         return ResponseEntity.ok(response);
     }

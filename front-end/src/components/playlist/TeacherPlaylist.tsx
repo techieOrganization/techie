@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import instructorData from '@/data/instructorData';
 import { useQuery } from '@tanstack/react-query';
@@ -15,7 +15,7 @@ const TeacherPlaylist = () => {
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [playlistName, setPlayListName] = useState('');
   const [showModal, setShowModal] = useState(false); // 모달 상태 추가
-  const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]); // 선택된 비디오 ID 저장
+  const [selectedVideoIds, setSelectedVideoIds] = useState<string>(''); // 선택된 비디오 ID 저장
 
   // 전체 강사의 동영상 가져오기
   const allQuery = useQuery<Video[], Error>({
@@ -40,7 +40,6 @@ const TeacherPlaylist = () => {
   const closeModal = () => {
     setShowModal(false); // 모달 닫기
     setPlayListName(''); // 입력 필드 초기화
-    setSelectedVideoIds([]); // 선택된 비디오 ID 초기화
   };
 
   const toggleBottomBar = (index: number) => {
@@ -50,11 +49,15 @@ const TeacherPlaylist = () => {
   const handleVideoSelect = (videoId: string) => {
     // 비디오 ID를 선택된 비디오 ID 배열에 추가
     if (selectedVideoIds.includes(videoId)) {
-      setSelectedVideoIds(selectedVideoIds.filter((id) => id !== videoId)); // 이미 선택된 경우 제거
+      setSelectedVideoIds(selectedVideoIds.replace(videoId, '')); // 이미 선택된 경우 제거
     } else {
-      setSelectedVideoIds([...selectedVideoIds, videoId]); // 새로 선택된 경우 추가
+      setSelectedVideoIds(videoId); // 새로 선택된 경우 추가
     }
   };
+
+  useEffect(() => {
+    console.log(selectedVideoIds);
+  }, [selectedVideoIds]);
 
   const handleSaveVideo = async () => {
     const token = Cookies.get('token');
@@ -112,11 +115,13 @@ const TeacherPlaylist = () => {
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
                   </a>
+
                   {token && (
                     <button
                       className="button"
                       onClick={() => {
                         toggleBottomBar(index); // 하단 바 토글
+                        handleVideoSelect(video.videoId); // 비디오 선택
                       }}
                     >
                       +
@@ -125,7 +130,6 @@ const TeacherPlaylist = () => {
                   <ul className={`bar-nav ${isOpen === index ? 'isOpen' : ''}`}>
                     <li
                       onClick={() => {
-                        handleVideoSelect(video.videoId); // 비디오 선택
                         openModal();
                       }}
                     >
