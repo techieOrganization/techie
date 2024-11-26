@@ -39,12 +39,10 @@ public class PlaylistResponse {
     public static class PlaylistDetails {
         private String videoId;
         private String title;
-        private String category;
 
         public PlaylistDetails(Video video) {
             this.videoId = video.getVideoId();
             this.title = video.getTitle();
-            this.category = String.valueOf(video.getCategory());
         }
     }
 
