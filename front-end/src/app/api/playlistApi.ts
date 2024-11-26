@@ -55,7 +55,7 @@ export const editVideo = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/playlists${playlistId}`,
+      `http://localhost:8080/api/playlists/${playlistId}`,
       {
         playlistName: playlistName,
         addVideoIds: [selectVideo],
@@ -76,11 +76,15 @@ export const editVideo = async (
   }
 };
 
-// 비디오 삭제
+// 재생목록 삭제
 
 export const deletepPlaylist = async (playlistId: string, token: string | undefined) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/api/playlists${playlistId}`);
+    const response = await axios.delete(`http://localhost:8080/api/playlists/${playlistId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

@@ -9,6 +9,7 @@ import { Video } from '@/types/video';
 import '@/styles/pages/playlist/playlist.scss';
 import { saveVideo } from '@/app/api/playlistApi';
 import Cookies from 'js-cookie';
+import instructorData from '@/data/instructorData';
 
 const TeacherPlaylist = () => {
   const [selected, setSelected] = useState(instructorData[0]);
@@ -113,7 +114,7 @@ const TeacherPlaylist = () => {
                     <h3 className="title">{video.title}</h3>
                     <p className="channel_title">{video.channelTitle}</p>
                     <p className="date">{new Date(video.publishedAt).toLocaleDateString()}</p>
-                  </a>
+                  </Link>
 
                   {token && (
                     <button
