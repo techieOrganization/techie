@@ -63,10 +63,11 @@ public class PlaylistServiceImpl implements PlaylistService {
         VideoResponse videoResponse = videoResponses.get(0);
         Video video = videoRepository.findByVideoId(videoId)
                 .orElseGet(() -> {
-                    return Video.builder()
+                    Video newVideo = Video.builder()
                             .videoId(videoId)
                             .title(videoResponse.getTitle())
                             .build();
+                    return videoRepository.save(newVideo);
                 });
 
         playlist.addVideo(video);
