@@ -1,9 +1,9 @@
 const instructorData = [
   {
-    name: '전체',
+    name: 'ALL',
     description: '전체 강좌 목록을 확인할 수 있어요',
     img: '/assets/images/main/logo06.jpg',
-    channeld: '',
+    channeld: null,
   },
   {
     name: '생활코딩',

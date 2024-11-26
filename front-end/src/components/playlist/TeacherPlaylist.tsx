@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import instructorData from '@/data/instructorData';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
 import { Video } from '@/types/video';
@@ -17,19 +17,17 @@ const TeacherPlaylist = () => {
   const [showModal, setShowModal] = useState(false); // 모달 상태 추가
   const [selectedVideoIds, setSelectedVideoIds] = useState<string>(''); // 선택된 비디오 ID 저장
 
-  // 전체 강사의 동영상 가져오기
   const allQuery = useQuery<Video[], Error>({
     queryKey: ['allVideos'],
     queryFn: getAllVideos,
-    enabled: selected.name === '전체',
+    enabled: selected.name === 'ALL',
     staleTime: 1000 * 60 * 30,
   });
 
-  // 특정 강사의 동영상을 가져오기
   const instQuery = useQuery<Video[], Error>({
     queryKey: ['instVideos', selected.channeld],
     queryFn: () => getLatestVideos(selected.channeld!),
-    enabled: selected.name !== '전체' && !!selected.channeld,
+    enabled: selected.name !== 'ALL' && !!selected.channeld,
     staleTime: 1000 * 60 * 10,
   });
 
@@ -84,27 +82,28 @@ const TeacherPlaylist = () => {
     <div className="playlists_container">
       <ul className="dev_list teacher">
         {instructorData.map((inst) => (
-          <li key={inst.name}>
-            <button type="button" onClick={() => setSelected(inst)}>
+          <li key={inst.name} className={selected.name === inst.name ? 'active' : ''}>
+            <button
+              type="button"
+              onClick={() => setSelected(inst)}
+              disabled={selected.name === inst.name}
+            >
               <Image src={inst.img} alt={inst.name} width={70} height={70} />
               <span>{inst.name}</span>
             </button>
           </li>
         ))}
       </ul>
+
       <div className="video_list_cont">
         <div className="inner">
           <ul className="video_list">
             {allQuery.isLoading || instQuery.isLoading ? (
               <p>로딩 중입니다...</p>
             ) : videos.length > 0 ? (
-              videos.map((video, index) => (
-                <li key={index} className="video_item">
-                  <a
-                    href={`https://www.youtube.com/watch?v=${video.videoId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+              videos.map((video) => (
+                <li key={video.videoId} className="video_item">
+                  <Link href={`/playlists/${selected.name}/${video.videoId}`}>
                     <Image
                       src={video.thumbnails.medium.url}
                       alt={video.title}
