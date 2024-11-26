@@ -9,7 +9,9 @@ import com.techie.backend.memo.repository.MemoRepository;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.service.UserService;
 import com.techie.backend.video.domain.Video;
+import com.techie.backend.video.dto.VideoResponse;
 import com.techie.backend.video.repository.VideoRepository;
+import com.techie.backend.video.service.VideoService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +21,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional
@@ -30,6 +34,7 @@ import java.util.Collections;
 @Slf4j
 public class MemoServiceImpl implements MemoService {
     private final MemoRepository memoRepository;
+    private final VideoService videoService;
     private final VideoRepository videoRepository;
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -48,10 +53,19 @@ public class MemoServiceImpl implements MemoService {
         memo.assignUser(user);
 
         String videoId = request.getVideoId();
-        // 메모 연관 동영상 할당
-        if (videoId != null) {
-            Video video = videoRepository.findByVideoId(videoId).orElse(
-                    videoRepository.save(new Video(videoId)));
+        if (videoId != null){
+            Video video = videoRepository.findByVideoId(videoId).orElseGet(()-> {
+                        String videoUri = videoService.buildVideoUri(videoId);
+                        String videoResponseJson = videoService.getYoutubeResponse(videoUri).getBody();
+                        VideoResponse videoResponse = videoService.convertJsonToVideoDTOWithoutPaging(videoResponseJson).get(0);
+                        String title = videoResponse.getTitle();
+                        return videoRepository.save(Video
+                                .builder()
+                                .videoId(videoId)
+                                .title(title)
+                                .build());
+                    }
+            );
             memo.assignVideo(video);
         }
 
