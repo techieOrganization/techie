@@ -102,7 +102,7 @@ const TeacherPlaylist = () => {
             {allQuery.isLoading || instQuery.isLoading ? (
               <p>로딩 중입니다...</p>
             ) : videos.length > 0 ? (
-              videos.map((video) => (
+              videos.map((video, index) => (
                 <li key={video.videoId} className="video_item">
                   <Link href={`/playlists/${selected.name}/${video.videoId}`}>
                     <Image
