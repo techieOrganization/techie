@@ -132,39 +132,68 @@ public class PlaylistServiceImpl implements PlaylistService {
         User user = userService.getUserFromSecurityContext(userDetails);
         Playlist playlist = playlistRepository.findByIdAndUser(playlistId, user);
 
+        if (request.getAddVideoIds() != null && !request.getAddVideoIds().isEmpty() && request.getRemoveVideoIds() != null && !request.getRemoveVideoIds().isEmpty()) {
+            throw new IllegalArgumentException("수정과 삭제가 동시에 이루어질 수 없습니다.");
+        }
+
         if (request.getPlaylistName() != null && !request.getPlaylistName().isBlank()) {
             playlist.updateName(request.getPlaylistName());
         }
 
-        if (request.getAddVideoIds() != null) {
+        if (request.getAddVideoIds() != null && !request.getAddVideoIds().isEmpty()) {
             for (String videoId : request.getAddVideoIds()) {
                 Video video = videoRepository.findById(videoId)
-                        .orElseThrow(VideoNotFoundException::new);
+                        .orElseGet(() -> {
+                            String videoUri = videoService.buildVideoUri(videoId);
+                            String videoResponseJson = videoService.getYoutubeResponse(videoUri).getBody();
+                            List<VideoResponse> videoResponses = videoService.convertJsonToVideoDTOWithoutPaging(videoResponseJson);
+
+                            if (videoResponses.isEmpty()) {
+                                throw new VideoNotFoundException();
+                            }
+
+                            VideoResponse videoResponse = videoResponses.get(0);
+                            Video newVideo = Video.builder()
+                                    .videoId(videoId)
+                                    .title(videoResponse.getTitle())
+                                    .build();
+                            videoRepository.save(newVideo);
+                            return newVideo;
+                        });
 
                 boolean videoExists = playlistVideoRepository.existsByPlaylistAndVideo(playlist, video);
-                if (!videoExists) {
-                    playlist.addVideo(video);
+                if (videoExists) {
+                    throw new IllegalArgumentException("이미 존재하는 값입니다.");
                 }
+
+                playlist.addVideo(video);
             }
         }
 
-        if (request.getRemoveVideoIds() != null) {
+        if (request.getRemoveVideoIds() != null && !request.getRemoveVideoIds().isEmpty()) {
             for (String videoId : request.getRemoveVideoIds()) {
                 Video video = videoRepository.findById(videoId)
                         .orElseThrow(VideoNotFoundException::new);
 
                 boolean videoExists = playlistVideoRepository.existsByPlaylistAndVideo(playlist, video);
-                if (videoExists) {
-                    PlaylistVideo playlistVideo = playlistVideoRepository.findByPlaylistAndVideo(playlist, video)
-                            .orElseThrow(VideoNotFoundException::new);
-                    playlist.removeVideo(video, playlistVideoRepository);
+                if (!videoExists) {
+                    throw new IllegalArgumentException("이미 삭제한 값입니다.");
                 }
+
+                PlaylistVideo playlistVideo = playlistVideoRepository.findByPlaylistAndVideo(playlist, video)
+                        .orElseThrow(VideoNotFoundException::new);
+
+                playlist.removeVideo(video, playlistVideoRepository);
             }
         }
+
         playlistRepository.save(playlist);
 
         return new PlaylistResponse.UpdatePlaylist(playlist.getId(), playlist.getName());
     }
+
+
+
 
     @Transactional
     @Override
