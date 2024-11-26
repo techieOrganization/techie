@@ -2,6 +2,7 @@ package com.techie.backend.video.domain;
 
 import com.techie.backend.playlist_video.domain.PlaylistVideo;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +18,7 @@ public class Video {
     @Id
     private String videoId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String title;
 
     @Enumerated(EnumType.STRING)
@@ -26,4 +27,14 @@ public class Video {
 
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlaylistVideo> playlistVideos = new ArrayList<>();
+
+    public Video(String videoId){
+        this.videoId = videoId;
+    }
+
+    @Builder
+    public Video(String videoId, String title) {
+        this.videoId = videoId;
+        this.title = title;
+    }
 }

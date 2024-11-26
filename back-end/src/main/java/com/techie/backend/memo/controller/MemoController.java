@@ -23,39 +23,39 @@ public class MemoController {
     @PostMapping
     public ResponseEntity<MemoResponse> createMemo(@RequestBody MemoRequest memoRequest,
                                                    @AuthenticationPrincipal UserDetailsCustom userDetails) {
-        return memoService.createMemo(memoRequest, userDetails.getUsername());
+        return memoService.createMemo(memoRequest, userDetails);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MemoResponse> getMemo(@PathVariable Long id,
                                                 @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
-        return memoService.getMemo(userDetails.getUsername(), id);
+        return memoService.getMemo(userDetails, id);
     }
 
     @GetMapping("/list")
     public ResponseEntity<Slice<MemoResponse>> getAllMemos(@AuthenticationPrincipal UserDetailsCustom userDetails,
                                                            @PageableDefault(size = 10) Pageable pageable) {
-        return memoService.getMemoList(userDetails, userDetails.getUsername(), pageable);
+        return memoService.getMemoList(userDetails, pageable);
     }
 
     @GetMapping("/byVideo")
     public ResponseEntity<Slice<MemoResponse>> getAllMemosByVideo(@RequestParam String vId,
                                                                   @AuthenticationPrincipal UserDetailsCustom userDetails,
                                                                   @PageableDefault(size = 10) Pageable pageable) {
-        return memoService.getAllMemosByVideoId(userDetails, userDetails.getUsername(), vId, pageable);
+        return memoService.getAllMemosByVideoId(userDetails, vId, pageable);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MemoResponse> updateMemo(@PathVariable Long id,
                                                    @RequestBody MemoRequest.Update updateRequest,
                                                    @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
-        return memoService.updateMemo(userDetails.getUsername(), id, updateRequest);
+        return memoService.updateMemo(userDetails, id, updateRequest);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMemo(@PathVariable Long id,
                                              @AuthenticationPrincipal UserDetailsCustom userDetails) throws AccessDeniedException {
-        return memoService.deleteMemo(userDetails.getUsername(), id);
+        return memoService.deleteMemo(userDetails, id);
     }
 
 }

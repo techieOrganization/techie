@@ -5,28 +5,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class PlaylistResponse {
 
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class Overview {
-        private List<PlaylistSummary> playlists = new ArrayList<>();
+        private List<PlaylistSummary> playlists;
 
         @Data
-        @NoArgsConstructor
         @AllArgsConstructor
         public static class PlaylistSummary {
             private Long playlistId;
-            private String name;
+            private String playlistName;
+            private int videoCount;
         }
     }
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Details {
         private Long playlistId;
         private String playlistName;
@@ -34,6 +34,8 @@ public class PlaylistResponse {
     }
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class PlaylistDetails {
         private String videoId;
         private String title;
