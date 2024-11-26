@@ -2,13 +2,15 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-
 import instructorData from '@/data/instructorData';
 import TeacherPlaylist from '@/components/playlist/TeacherPlaylist';
 
 const TeacherCategoryPage: React.FC = () => {
   const params = useParams();
-  const teacherName = decodeURIComponent(params.category);
+
+  const teacherName = Array.isArray(params.category)
+    ? decodeURIComponent(params.category[0])
+    : decodeURIComponent(params.category);
 
   const instructor = instructorData.find((instructor) => instructor.name === teacherName);
 
@@ -18,7 +20,7 @@ const TeacherCategoryPage: React.FC = () => {
 
   return (
     <div className="playlists_container">
-      <TeacherPlaylist playlistId={instructor.playlistId} />
+      <TeacherPlaylist channelId={instructor.channeld} />
     </div>
   );
 };

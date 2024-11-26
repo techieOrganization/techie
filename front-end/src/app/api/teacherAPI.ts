@@ -65,5 +65,10 @@ export const getAllVideos = async (): Promise<Video[]> => {
     .map((inst) => getLatestVideos(inst.channeld!));
 
   const results = await Promise.all(promises);
-  return results.flat();
+
+  const allVideos = results.flat();
+
+  allVideos.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
+  return allVideos;
 };
