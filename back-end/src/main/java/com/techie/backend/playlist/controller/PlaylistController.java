@@ -34,12 +34,11 @@ public class PlaylistController {
     }
 
 
-    @GetMapping("/users/{userId}/playlists/{playlistId}")
+    @GetMapping("/{playlistId}")
     public ResponseEntity<PlaylistResponse.Details> getPlaylistDetails(
             @AuthenticationPrincipal UserDetailsCustom userDetails,
-            @PathVariable Long playlistId,
-            @PathVariable Long userId) {
-        PlaylistResponse.Details playlistResponse = playlistService.getPlaylistDetails(userId, playlistId, userDetails);
+            @PathVariable Long playlistId) {
+        PlaylistResponse.Details playlistResponse = playlistService.getPlaylistDetails(playlistId, userDetails);
         return ResponseEntity.ok(playlistResponse);
     }
 
