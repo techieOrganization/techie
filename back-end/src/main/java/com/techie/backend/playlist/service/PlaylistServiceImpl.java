@@ -3,7 +3,6 @@ package com.techie.backend.playlist.service;
 
 import com.techie.backend.global.exception.playlist.PlaylistNotFoundException;
 import com.techie.backend.global.exception.playlist.VideoNotFoundException;
-import com.techie.backend.global.exception.user.UserNotFoundException;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.playlist.domain.Playlist;
 import com.techie.backend.playlist.dto.PlaylistRequest;
@@ -19,7 +18,6 @@ import com.techie.backend.video.repository.VideoRepository;
 import com.techie.backend.video.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,10 +70,8 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         playlist.addVideo(video);
         playlistRepository.save(playlist);
-
         return true;
     }
-
 
     @Override
     public PlaylistResponse.Overview getPlaylists(UserDetailsCustom userDetails) {
@@ -105,15 +101,11 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public PlaylistResponse.Details getPlaylistDetails(Long userId, Long playlistId, UserDetailsCustom userDetails) {
+    public PlaylistResponse.Details getPlaylistDetails(Long playlistId, UserDetailsCustom userDetails) {
         User user = userService.getUserFromSecurityContext(userDetails);
-        if (user == null || !user.getId().equals(userId)) {
-            throw new UserNotFoundException();
-        }
-        Playlist playlist = playlistRepository.findByUserIdAndId(userId, playlistId);
-        if (playlist == null) {
-            throw new PlaylistNotFoundException();
-        }
+
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(PlaylistNotFoundException::new);
 
         PlaylistResponse.Details response = modelMapper.map(playlist, PlaylistResponse.Details.class);
 
@@ -124,7 +116,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         return response;
     }
-
 
     @Transactional
     @Override
@@ -192,9 +183,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         return new PlaylistResponse.UpdatePlaylist(playlist.getId(), playlist.getName());
     }
 
-
-
-
     @Transactional
     @Override
     public Boolean deletePlaylist(UserDetailsCustom userDetails, Long playlistId) {
@@ -204,7 +192,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (playlist == null) {
             throw new PlaylistNotFoundException();
         }
-
         playlistRepository.delete(playlist);
 
         return true;
