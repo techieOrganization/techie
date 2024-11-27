@@ -7,9 +7,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
 import { Video } from '@/types/video';
 import '@/styles/pages/playlist/playlist.scss';
-import { saveVideo } from '@/app/api/playlistApi';
+import { addVideo, deletepPlaylist, getVideo, saveVideo } from '@/app/api/playlistApi';
 import Cookies from 'js-cookie';
 import instructorData from '@/data/instructorData';
+import { PlayLists } from '@/types/playlist';
 
 const TeacherPlaylist = () => {
   const [selected, setSelected] = useState(instructorData[0]);
@@ -17,6 +18,8 @@ const TeacherPlaylist = () => {
   const [playlistName, setPlayListName] = useState('');
   const [showModal, setShowModal] = useState(false); // 모달 상태 추가
   const [selectedVideoIds, setSelectedVideoIds] = useState<string>(''); // 선택된 비디오 ID 저장
+  const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
 
   const allQuery = useQuery<Video[], Error>({
     queryKey: ['allVideos'],
@@ -62,17 +65,76 @@ const TeacherPlaylist = () => {
     const token = Cookies.get('token');
     if (selectedVideoIds.length === 0) {
       alert('선택된 영상이 없습니다.');
-      return; // 선택된 비디오가 없으면 함수 종료
+      return;
     }
 
     try {
       await saveVideo(selectedVideoIds, playlistName, token); // 선택된 비디오 ID와 재생목록 이름 전송
       alert('영상이 재생목록에 저장되었습니다.');
       closeModal(); // 저장 후 모달 닫기
+      const data = await getVideo(token);
+      setPlaylists(data); // playlists 상태 업데이트
     } catch (error) {
       console.error('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
+    setSelectedVideoIds('');
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getVideo(token);
+        console.log(data);
+        setPlaylists(data);
+      } catch (error) {
+        console.error(error); // 오류 메시지를 상태에 저장
+      } finally {
+        setLoading(false); // 로딩 상태를 false로 설정
+      }
+    };
+
+    fetchData(); // 데이터 가져오기 호출
+  }, []);
+
+  const onClickCheckBox = async (playlistId: string) => {
+    const token = Cookies.get('token');
+    if (selectedVideoIds.length === 0) {
+      alert('선택된 영상이 없습니다.');
+      return;
+    }
+
+    if (!token) return;
+    try {
+      await addVideo(playlistName, selectedVideoIds, playlistId, token);
+      alert('재생목록에 영상이 추가되었습니다');
+    } catch (error) {
+      console.log(error);
+    }
+    closeModal();
+    setSelectedVideoIds('');
+  };
+
+  const onClickDelete = async (playlistId: string) => {
+    const token = Cookies.get('token');
+    if (!token) return;
+    try {
+      await deletepPlaylist(playlistId, token);
+      setPlaylists((prevPlaylists: PlayLists | undefined) =>
+        prevPlaylists
+          ? {
+              playlists: prevPlaylists.playlists.filter(
+                (playlist) => playlist.playlistId !== playlistId,
+              ),
+            }
+          : undefined,
+      );
+      alert('재생목록이 삭제 되었습니다');
+    } catch (error) {
+      console.log(error);
+    }
+    closeModal();
+    setSelectedVideoIds('');
   };
 
   const videos = selected.name === '전체' ? allQuery.data || [] : instQuery.data || [];
@@ -131,6 +193,7 @@ const TeacherPlaylist = () => {
                     <li
                       onClick={() => {
                         openModal();
+                        toggleBottomBar(index);
                       }}
                     >
                       재생목록에 저장
@@ -158,6 +221,33 @@ const TeacherPlaylist = () => {
                 onClick={(e) => e.stopPropagation()}
               />
               <button onClick={handleSaveVideo}>재생목록 추가</button>
+              <div className="playlist_content_container">
+                {playlists ? (
+                  playlists.playlists.map((playlist) => (
+                    <div key={playlist.playlistId} className="playlist_item">
+                      <input
+                        type="checkbox"
+                        key={playlist.playlistId}
+                        onClick={() => {
+                          onClickCheckBox(playlist.playlistId);
+                        }}
+                      />
+                      <h3>{playlist.playlistName}</h3>
+                      <button
+                        className="deleteBtn"
+                        onClick={() => {
+                          onClickDelete(playlist.playlistId);
+                        }}
+                        key={`delete-${playlist.playlistId}`}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div>재생목록이 없습니다.</div>
+                )}
+              </div>
             </div>
           </div>
         </div>

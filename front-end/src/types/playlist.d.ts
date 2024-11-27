@@ -1,6 +1,20 @@
 export interface PlayList {
-  [playlistId: number, playlistName: string, videoCount: number];
+  playlistId: string;
+  playlistName: string;
+  videoCount: number;
+  userId: string;
 }
 export interface PlayLists {
-  playlists: Playlist[];
+  playlists: PlayList[];
+}
+
+export interface DetailPlayList {
+  playlistId: number;
+  playlistName: string;
+  videos: [
+    {
+      videoId: string;
+      title: string;
+    },
+  ];
 }

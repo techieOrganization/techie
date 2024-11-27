@@ -47,7 +47,7 @@ export const getVideo = async (token: string | undefined) => {
 
 // 재생 목록 수정하기
 
-export const editVideo = async (
+export const addVideo = async (
   playlistName: string,
   selectVideo: string,
   playlistId: string,
@@ -85,6 +85,34 @@ export const deletepPlaylist = async (playlistId: string, token: string | undefi
         Authorization: `Bearer ${token}`,
       },
     });
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error('api 요청 오류');
+  }
+};
+
+// 디테일 플레이 리스트
+
+export const detailPlaylist = async (
+  playlistId: string | undefined,
+  token: string | undefined,
+  userId: string | undefined,
+) => {
+  if (!playlistId || !token || !userId) return;
+
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/playlists/users${userId}/playlists/${playlistId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

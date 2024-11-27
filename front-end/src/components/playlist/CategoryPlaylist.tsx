@@ -9,8 +9,8 @@ import vidListData from '@/data/vidListData';
 import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 import Cookies from 'js-cookie';
-import { editVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
-import { PlayLists } from '@/types/playlist';
+import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
+import { PlayLists, PlayList } from '@/types/playlist';
 
 interface CategoryPlaylistProps {
   category: string;
@@ -142,6 +142,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       console.error('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
+    setSelectVideo('');
   };
 
   const handleVideoSelect = (videoId: string) => {
@@ -162,8 +163,8 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     setIsOpen(isOpen === index ? null : index);
   };
 
+  // 재생목록 렌더링
   useEffect(() => {
-    const token = Cookies.get('token');
     const fetchData = async () => {
       try {
         const data = await getVideo(token);
@@ -189,7 +190,8 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
     if (!token) return;
     try {
-      await editVideo(playlistNmae, selectVideo, playlistId, token);
+      await addVideo(playlistNmae, selectVideo, playlistId, token);
+      alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
       console.log(error);
     }
@@ -202,13 +204,22 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     if (!token) return;
     try {
       await deletepPlaylist(playlistId, token);
+      setPlaylists((prevPlaylists: PlayLists | undefined) =>
+        prevPlaylists
+          ? {
+              playlists: prevPlaylists.playlists.filter(
+                (playlist) => playlist.playlistId !== playlistId,
+              ),
+            }
+          : undefined,
+      );
+      alert('재생목록이 삭제 되었습니다');
     } catch (error) {
       console.log(error);
     }
     closeModal();
     setSelectVideo('');
   };
-
   return (
     <div className="playlists_container">
       <ul className="dev_list">

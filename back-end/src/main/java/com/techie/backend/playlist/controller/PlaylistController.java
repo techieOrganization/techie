@@ -55,7 +55,7 @@ public class PlaylistController {
     @DeleteMapping("/{playlistId}")
     public ResponseEntity<Boolean> deletePlaylist(
             @AuthenticationPrincipal UserDetailsCustom userDetails,
-            @PathVariable Long playlistId) {
+            @PathVariable("playlistId") Long playlistId) {
         Boolean isDeleted = playlistService.deletePlaylist(userDetails, playlistId);
         return ResponseEntity.ok(isDeleted);
     }
