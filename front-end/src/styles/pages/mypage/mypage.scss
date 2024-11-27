@@ -113,7 +113,31 @@
       &:hover {
         transform: translateY(-10px);
       }
-
+    }
+    .playlist-container {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      overflow-y: auto;
+      .playlist-item {
+        display: flex;
+        flex-direction: column;
+        width: 15vw;
+        align-items: center;
+        background-color: var(--bg-color);
+        color: black;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: 1s;
+        gap: 1rem;
+        margin-top: 10px;
+        .playlist-name {
+          font-size: 1.8rem;
+        }
+        &:hover {
+          transform: translateY(-10px);
+        }
+      }
       a {
         display: block;
         width: 100%;

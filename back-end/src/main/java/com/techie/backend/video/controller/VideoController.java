@@ -16,11 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/videos")
 @Slf4j
+@CrossOrigin(origins = "http://localhost:3000") 
 public class VideoController {
     private final VideoService videoService;
 
     @GetMapping("/{category}")
-    public Slice<VideoResponse> listCategoryVideo(@PathVariable Category category, Pageable pageable) throws JsonProcessingException {
+    public Slice<VideoResponse> listCategoryVideo(@PathVariable("category") Category category, Pageable pageable) throws JsonProcessingException {
         return videoService.fetchVideosByCategory(category, pageable);
     }
 
