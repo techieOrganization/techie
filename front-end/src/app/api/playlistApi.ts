@@ -96,22 +96,15 @@ export const deletepPlaylist = async (playlistId: string, token: string | undefi
 
 // 디테일 플레이 리스트
 
-export const detailPlaylist = async (
-  playlistId: string | undefined,
-  token: string | undefined,
-  userId: string | undefined,
-) => {
-  if (!playlistId || !token || !userId) return;
+export const detailPlaylist = async (playlistId: string | undefined, token: string | undefined) => {
+  if (!playlistId || !token) return;
 
   try {
-    const response = await axios.get(
-      `http://localhost:8080/api/playlists/users${userId}/playlists/${playlistId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get(`http://localhost:8080/api/playlists/${playlistId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
 
     return response.data;
   } catch (error: unknown) {

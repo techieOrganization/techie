@@ -6,22 +6,23 @@ import { useParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { DetailPlayList } from '@/types/playlist';
-
+import Link from 'next/link';
+import '@/styles/pages/my-video-list/my-video-list.scss';
 interface Params {
   playlistId?: string;
-  userId?: string;
 }
 
 const MyVideoList = () => {
   const params = useParams() as Params;
-  const { userId, playlistId } = params;
+  const { playlistId } = params;
 
   const [playlist, setPlaylist] = useState<DetailPlayList | null>(null);
 
   const fetchVideo = async () => {
     const token = Cookies.get('token');
     try {
-      const response = await detailPlaylist(playlistId, token, userId);
+      const response = await detailPlaylist(playlistId, token);
+      console.log(response);
       setPlaylist(response);
     } catch (error) {
       console.error(error);
@@ -30,18 +31,20 @@ const MyVideoList = () => {
 
   useEffect(() => {
     fetchVideo();
-  }, [playlistId, userId]); // 의존성 배열에 playlistId와 userId 추가
+  }, [playlistId]); // 의존성 배열에 playlistId와 userId 추가
 
   return (
-    <div>
-      <h1 className="my-video-list-header">{playlistId}번 재생 목록</h1>
-      <div>
+    <div className="video_container">
+      <h1 className="my-video-list-header">{playlist?.playlistName}</h1>
+
+      <div className="video-item-container">
         {playlist && playlist.videos && playlist.videos.length > 0 ? (
           playlist.videos.map((video) => (
-            <div key={video.videoId} className="video-item">
-              <h4>{video.title}</h4>
-              {/* 비디오 관련 추가 정보 렌더링 */}
-            </div>
+            <Link href={`/playlists/ALL/${video.videoId}`} className="video_title">
+              <div key={video.videoId} className="video-item">
+                {video.title}
+              </div>
+            </Link>
           ))
         ) : (
           <p>재생목록에 영상이 없습니다.</p>

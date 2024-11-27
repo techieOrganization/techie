@@ -25,11 +25,11 @@ const MyVideoSection: React.FC = () => {
     }
   }, []);
 
-  const fetchDetailPlaylist = useCallback(async (playlistId: string, userId: string) => {
+  const fetchDetailPlaylist = useCallback(async (playlistId: string) => {
     const token = Cookies.get('token');
     setIsLoading(true);
     try {
-      const response = await detailPlaylist(playlistId, token, userId);
+      const response = await detailPlaylist(playlistId, token);
       setDetailPlaylistData(response); // 상세 재생목록 데이터를 설정
     } catch (error) {
       console.error(error);
@@ -40,25 +40,24 @@ const MyVideoSection: React.FC = () => {
 
   useEffect(() => {
     fetchPlaylists(); // 컴포넌트가 마운트될 때 재생목록을 가져옴
+    console.log(detailPlaylistData);
   }, [fetchPlaylists]);
 
   return (
-    <div>
+    <div className="playlist-container">
       {isLoading && <p>Loading...</p>}
-      {playlists.playlists.length === 0 && !isLoading && <p>No playlists available.</p>}
+      {playlists.playlists.length === 0 && !isLoading && <p>저장된 재생목록이 없습니다.</p>}
       {playlists.playlists.map((playlist) => (
-        <div key={playlist.playlistId} className="playlist-item">
-          <h3>재생목록 : {playlist.playlistName}</h3>
-          <p>저장된 영상 : {playlist.videoCount}</p>
-          <button
-            onClick={() => {
-              // fetchDetailPlaylist 호출 시 playlistId와 userId 전달
-              fetchDetailPlaylist(playlist.playlistId, playlist.userId);
-              router.push(`my-video-list/${playlist.userId}/playlistId/${playlist.playlistId}`);
-            }}
-          >
-            상세 영상 페이지
-          </button>
+        <div
+          key={playlist.playlistId}
+          className="playlist-item"
+          onClick={() => {
+            fetchDetailPlaylist(playlist.playlistId);
+            router.push(`my-video-list/playlistId/${playlist.playlistId}`);
+          }}
+        >
+          <h3 className="playlist-name">{playlist.playlistName}</h3>
+          <p>{playlist.videoCount}</p>
         </div>
       ))}
     </div>

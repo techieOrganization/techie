@@ -1,2 +1,41 @@
+.video_container {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh;
+  height: 70vh;
+  align-items: center;
+  gap: 4rem;
+}
+.video-item-container {
+  display: flex;
+  width: 80vw;
+  gap: 1rem;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  .video_title {
+    font-size: 1.5rem;
+  }
+  .video-item {
+    width: 15vw;
+    height: 20vh;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color);
+    border-radius: 2rem;
+    padding: 15px;
+    cursor: pointer;
+    box-sizing: border-box;
+    color: black;
+    transition: 1s;
+    margin-top: 10px;
+    &:hover {
+      transform: translateY(-10px);
+    }
+  }
+}
+
 .my-video-list-header {
+  font-size: 4rem;
+  font-weight: 600;
 }
