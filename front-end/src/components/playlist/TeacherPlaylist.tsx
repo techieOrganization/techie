@@ -19,7 +19,6 @@ const TeacherPlaylist = () => {
   const [showModal, setShowModal] = useState(false); // 모달 상태 추가
   const [selectedVideoIds, setSelectedVideoIds] = useState<string>(''); // 선택된 비디오 ID 저장
   const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
 
   const allQuery = useQuery<Video[], Error>({
     queryKey: ['allVideos'],
@@ -89,8 +88,6 @@ const TeacherPlaylist = () => {
         setPlaylists(data);
       } catch (error) {
         console.error(error); // 오류 메시지를 상태에 저장
-      } finally {
-        setLoading(false); // 로딩 상태를 false로 설정
       }
     };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { DetailPlayList, PlayLists } from '@/types/playlist'; // 인터페이스 임포트
 import { useRouter } from 'next/navigation';
 import { getVideo, detailPlaylist } from '@/app/api/playlistApi';

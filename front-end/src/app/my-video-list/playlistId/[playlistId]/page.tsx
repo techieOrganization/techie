@@ -7,7 +7,6 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { DetailPlayList } from '@/types/playlist';
 import Link from 'next/link';
-import '@/styles/pages/my-video-list/my-video-list.scss';
 interface Params {
   playlistId?: string;
 }
@@ -40,7 +39,11 @@ const MyVideoList = () => {
       <div className="video-item-container">
         {playlist && playlist.videos && playlist.videos.length > 0 ? (
           playlist.videos.map((video) => (
-            <Link href={`/playlists/ALL/${video.videoId}`} className="video_title">
+            <Link
+              href={`/playlists/ALL/${video.videoId}`}
+              className="video_title"
+              key={video.videoId}
+            >
               <div key={video.videoId} className="video-item">
                 {video.title}
               </div>
@@ -55,7 +58,3 @@ const MyVideoList = () => {
 };
 
 export default MyVideoList;
-
-//1. userId와 playlistId 를 전체 플레이리스트 api 에서 응답으로 받아와서 상세 영상 api의 매개변수로 넣고 호출해준다
-//2.1 모든 비디오를 호출해오는 api로 호출하고 상세 플레이리스트의 videoId 값이랑 동일하지 않은 비디오들은 모두 필터링해준다.
-//2.2 상세 플레이리스트의 반환값인 videoId,title를 렌더링해주고 Link태그를 이용해서 동적으로 해당영상의 url로 라우팅시킨다 ++ 참고사항 그러려면 카테고리도 동적으로 받아와야한다

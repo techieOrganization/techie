@@ -10,7 +10,7 @@ import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import '@/styles/pages/playlist/playlist.scss';
 import Cookies from 'js-cookie';
 import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
-import { PlayLists, PlayList } from '@/types/playlist';
+import { PlayLists } from '@/types/playlist';
 
 interface CategoryPlaylistProps {
   category: string;
