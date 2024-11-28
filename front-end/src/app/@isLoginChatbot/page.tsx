@@ -108,8 +108,8 @@ const Chatbot = () => {
   const keyDownEnter = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       handleSubmit();
+      e.preventDefault();
     }
-    e.preventDefault();
   };
 
   return (
