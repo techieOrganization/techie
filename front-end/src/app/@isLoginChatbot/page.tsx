@@ -9,6 +9,7 @@ const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [textarea, setTextarea] = useState('');
   const [gptResponse, setGptResponse] = useState('');
+  const [loading, setLoading] = useState(false);
   const MOVE_THRESHOLD = 10;
 
   const toggleTextArea = () => {
@@ -78,6 +79,7 @@ const Chatbot = () => {
     if (!textarea) return;
     if (!token) return;
     try {
+      setLoading(true);
       const apiResponse = await fetchChatBot({ request: textarea, token: token });
       typeResponse(apiResponse.response);
       setTextarea('');
@@ -85,6 +87,8 @@ const Chatbot = () => {
       console.log('토큰 가져오기 성공', token);
     } catch (error) {
       console.error('함수요청 오류', error);
+    } finally {
+      setLoading(true);
     }
   };
 
@@ -101,6 +105,11 @@ const Chatbot = () => {
     }, 50);
   };
 
+  const keyDownEnter = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) e.preventDefault();
+    handleSubmit();
+  };
+
   return (
     <div
       className="chatbot"
@@ -113,7 +122,7 @@ const Chatbot = () => {
         style={{ left: position.x - 620, top: position.y - 300, position: 'fixed' }}
       >
         <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
-          <p>{gptResponse}</p>
+          <p>{loading ? '응답을 받아오는 중입니다...' : gptResponse}</p>
         </div>
         <textarea
           value={textarea}
@@ -121,6 +130,7 @@ const Chatbot = () => {
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           placeholder="Techie 에게 물어보세요!"
+          onKeyDown={keyDownEnter}
         ></textarea>
         <button onMouseDown={(e) => e.stopPropagation()} onClick={handleSubmit}>
           ➡️

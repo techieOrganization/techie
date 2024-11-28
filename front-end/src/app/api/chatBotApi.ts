@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 interface GptParams {
   request: string;
   token: string | undefined;
@@ -13,7 +13,7 @@ interface ApiResponse {
 const fetchChatBot = async (params: GptParams): Promise<ApiResponse> => {
   try {
     const reponse = await axios.post(
-      'http://localhost:8080/api/gpt/qna',
+      `${baseUrl}/api/gpt/qna`,
       {
         request: params.request,
       },

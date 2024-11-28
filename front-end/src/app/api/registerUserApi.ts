@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 interface RegisterUserParams {
   nickname: string;
   email: string;
@@ -9,7 +9,7 @@ interface RegisterUserParams {
 
 export const fetchRegisterUser = async (params: RegisterUserParams) => {
   try {
-    const response = await axios.post('http://localhost:8080/api/users/join', {
+    const response = await axios.post(`${baseUrl}/api/users/join`, {
       nickname: params.nickname,
       email: params.email,
       password: params.password,

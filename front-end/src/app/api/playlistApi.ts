@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 // 재생 목록 생성
 export const saveVideo = async (
   videoId: string,
@@ -8,7 +8,7 @@ export const saveVideo = async (
 ): Promise<void> => {
   try {
     const response = await axios.post(
-      'http://localhost:8080/api/playlists',
+      `${baseUrl}/api/playlists`,
       {
         playlistName: name,
         videoId: videoId,
@@ -31,7 +31,7 @@ export const saveVideo = async (
 
 export const getVideo = async (token: string | undefined) => {
   try {
-    const response = await axios.get('http://localhost:8080/api/playlists', {
+    const response = await axios.get(`${baseUrl}/playlists`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -55,7 +55,7 @@ export const addVideo = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/playlists/${playlistId}`,
+      `${baseUrl}/api/playlists/${playlistId}`,
       {
         playlistName: playlistName,
         addVideoIds: [selectVideo],
@@ -80,7 +80,7 @@ export const addVideo = async (
 
 export const deletepPlaylist = async (playlistId: string, token: string | undefined) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/api/playlists/${playlistId}`, {
+    const response = await axios.delete(`${baseUrl}/api/playlists/${playlistId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
