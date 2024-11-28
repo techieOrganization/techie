@@ -31,7 +31,7 @@ export const saveVideo = async (
 
 export const getVideo = async (token: string | undefined) => {
   try {
-    const response = await axios.get(`${baseUrl}/playlists`, {
+    const response = await axios.get(`${baseUrl}/api/playlists`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
