@@ -86,14 +86,14 @@ const TeacherPlaylist = () => {
     try {
       await saveVideo(selectedVideoIds, playlistName, token); // 선택된 비디오 ID와 재생목록 이름 전송
       alert('영상이 재생목록에 저장되었습니다.');
-      closeModal();
+      closeModal(); // 저장 후 모달 닫기
       const data = await getVideo(token);
-      setPlaylists(data);
+      setPlaylists(data); // playlists 상태 업데이트
     } catch (error) {
       console.error('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
-    setSelectedVideoIds(''); // 선택 초기화
+    setSelectedVideoIds('');
   };
 
   // 페이지 로드 시 재생목록 데이터 가져오기
@@ -103,13 +103,14 @@ const TeacherPlaylist = () => {
       if (!token) return;
       try {
         const data = await getVideo(token);
+        console.log(data);
         setPlaylists(data);
       } catch (error) {
-        console.error('Error fetching playlists:', error);
+        console.error(error); // 오류 메시지를 상태에 저장
       }
     };
 
-    fetchData();
+    fetchData(); // 데이터 가져오기 호출
   }, []);
 
   // 재생목록에 영상 추가
@@ -122,9 +123,9 @@ const TeacherPlaylist = () => {
 
     try {
       await addVideo(playlistName, selectedVideoIds, playlistId, token);
-      alert('재생목록에 영상이 추가되었습니다.');
+      alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
     closeModal();
     setSelectedVideoIds('');
