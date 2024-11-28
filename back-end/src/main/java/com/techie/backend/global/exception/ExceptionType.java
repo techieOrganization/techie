@@ -20,8 +20,10 @@ public enum ExceptionType {
     NO_CHANGES(HttpStatus.NOT_MODIFIED, "변경사항이 없습니다"),
     INVALID_VIDEO_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 값입니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
-    INVALID_OLD_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호가 올바르지 않습니다.");
-
+    INVALID_OLD_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호가 올바르지 않습니다."),
+    GPT_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "GPT API 요청 중 문제가 발생했습니다."),
+    GPT_RESPONSE_PARSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "GPT 응답을 처리하는 중 문제가 발생했습니다."),
+    INVALID_GPT_REQUEST(HttpStatus.BAD_REQUEST, "GPT 요청은 비어있을 수 없습니다.");
     private final HttpStatus status;
     private final String message;
 

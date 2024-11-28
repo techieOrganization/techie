@@ -1,5 +1,8 @@
 package com.techie.backend.global.exception;
 
+import com.techie.backend.global.exception.gpt.GptRequestException;
+import com.techie.backend.global.exception.gpt.GptResponseParseException;
+import com.techie.backend.global.exception.gpt.InvalidGptRequestException;
 import com.techie.backend.global.exception.memo.EmptyContentException;
 import com.techie.backend.global.exception.playlist.InvalidVideoIdException;
 import com.techie.backend.global.exception.playlist.PlaylistNotFoundException;
@@ -100,5 +103,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NewPasswordMisMatchException.class)
     public ResponseEntity<Map<String, Object>> handleNewPasswordMisMatchException(NewPasswordMisMatchException ex) {
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(GptRequestException.class)
+    public ResponseEntity<Map<String, Object>> handleGptRequestException(GptRequestException ex) {
+        return buildErrorResponse(ex.getMessage(), ex.getExceptionType().getStatus());
+    }
+
+    @ExceptionHandler(GptResponseParseException.class)
+    public ResponseEntity<Map<String, Object>> handleGptResponseParseException(GptResponseParseException ex) {
+        return buildErrorResponse(ex.getMessage(), ex.getExceptionType().getStatus());
+    }
+
+    @ExceptionHandler(InvalidGptRequestException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidGptRequestException(InvalidGptRequestException ex) {
+        return buildErrorResponse(ex.getMessage(), ex.getExceptionType().getStatus());
     }
 }

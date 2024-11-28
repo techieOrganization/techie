@@ -16,11 +16,11 @@ public class Gpt {
     private long id;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String request;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String response;
 
     @ManyToOne(fetch = FetchType.LAZY)
