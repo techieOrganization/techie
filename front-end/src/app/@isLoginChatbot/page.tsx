@@ -88,7 +88,7 @@ const Chatbot = () => {
     } catch (error) {
       console.error('함수요청 오류', error);
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -106,8 +106,10 @@ const Chatbot = () => {
   };
 
   const keyDownEnter = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) e.preventDefault();
-    handleSubmit();
+    if (e.key === 'Enter' && !e.shiftKey) {
+      handleSubmit();
+    }
+    e.preventDefault();
   };
 
   return (
