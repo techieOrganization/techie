@@ -13,7 +13,7 @@ const instructorData = [
   },
   {
     name: '드림코딩',
-    description: '초보자를 위한 친절한 강의로 웹 개발allVideos 전반을 배울 수 있어요',
+    description: '초보자를 위한 친절한 강의로 웹 개발 전반을 배울 수 있어요',
     img: '/assets/images/main/logo02.jpg',
     channeld: 'UC_4u-bXaba7yrRz_6x6kb_w',
   },
