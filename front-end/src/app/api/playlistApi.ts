@@ -100,7 +100,7 @@ export const detailPlaylist = async (playlistId: string | undefined, token: stri
   if (!playlistId || !token) return;
 
   try {
-    const response = await axios.get(`http://localhost:8080/api/playlists/${playlistId}`, {
+    const response = await axios.get(`${baseUrl}/api/playlists/${playlistId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
