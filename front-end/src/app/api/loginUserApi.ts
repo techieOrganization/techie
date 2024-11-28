@@ -1,4 +1,5 @@
 import axios from 'axios';
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface LoginUserParams {
   email: string;
@@ -7,7 +8,7 @@ interface LoginUserParams {
 
 export const loginUser = async (params: LoginUserParams) => {
   try {
-    const response = await axios.post('http://localhost:8080/login', {
+    const response = await axios.post(`${baseUrl}/login`, {
       email: params.email,
       password: params.password,
     });
