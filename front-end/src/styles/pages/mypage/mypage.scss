@@ -113,6 +113,25 @@
       &:hover {
         transform: translateY(-10px);
       }
+
+      a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      h4 {
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        color: #333;
+        font-size: 1.4rem;
+      }
     }
     .playlist-container {
       display: flex;
