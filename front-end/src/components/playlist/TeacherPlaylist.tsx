@@ -49,30 +49,31 @@ const TeacherPlaylist = () => {
     staleTime: 1000 * 60 * 10, // 10분 캐싱
   });
 
-  // 모달 열기
   const openModal = () => {
-    setShowModal(true);
+    setShowModal(true); // 모달 열기
   };
 
-  // 모달 닫기
   const closeModal = () => {
-    setShowModal(false);
+    setShowModal(false); // 모달 닫기
     setPlayListName(''); // 입력 필드 초기화
   };
 
-  // 하단 바 토글
   const toggleBottomBar = (index: number) => {
     setIsOpen(isOpen === index ? null : index);
   };
 
-  // 비디오 선택 토글
   const handleVideoSelect = (videoId: string) => {
+    // 비디오 ID를 선택된 비디오 ID 배열에 추가
     if (selectedVideoIds.includes(videoId)) {
-      setSelectedVideoIds(selectedVideoIds.replace(videoId, '')); // 선택 해제
+      setSelectedVideoIds(selectedVideoIds.replace(videoId, '')); // 이미 선택된 경우 제거
     } else {
-      setSelectedVideoIds(videoId); // 선택
+      setSelectedVideoIds(videoId); // 새로 선택된 경우 추가
     }
   };
+
+  useEffect(() => {
+    console.log(selectedVideoIds);
+  }, [selectedVideoIds]);
 
   // 비디오를 재생목록에 저장
   const handleSaveVideo = async () => {
@@ -83,7 +84,7 @@ const TeacherPlaylist = () => {
     }
 
     try {
-      await saveVideo(selectedVideoIds, playlistName, token);
+      await saveVideo(selectedVideoIds, playlistName, token); // 선택된 비디오 ID와 재생목록 이름 전송
       alert('영상이 재생목록에 저장되었습니다.');
       closeModal();
       const data = await getVideo(token);
@@ -136,7 +137,7 @@ const TeacherPlaylist = () => {
 
     try {
       await deletepPlaylist(playlistId, token);
-      setPlaylists((prevPlaylists) =>
+      setPlaylists((prevPlaylists: PlayLists | undefined) =>
         prevPlaylists
           ? {
               playlists: prevPlaylists.playlists.filter(
@@ -145,15 +146,14 @@ const TeacherPlaylist = () => {
             }
           : undefined,
       );
-      alert('재생목록이 삭제되었습니다.');
+      alert('재생목록이 삭제 되었습니다');
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
     closeModal();
     setSelectedVideoIds('');
   };
 
-  // 현재 선택된 강사에 따라 동영상 데이터 가져오기
   const videos = selected.name === 'ALL' ? allQuery.data || [] : instQuery.data || [];
 
   const token = Cookies.get('token');
@@ -200,8 +200,8 @@ const TeacherPlaylist = () => {
                     <button
                       className="button"
                       onClick={() => {
-                        toggleBottomBar(index);
-                        handleVideoSelect(video.videoId);
+                        toggleBottomBar(index); // 하단 바 토글
+                        handleVideoSelect(video.videoId); // 비디오 선택
                       }}
                     >
                       +
@@ -225,10 +225,10 @@ const TeacherPlaylist = () => {
           </ul>
         </div>
       </div>
-
       {/* 모달 */}
       {showModal && (
         <div className="overlay" onClick={closeModal}>
+          {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <input
@@ -236,17 +236,27 @@ const TeacherPlaylist = () => {
                 value={playlistName}
                 onChange={(e) => setPlayListName(e.target.value)}
                 placeholder="재생목록 이름 입력"
+                onClick={(e) => e.stopPropagation()}
               />
               <button onClick={handleSaveVideo}>재생목록 추가</button>
               <div className="playlist_content_container">
                 {playlists ? (
                   playlists.playlists.map((playlist) => (
                     <div key={playlist.playlistId} className="playlist_item">
-                      <input type="checkbox" onClick={() => onClickCheckBox(playlist.playlistId)} />
+                      <input
+                        type="checkbox"
+                        key={playlist.playlistId}
+                        onClick={() => {
+                          onClickCheckBox(playlist.playlistId);
+                        }}
+                      />
                       <h3>{playlist.playlistName}</h3>
                       <button
                         className="deleteBtn"
-                        onClick={() => onClickDelete(playlist.playlistId)}
+                        onClick={() => {
+                          onClickDelete(playlist.playlistId);
+                        }}
+                        key={`delete-${playlist.playlistId}`}
                       >
                         삭제
                       </button>
