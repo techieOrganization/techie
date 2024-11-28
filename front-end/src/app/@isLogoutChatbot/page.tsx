@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '@/styles/pages/chatbot/chatbot.scss';
 import Link from 'next/link';
 
@@ -11,6 +11,29 @@ const LogoutChatBot = () => {
   const toggleTextArea = () => {
     setIsOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    const yOffset = 70; // 하단에서의 오프셋
+    const xOffset = 90;
+    const handleResize = () => {
+      const { innerHeight, innerWidth } = window;
+
+      if (innerWidth > 0) {
+        setPosition({ x: innerWidth - xOffset, y: innerHeight - yOffset });
+      }
+    };
+
+    // 초기 호출
+    handleResize();
+
+    // 리사이즈 이벤트 리스너 추가
+    window.addEventListener('resize', handleResize);
+
+    // 컴포넌트 언마운트 시 리스너 제거
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const offsetX = e.clientX - position.x;
