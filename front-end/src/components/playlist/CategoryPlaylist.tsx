@@ -288,7 +288,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
             })}
           </ul>
           {loading && page > 0 && <p>추가 로딩 중...</p>}
-          {!loading && !error && videos.length === 0 && <p>결과를 찾을 수 없습니다.</p>}
+          {!loading && !error && videos.length === 0 && <p>로딩 중...</p>}
         </div>
       </div>
       {/* 모달 */}

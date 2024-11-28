@@ -1,10 +1,10 @@
 const instructorData = [
-  // {
-  //   name: 'ALL',
-  //   description: '전체 강좌 목록을 확인할 수 있어요',
-  //   img: '/assets/images/main/logo06.jpg',
-  //   channeld: null,
-  // },
+  {
+    name: 'ALL',
+    description: '전체 강좌 목록을 확인할 수 있어요',
+    img: '/assets/images/main/logo06.jpg',
+    channeld: null,
+  },
   {
     name: '생활코딩',
     description: '프로그래밍 기초부터 고급까지, 누구나 쉽게 배울 수 있는 강좌 제공',

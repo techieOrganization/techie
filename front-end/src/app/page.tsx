@@ -182,7 +182,7 @@ export default function Home() {
           <ul className="instructor_list">
             {instructorData.slice(1, 6).map((instructor, index) => (
               <li key={index}>
-                <Link href={`/teacher-lists/${instructor.name}`}>
+                <Link href={`/teacher-lists?teacher=${instructor.name}`}>
                   <Image src={instructor.img} alt={instructor.name} width={100} height={100} />
                   <div className="txt_box">
                     <span>{instructor.name}</span>
