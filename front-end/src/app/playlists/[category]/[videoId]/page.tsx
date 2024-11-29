@@ -118,17 +118,20 @@ const VideoPlayerPage: React.FC = () => {
       return;
     }
 
+    // videoId를 string으로 변환
+    const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
+
     try {
       const payload = {
         title: videoDetails?.title || '',
         content: memoText,
         noteTime: memoTime || '00:00',
-        videoId,
+        videoId: normalizedVideoId, // 변환된 videoId 사용
       };
 
       await saveMemo(payload);
 
-      const updatedResponse = await getMemosByVideo(videoId, 0);
+      const updatedResponse = await getMemosByVideo(normalizedVideoId, 0); // 동일하게 적용
       setMemos(updatedResponse.data.content);
       setCurrentPage(0);
       setHasMoreMemos(!updatedResponse.data.last);
@@ -171,7 +174,10 @@ const VideoPlayerPage: React.FC = () => {
 
       await updateMemo(memoId, payload);
 
-      const updatedResponse = await getMemosByVideo(videoId, 0);
+      // videoId를 string으로 변환
+      const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
+
+      const updatedResponse = await getMemosByVideo(normalizedVideoId, 0);
       setMemos(updatedResponse.data.content);
       setCurrentPage(0);
       setHasMoreMemos(!updatedResponse.data.last);
@@ -192,7 +198,10 @@ const VideoPlayerPage: React.FC = () => {
     try {
       await deleteMemo(memoId);
 
-      const updatedResponse = await getMemosByVideo(videoId, 0);
+      // videoId를 string으로 변환
+      const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
+
+      const updatedResponse = await getMemosByVideo(normalizedVideoId, 0);
       setMemos(updatedResponse.data.content);
       setCurrentPage(0);
       setHasMoreMemos(!updatedResponse.data.last);
@@ -220,7 +229,9 @@ const VideoPlayerPage: React.FC = () => {
   const fetchMemosForVideo = useCallback(
     async (page: number) => {
       try {
-        const response = await getMemosByVideo(videoId, page);
+        const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
+
+        const response = await getMemosByVideo(normalizedVideoId, page);
 
         setMemos((prevMemos) =>
           page === 0 ? response.data.content : [...prevMemos, ...response.data.content],
