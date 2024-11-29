@@ -126,12 +126,12 @@ const VideoPlayerPage: React.FC = () => {
         title: videoDetails?.title || '',
         content: memoText,
         noteTime: memoTime || '00:00',
-        videoId: normalizedVideoId, // 변환된 videoId 사용
+        videoId: normalizedVideoId,
       };
 
       await saveMemo(payload);
 
-      const updatedResponse = await getMemosByVideo(normalizedVideoId, 0); // 동일하게 적용
+      const updatedResponse = await getMemosByVideo(normalizedVideoId, 0);
       setMemos(updatedResponse.data.content);
       setCurrentPage(0);
       setHasMoreMemos(!updatedResponse.data.last);
@@ -229,6 +229,7 @@ const VideoPlayerPage: React.FC = () => {
   const fetchMemosForVideo = useCallback(
     async (page: number) => {
       try {
+        // videoId를 string으로 변환
         const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
 
         const response = await getMemosByVideo(normalizedVideoId, page);
