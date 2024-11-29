@@ -177,8 +177,10 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       }
     };
 
-    fetchData(); // 데이터 가져오기 호출
-  }, []);
+    if (token) {
+      fetchData(); // 데이터 가져오기 호출
+    }
+  }, [token]);
 
   // put api로 수정해야하는 부분
   const onClickCheckBox = async (playlistId: string) => {
