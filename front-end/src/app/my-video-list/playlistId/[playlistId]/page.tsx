@@ -3,10 +3,10 @@
 import { detailPlaylist } from '@/app/api/playlistApi';
 import '@/styles/pages/my-video-list/my-video-list.scss';
 import { useParams } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { DetailPlayList } from '@/types/playlist';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 interface Params {
   playlistId?: string;
 }
@@ -30,7 +30,7 @@ const MyVideoList = () => {
 
   useEffect(() => {
     fetchVideo();
-  }, [playlistId]); // 의존성 배열에 playlistId와 userId 추가
+  }, [playlistId, Cookies.get('token')]); // 의존성 배열에 playlistId와 userId 추가
 
   return (
     <div className="video_container">
