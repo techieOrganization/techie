@@ -20,7 +20,7 @@ const TeacherCategoryPage: React.FC = () => {
 
   return (
     <div className="playlists_container">
-      <TeacherPlaylist channelId={instructor.channeld} />
+      <TeacherPlaylist />
     </div>
   );
 };

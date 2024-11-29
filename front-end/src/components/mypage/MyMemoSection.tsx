@@ -18,9 +18,9 @@ const MyMemoSection: React.FC = () => {
       const response = await getAllMemos(page);
       const newMemos = response.data.content;
 
-      setMemos((prev) => {
+      setMemos((prev: Memo[]) => {
         const uniqueMemos = newMemos.filter(
-          (memo) => !prev.some((prevMemo) => prevMemo.id === memo.id),
+          (memo: Memo) => !prev.some((prevMemo: Memo) => prevMemo.id === memo.id),
         );
         return [...prev, ...uniqueMemos];
       });
