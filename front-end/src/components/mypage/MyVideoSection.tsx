@@ -40,8 +40,7 @@ const MyVideoSection: React.FC = () => {
 
   useEffect(() => {
     fetchPlaylists(); // 컴포넌트가 마운트될 때 재생목록을 가져옴
-    console.log(detailPlaylistData);
-  }, [fetchPlaylists, Cookies.get('token')]);
+  }, [fetchPlaylists, detailPlaylistData]);
 
   return (
     <div className="playlist-container">
