@@ -1,0 +1,120 @@
+.chatbot {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--btn-color);
+  border-radius: 50%;
+  user-select: none;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.chatbot-content_login {
+  width: 40vw;
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  opacity: 0;
+  transform: scale(0) translateY(-10px);
+  transform-origin: bottom right;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  gap: 10px;
+  min-width: 620px;
+
+  &.isOpen {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  textarea {
+    width: 50%;
+    border: none;
+    border-radius: 10px;
+    min-width: 300px;
+    min-height: 300px;
+    resize: none;
+    padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--btn-color) #f1f1f1;
+    border: none;
+    outline: none;
+    color: var(--btn-color);
+    :focus {
+      outline: none;
+    }
+  }
+
+  .chatbot-response {
+    width: 50%;
+    background-color: #2c3e50;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 300px;
+    min-height: 300px;
+    user-select: text;
+    scrollbar-width: thin;
+    scrollbar-color: var(--btn-color) #f1f1f1;
+    cursor: auto;
+    p {
+      color: white;
+      cursor: text;
+    }
+  }
+
+  button {
+    position: absolute;
+    top: 85%;
+    right: 2%;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: var(--btn-color);
+    border-radius: 50%;
+    color: white;
+  }
+}
+
+/// 로그아웃
+.chatbot-content_logout {
+  width: 25vw;
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  opacity: 0;
+  min-width: 350px;
+  transform: scale(0) translateY(-10px);
+  transform-origin: bottom right;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  div {
+    background-color: var(--btn-color);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 700;
+    min-width: 350px;
+    .logout-link {
+      color: rgb(255, 235, 59);
+    }
+  }
+
+  &.isOpen {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

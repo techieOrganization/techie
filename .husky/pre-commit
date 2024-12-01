@@ -1,0 +1,9 @@
+if git diff --cached --name-only | grep -q '^front-end/'; then
+  cd "$(git rev-parse --show-toplevel)/front-end"
+  yarn lint-staged
+else
+  echo "No changes in front-end folder, skipping lint-staged."
+fi
+
+cd "$(git rev-parse --show-toplevel)/front-end"
+yarn lint:fix
