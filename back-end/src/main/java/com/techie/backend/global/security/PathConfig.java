@@ -23,7 +23,8 @@ public class PathConfig {
     // 접근 권한 : 인증된 사용자 (JWT 필요)
     public static final List<String> AUTHENTICATED_PATHS = List.of(
             "/api/users/me",
-            "/api/gpt/qna"
+            "/api/gpt/qna",
+            "/api/memo/**"
     );
 
     // 접근 권한 : 어드민 관리자 (ROLE_ADMIN 만 접근 가능)

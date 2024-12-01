@@ -44,7 +44,7 @@ public class SecurityConfig {
                     PathConfig.PERMIT_ALL_PATHS.forEach(path -> auth.requestMatchers(path).permitAll());
                     PathConfig.AUTHENTICATED_PATHS.forEach(path -> auth.requestMatchers(path).authenticated());
                     PathConfig.ADMIN_ONLY_PATHS.forEach(path -> auth.requestMatchers(path).hasRole("ADMIN"));
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().permitAll();
                 })
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
