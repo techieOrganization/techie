@@ -24,7 +24,7 @@ public class PathConfig {
     public static final List<String> AUTHENTICATED_PATHS = List.of(
             "/api/users/me",
             "/api/gpt/qna",
-            "/api/memo"
+            "/api/memo/**"
     );
 
     // 접근 권한 : 어드민 관리자 (ROLE_ADMIN 만 접근 가능)
