@@ -10,8 +10,9 @@ import { Video } from '@/types/video';
 import { PlayLists } from '@/types/playlist';
 import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
-import { formatDuration } from '@/utils/playlist/formatDuration';
 import useInfiniteScroll from '@/hooks/playlist/useInfiniteScroll';
+import { formatDuration } from '@/utils/playlist/formatDuration';
+
 import '@/styles/pages/playlist/playlist.scss';
 
 interface CategoryPlaylistProps {
