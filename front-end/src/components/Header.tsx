@@ -10,7 +10,7 @@ import { clearUserInfo } from '@/redux/reducer';
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [selectedCategory, setSelectedCategory] = useState('LANG');
   const router = useRouter();
   const dispatch = useDispatch();
 
