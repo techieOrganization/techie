@@ -35,6 +35,7 @@ const MemoList: React.FC<MemoListProps> = ({
               <span className="memo_time" onClick={() => onTimeClick(memo.noteTime)}>
                 {memo.noteTime || '시간 없음'}
               </span>
+              <h4 className="memo_title">{memo.title || ''}</h4>
               <p className="memo_content">{memo.content || '내용 없음'}</p>
               <div className="memo_actions">
                 <button onClick={() => onEditMemo(memo)}>수정</button>

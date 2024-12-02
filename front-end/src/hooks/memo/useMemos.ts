@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Memo } from '@/types/memo'; // Memo 타입을 정의해주세요
+import { Memo } from '@/types/memo';
 import { saveMemo, updateMemo, deleteMemo, getMemosByVideo } from '@/app/api/memoAPI';
 
 interface UseMemosProps {
@@ -32,10 +32,10 @@ export const useMemos = ({ videoId }: UseMemosProps) => {
     fetchMemosForVideo(currentPage);
   }, [currentPage, fetchMemosForVideo]);
 
-  const addMemo = async (content: string, noteTime: string, videoTitle: string) => {
+  const addMemo = async (title: string, content: string, noteTime: string) => {
     try {
       const payload = {
-        title: videoTitle,
+        title,
         content,
         noteTime,
         videoId,
@@ -49,11 +49,17 @@ export const useMemos = ({ videoId }: UseMemosProps) => {
     }
   };
 
-  const updateMemoById = async (memoId: string, content: string, noteTime: string) => {
+  const updateMemoById = async (
+    memoId: string,
+    title: string,
+    content: string,
+    noteTime: string,
+  ) => {
     try {
       const payload = {
-        noteTime,
+        title,
         content,
+        noteTime,
       };
       await updateMemo(memoId, payload);
       // 메모 새로고침

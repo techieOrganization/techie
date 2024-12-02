@@ -23,6 +23,7 @@ const VideoPlayerPage: React.FC = () => {
   const [isAddingMemo, setIsAddingMemo] = useState(false);
   const [editingMemo, setEditingMemo] = useState<{
     id: string;
+    title: string;
     content: string;
     noteTime: string;
   } | null>(null);
@@ -45,15 +46,15 @@ const VideoPlayerPage: React.FC = () => {
   }, [normalizedVideoId]);
 
   // 메모 저장
-  const handleSaveMemo = (content: string, noteTime: string) => {
-    addMemo(content, noteTime, videoDetails?.title || '');
+  const handleSaveMemo = (title: string, content: string, noteTime: string) => {
+    addMemo(title, content, noteTime);
     setIsAddingMemo(false);
   };
 
   // 메모 수정 저장
-  const handleSaveEditedMemo = (content: string, noteTime: string) => {
+  const handleSaveEditedMemo = (title: string, content: string, noteTime: string) => {
     if (editingMemo) {
-      updateMemoById(editingMemo.id, content, noteTime);
+      updateMemoById(editingMemo.id, title, content, noteTime);
       setEditingMemo(null);
     }
   };
@@ -87,6 +88,7 @@ const VideoPlayerPage: React.FC = () => {
             {/* 메모 추가 또는 수정 */}
             {isAddingMemo ? (
               <MemoForm
+                initialTitle=""
                 initialContent=""
                 initialTime={memoTime || '00:00'}
                 onSave={handleSaveMemo}
@@ -94,6 +96,7 @@ const VideoPlayerPage: React.FC = () => {
               />
             ) : editingMemo ? (
               <MemoForm
+                initialTitle={editingMemo.title}
                 initialContent={editingMemo.content}
                 initialTime={editingMemo.noteTime}
                 onSave={handleSaveEditedMemo}
