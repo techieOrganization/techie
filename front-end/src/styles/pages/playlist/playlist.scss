@@ -22,7 +22,7 @@
     width: 30%;
     height: auto;
 
-    .modal-content {
+    .modal_content {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -312,7 +312,7 @@
   width: 100%;
   height: 100vh;
 
-  .modal-content {
+  .modal_content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -327,7 +327,7 @@
     color: #5a9bdb;
     font-size: 2rem;
     font-weight: bold;
-    overflow: scroll;
+    overflow: auto;
     max-height: 70vh;
     overflow-x: auto;
     .playlist_content_container {
@@ -361,6 +361,8 @@
 
   .modal_actions {
     margin-top: 3rem;
+    display: flex;
+    justify-content: center;
 
     button {
       width: 8rem;

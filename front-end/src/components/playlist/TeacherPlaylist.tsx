@@ -71,9 +71,7 @@ const TeacherPlaylist = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(selectedVideoIds);
-  }, [selectedVideoIds]);
+  useEffect(() => {}, [selectedVideoIds]);
 
   // 비디오를 재생목록에 저장
   const handleSaveVideo = async () => {
@@ -103,7 +101,6 @@ const TeacherPlaylist = () => {
       if (!token) return;
       try {
         const data = await getVideo(token);
-        console.log(data);
         setPlaylists(data);
       } catch (error) {
         console.error(error); // 오류 메시지를 상태에 저장
@@ -231,7 +228,7 @@ const TeacherPlaylist = () => {
         <div className="overlay" onClick={closeModal}>
           {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal_content" onClick={(e) => e.stopPropagation()}>
               <input
                 type="text"
                 value={playlistName}

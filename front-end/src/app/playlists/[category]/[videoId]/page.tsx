@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { fetchVideoDetails } from '@/app/api/videoAPIDetail';
 import { saveMemo, updateMemo, deleteMemo, getMemosByVideo } from '@/app/api/memoAPI';
 import '@/styles/pages/playlist/playlist.scss';
+import Cookies from 'js-cookie';
 
 interface VideoDetails {
   title: string;
@@ -100,6 +101,13 @@ const VideoPlayerPage: React.FC = () => {
 
   // 메모 추가
   const handleAddMemo = () => {
+    const token = Cookies.get('token'); // 토큰 확인
+
+    if (!token) {
+      alert('로그인 후 시도해주세요.');
+      return;
+    }
+
     if (playerRef.current?.getCurrentTime) {
       const currentTime = Math.floor(playerRef.current.getCurrentTime());
       const formattedTime = formatTime(currentTime);
