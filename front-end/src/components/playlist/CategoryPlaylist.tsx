@@ -1,5 +1,3 @@
-// CategoryPlaylist.tsx
-
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -67,6 +65,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     [],
   );
 
+  // 카테고리나 검색어가 변경되면 비디오를 새로 로드
   useEffect(() => {
     setPage(0);
     setVideos([]);
@@ -74,20 +73,12 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     loadVideos(0, category, query);
   }, [category, query, loadVideos]);
 
-  // 카테고리나 검색어가 변경되면 비디오를 새로 로드
-  useEffect(() => {
-    setPage(0);
-    setVideos([]);
-    setHasMore(true);
-    loadVideos(0, category, query);
-  }, [category, query]);
-
   // 페이지 번호가 변경되면 추가 비디오 로드
   useEffect(() => {
     if (page > 0) {
       loadVideos(page, category, query);
     }
-  }, [page]);
+  }, [page, category, query, loadVideos]);
 
   const handleCategoryClick = (newCategory: string) => {
     if (newCategory === category) return;
@@ -189,6 +180,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     closeModal();
     setSelectVideo('');
   };
+
   // 재생목록 삭제
   const onClickDelete = async (playlistId: string) => {
     const token = Cookies.get('token');
