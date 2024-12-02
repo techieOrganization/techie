@@ -38,31 +38,41 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const [loadingPlaylists, setLoadingPlaylists] = useState(true);
 
   // 비디오 로딩 함수
-  const loadVideos = async (currentPage: number, currentCategory: string, currentQuery: string) => {
-    setLoadingVideos(true);
-    setError('');
-    try {
-      const data = await fetchVideosByCategory({
-        category: currentCategory,
-        query: currentQuery,
-        page: currentPage,
-      });
+  const loadVideos = useCallback(
+    async (currentPage: number, currentCategory: string, currentQuery: string) => {
+      setLoadingVideos(true);
+      setError('');
+      try {
+        const data = await fetchVideosByCategory({
+          category: currentCategory,
+          query: currentQuery,
+          page: currentPage,
+        });
 
-      setHasMore(!data.last);
+        setHasMore(!data.last);
 
-      setVideos((prevVideos) => [
-        ...prevVideos,
-        ...data.content.filter(
-          (newVideo) => !prevVideos.some((oldVideo) => oldVideo.videoId === newVideo.videoId),
-        ),
-      ]);
-    } catch (err) {
-      console.error('Error fetching videos:', err);
-      setError('비디오를 불러오는 중 문제가 발생했습니다.');
-    } finally {
-      setLoadingVideos(false);
-    }
-  };
+        setVideos((prevVideos) => [
+          ...prevVideos,
+          ...data.content.filter(
+            (newVideo) => !prevVideos.some((oldVideo) => oldVideo.videoId === newVideo.videoId),
+          ),
+        ]);
+      } catch (err) {
+        console.error('Error fetching videos:', err);
+        setError('비디오를 불러오는 중 문제가 발생했습니다.');
+      } finally {
+        setLoadingVideos(false);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    setPage(0);
+    setVideos([]);
+    setHasMore(true);
+    loadVideos(0, category, query);
+  }, [category, query, loadVideos]);
 
   // 카테고리나 검색어가 변경되면 비디오를 새로 로드
   useEffect(() => {
@@ -86,7 +96,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     router.push(`/playlists/${newCategory}`);
   };
 
-  // useInfiniteScroll 훅 사용
+  // 무한 스크롤 기능
   const onLoadMore = useCallback(() => {
     setPage((prevPage) => prevPage + 1);
   }, []);
