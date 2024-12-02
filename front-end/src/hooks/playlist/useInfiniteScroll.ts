@@ -1,35 +1,29 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface UseInfiniteScrollOptions {
-  loading: boolean; // 로딩 중인지 여부
-  hasMore: boolean; // 더 로드할 데이터가 있는지 여부
-  onLoadMore: () => void; // 추가 데이터를 로드하는 함수
-  threshold?: number; // 옵저버 임계값
+  hasMore: boolean;
+  loading: boolean;
+  onLoadMore: () => void;
 }
 
-const useInfiniteScroll = ({
-  loading,
-  hasMore,
-  onLoadMore,
-  threshold = 0.1,
-}: UseInfiniteScrollOptions): ((node: HTMLElement | null) => void) => {
+function useInfiniteScroll({ hasMore, loading, onLoadMore }: UseInfiniteScrollOptions) {
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const lastElementRef = (node: HTMLElement | null) => {
-    if (loading || !hasMore) return;
-    if (observer.current) observer.current.disconnect();
+  const lastElementRef = useCallback(
+    (node: HTMLElement | null) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
 
-    observer.current = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
           onLoadMore();
         }
-      },
-      { threshold },
-    );
+      });
 
-    if (node) observer.current.observe(node);
-  };
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore, onLoadMore],
+  );
 
   useEffect(() => {
     return () => {
@@ -37,7 +31,7 @@ const useInfiniteScroll = ({
     };
   }, []);
 
-  return lastElementRef;
-};
+  return { lastElementRef };
+}
 
 export default useInfiniteScroll;

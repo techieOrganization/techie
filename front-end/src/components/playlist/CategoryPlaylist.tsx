@@ -1,17 +1,20 @@
+// CategoryPlaylist.tsx
+
 'use client';
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Video } from '@/types/video';
-import vidListData from '@/data/vidListData';
-import { fetchVideosByCategory } from '@/app/api/videoAPI';
-import '@/styles/pages/playlist/playlist.scss';
 import Cookies from 'js-cookie';
-import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
+import vidListData from '@/data/vidListData';
+import { Video } from '@/types/video';
 import { PlayLists } from '@/types/playlist';
+import { fetchVideosByCategory } from '@/app/api/videoAPI';
+import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
 import { formatDuration } from '@/utils/playlist/formatDuration';
+import useInfiniteScroll from '@/hooks/playlist/useInfiniteScroll';
+import '@/styles/pages/playlist/playlist.scss';
 
 interface CategoryPlaylistProps {
   category: string;
@@ -27,7 +30,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const [playlistNmae, setPlayListName] = useState('');
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
@@ -84,31 +86,16 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     router.push(`/playlists/${newCategory}`);
   };
 
-  // 무한 스크롤을 위한 마지막 비디오 요소 참조
-  const lastVideoElementRef = useCallback(
-    (node: HTMLLIElement | null) => {
-      if (loadingVideos || !hasMore) return;
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            setPage((prevPage) => prevPage + 1);
-          }
-        },
-        { threshold: 0.1 },
-      );
-
-      if (node) observer.current.observe(node);
-    },
-    [loadingVideos, hasMore],
-  );
-
-  useEffect(() => {
-    return () => {
-      if (observer.current) observer.current.disconnect();
-    };
+  // useInfiniteScroll 훅 사용
+  const onLoadMore = useCallback(() => {
+    setPage((prevPage) => prevPage + 1);
   }, []);
+
+  const { lastElementRef } = useInfiniteScroll({
+    hasMore,
+    loading: loadingVideos,
+    onLoadMore,
+  });
 
   const openModal = () => {
     setShowModal(true);
@@ -244,7 +231,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                 <li
                   key={video.videoId}
                   className="video_item"
-                  ref={isLastVideo ? lastVideoElementRef : null}
+                  ref={isLastVideo ? lastElementRef : null}
                 >
                   <Link href={`/playlists/${category}/${video.videoId}`}>
                     <Image
