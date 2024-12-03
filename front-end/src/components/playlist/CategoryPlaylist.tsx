@@ -176,7 +176,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       await addVideo(playlistNmae, selectVideo, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     closeModal();
     setSelectVideo('');
@@ -199,7 +199,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       );
       alert('재생목록이 삭제 되었습니다');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     closeModal();
     setSelectVideo('');

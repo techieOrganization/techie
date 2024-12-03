@@ -122,7 +122,7 @@ const TeacherPlaylist = () => {
       await addVideo(playlistName, selectedVideoIds, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     closeModal();
     setSelectedVideoIds('');
@@ -146,7 +146,7 @@ const TeacherPlaylist = () => {
       );
       alert('재생목록이 삭제 되었습니다');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     closeModal();
     setSelectedVideoIds('');

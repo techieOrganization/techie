@@ -20,7 +20,6 @@ const MyVideoList = () => {
   const fetchVideo = useCallback(async () => {
     try {
       const response = await detailPlaylist(playlistId, token);
-      console.log(response);
       setPlaylist(response);
     } catch (error) {
       console.error(error);

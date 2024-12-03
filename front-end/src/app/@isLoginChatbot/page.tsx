@@ -83,8 +83,6 @@ const Chatbot = () => {
       const apiResponse = await fetchChatBot({ request: textarea, token: token });
       typeResponse(apiResponse.response);
       setTextarea('');
-      console.log(apiResponse.response);
-      console.log('토큰 가져오기 성공', token);
     } catch (error) {
       console.error('함수요청 오류', error);
     } finally {
