@@ -119,7 +119,7 @@ const Chatbot = () => {
       <div className="icon">💬</div>
       <div
         className={`chatbot-content_login ${isOpen ? 'isOpen' : ''}`}
-        style={{ left: position.x - 730, top: position.y - 320, position: 'fixed' }}
+        style={{ left: position.x - 630, top: position.y - 300, position: 'fixed' }}
       >
         <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
           <p>{loading ? '응답을 받아오는 중입니다...' : gptResponse}</p>
@@ -133,7 +133,7 @@ const Chatbot = () => {
           onKeyDown={keyDownEnter}
         ></textarea>
         <button onMouseDown={(e) => e.stopPropagation()} onClick={handleSubmit}>
-          ➡️
+          →
         </button>
       </div>
     </div>
