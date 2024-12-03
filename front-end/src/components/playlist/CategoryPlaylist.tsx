@@ -35,6 +35,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined);
   const [loadingVideos, setLoadingVideos] = useState(true);
   const [loadingPlaylists, setLoadingPlaylists] = useState(true);
+  const maxLength = 15;
 
   // 비디오 로딩 함수
   const loadVideos = useCallback(
@@ -106,6 +107,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const closeModal = () => {
     setShowModal(false);
     setPlayListName('');
+    setSelectVideo('');
   };
 
   const handleSaveVideo = async () => {
@@ -179,7 +181,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       console.error(error);
     }
     closeModal();
-    setSelectVideo('');
   };
 
   // 재생목록 삭제
@@ -202,7 +203,15 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       console.error(error);
     }
     closeModal();
-    setSelectVideo('');
+  };
+
+  const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value.length <= maxLength) {
+      setPlayListName(value);
+    } else {
+      alert('재생목록의 이름은 15자 이내로 작성하여야합니다');
+    }
   };
 
   return (
@@ -290,7 +299,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
               <input
                 type="text"
                 value={playlistNmae}
-                onChange={(e) => setPlayListName(e.target.value)}
+                onChange={onChangePlaylistName}
                 placeholder="재생목록 이름 입력"
                 onClick={(e) => e.stopPropagation()}
               />
