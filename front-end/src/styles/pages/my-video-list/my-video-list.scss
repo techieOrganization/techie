@@ -17,18 +17,21 @@
     font-size: 1.5rem;
   }
   .video-item {
+    border: 1px solid #ccc;
     width: 15vw;
-    height: 20vh;
+    min-height: 15rem;
     justify-content: center;
     align-items: center;
     background-color: var(--bg-color);
-    border-radius: 2rem;
-    padding: 15px;
+    border-radius: 1rem;
     cursor: pointer;
     box-sizing: border-box;
-    color: black;
-    transition: 1s;
+    transition: all 0.3s;
     margin-top: 10px;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
     &:hover {
       transform: translateY(-10px);
     }
@@ -37,5 +40,7 @@
 
 .my-video-list-header {
   font-size: 4rem;
-  font-weight: 600;
+  font-weight: bold;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
 }

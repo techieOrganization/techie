@@ -16,7 +16,7 @@
 }
 
 .chatbot-content_login {
-  width: 40vw;
+  width: 50rem;
   display: flex;
   flex-direction: row;
   position: fixed;
@@ -36,7 +36,7 @@
 
   textarea {
     width: 50%;
-    border: none;
+    border: 1px solid #c9c9c9;
     border-radius: 10px;
     min-width: 300px;
     min-height: 300px;
@@ -44,7 +44,6 @@
     padding: 10px;
     scrollbar-width: thin;
     scrollbar-color: var(--btn-color) #f1f1f1;
-    border: none;
     outline: none;
     color: var(--btn-color);
     :focus {
@@ -100,14 +99,13 @@
 
   div {
     background-color: var(--btn-color);
-    width: 100%;
     display: flex;
     justify-content: center;
     padding: 10px;
     border-radius: 10px;
     color: white;
     font-weight: 700;
-    min-width: 350px;
+    width: 38rem;
     .logout-link {
       color: rgb(255, 235, 59);
     }

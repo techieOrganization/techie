@@ -43,22 +43,25 @@ const MyVideoSection: React.FC = () => {
   }, [fetchPlaylists, detailPlaylistData]);
 
   return (
-    <div className="playlist-container">
-      {isLoading && <p>Loading...</p>}
-      {playlists.playlists.length === 0 && !isLoading && <p>저장된 재생목록이 없습니다.</p>}
-      {playlists.playlists.map((playlist) => (
-        <div
-          key={playlist.playlistId}
-          className="playlist-item"
-          onClick={() => {
-            fetchDetailPlaylist(playlist.playlistId);
-            router.push(`my-video-list/playlistId/${playlist.playlistId}`);
-          }}
-        >
-          <h3 className="playlist-name">{playlist.playlistName}</h3>
-          <p>{playlist.videoCount}</p>
-        </div>
-      ))}
+    <div>
+      <h2 className="video-title">내 재생목록 모음</h2>
+      <div className="playlist-container">
+        {isLoading && <p>Loading...</p>}
+        {playlists.playlists.length === 0 && !isLoading && <p>저장된 재생목록이 없습니다.</p>}
+        {playlists.playlists.map((playlist) => (
+          <div
+            key={playlist.playlistId}
+            className="playlist-item"
+            onClick={() => {
+              fetchDetailPlaylist(playlist.playlistId);
+              router.push(`my-video-list/playlistId/${playlist.playlistId}`);
+            }}
+          >
+            <h3 className="playlist-name">{playlist.playlistName}</h3>
+            <p>{playlist.videoCount} 개의 저장된 영상</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

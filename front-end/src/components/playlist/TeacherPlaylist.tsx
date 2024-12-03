@@ -26,6 +26,7 @@ const TeacherPlaylist = () => {
   const [showModal, setShowModal] = useState(false); // 모달 열림 상태
   const [selectedVideoIds, setSelectedVideoIds] = useState<string>(''); // 선택된 비디오 ID
   const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined); // 재생목록 상태
+  const maxLength = 15;
 
   // 선택된 강사가 변경될 때 URL 업데이트
   const handleTeacherSelect = (inst: (typeof instructorData)[number]) => {
@@ -56,6 +57,7 @@ const TeacherPlaylist = () => {
   const closeModal = () => {
     setShowModal(false); // 모달 닫기
     setPlayListName(''); // 입력 필드 초기화
+    setSelectedVideoIds('');
   };
 
   const toggleBottomBar = (index: number) => {
@@ -122,10 +124,9 @@ const TeacherPlaylist = () => {
       await addVideo(playlistName, selectedVideoIds, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     closeModal();
-    setSelectedVideoIds('');
   };
 
   // 재생목록 삭제
@@ -146,10 +147,18 @@ const TeacherPlaylist = () => {
       );
       alert('재생목록이 삭제 되었습니다');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     closeModal();
-    setSelectedVideoIds('');
+  };
+
+  const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value.length <= maxLength) {
+      setPlayListName(value);
+    } else {
+      alert('재생목록의 이름은 15자 이내로 작성하여야합니다');
+    }
   };
 
   const videos = selected.name === 'ALL' ? allQuery.data || [] : instQuery.data || [];
@@ -232,7 +241,7 @@ const TeacherPlaylist = () => {
               <input
                 type="text"
                 value={playlistName}
-                onChange={(e) => setPlayListName(e.target.value)}
+                onChange={onChangePlaylistName}
                 placeholder="재생목록 이름 입력"
                 onClick={(e) => e.stopPropagation()}
               />

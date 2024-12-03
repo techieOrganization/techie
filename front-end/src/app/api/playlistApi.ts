@@ -20,7 +20,6 @@ export const saveVideo = async (
         },
       },
     );
-    console.log('영상저장 성공');
     return response.data;
   } catch (error) {
     console.error('Unexpected error:', error);
