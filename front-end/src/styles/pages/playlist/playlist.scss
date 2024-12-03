@@ -22,7 +22,7 @@
     width: 30%;
     height: auto;
 
-    .modal-content {
+    .modal_content {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -237,6 +237,12 @@
         padding: 2rem 0;
       }
 
+      .memo_title {
+        font-size: 1.7rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
       .memo_notice {
         color: #444;
         margin-top: 1rem;
@@ -266,12 +272,25 @@
       margin-right: 1rem;
       font-size: 1.4rem;
     }
+    .memo_title_input {
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px solid #ccc;
+      margin-bottom: 1rem;
+      width: 30rem;
+    }
     .memo_input {
       width: 100%;
       resize: none;
       padding: 1rem;
       border-radius: 1rem;
       border: 1px solid #ccc;
+      margin-bottom: 0.5rem;
+      height: 10rem;
+
+      &::placeholder {
+        color: #ccc;
+      }
     }
     .save_memo_title {
       font-size: 2rem;
@@ -312,7 +331,7 @@
   width: 100%;
   height: 100vh;
 
-  .modal-content {
+  .modal_content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -327,7 +346,7 @@
     color: #5a9bdb;
     font-size: 2rem;
     font-weight: bold;
-    overflow: scroll;
+    overflow: auto;
     max-height: 70vh;
     overflow-x: auto;
     .playlist_content_container {
@@ -361,6 +380,8 @@
 
   .modal_actions {
     margin-top: 3rem;
+    display: flex;
+    justify-content: center;
 
     button {
       width: 8rem;
