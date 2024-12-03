@@ -179,7 +179,7 @@ const TeacherPlaylist = () => {
         <div className="inner">
           <ul className="video_list">
             {allQuery.isLoading || instQuery.isLoading ? (
-              <p>로딩 중입니다...</p>
+              <p>로딩 중...</p>
             ) : videos.length > 0 ? (
               videos.map((video, index) => (
                 <li key={video.videoId} className="video_item">

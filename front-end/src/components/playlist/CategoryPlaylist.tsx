@@ -225,7 +225,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         <div className="inner">
           {error && <p className="error_message">{error}</p>}
           {!error && videos.length === 0 && !loadingVideos && <p>검색 결과가 없습니다.</p>}
-
+          {loadingVideos && <p>로딩 중...</p>}
           {/* 비디오 리스트 */}
           <ul className="video_list">
             {videos.map((video, index) => {
@@ -273,8 +273,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
               );
             })}
           </ul>
-
-          {loadingVideos && <p>로딩 중...</p>}
         </div>
       </div>
       {/* 모달 */}
