@@ -17,10 +17,11 @@
     font-size: 1.5rem;
   }
   .video-item {
+    position: relative;
     border: 1px solid #ccc;
     width: 15vw;
     min-height: 15rem;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background-color: var(--bg-color);
     border-radius: 1rem;
@@ -34,7 +35,27 @@
     padding: 1rem 2rem;
     &:hover {
       transform: translateY(-10px);
+      .deleteBtn {
+        opacity: 1;
+        visibility: visible;
+      }
     }
+    display: flex;
+    flex-direction: column;
+  }
+  .deleteBtn {
+    position: relative;
+    opacity: 0;
+    color: black;
+    font-weight: bold;
+    font-size: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    margin-left: 18rem;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.5s ease;
   }
 }
 
