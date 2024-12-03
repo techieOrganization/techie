@@ -10,7 +10,7 @@ import { clearUserInfo } from '@/redux/reducer';
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [selectedCategory, setSelectedCategory] = useState('LANG');
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -63,9 +63,6 @@ const Header = () => {
             </li>
             <li className="menu_item">
               <Link href="/teacher-lists">성장 멘토 🌱</Link>
-            </li>
-            <li className="menu_item">
-              <Link href="/community">커뮤니티 💬</Link>
             </li>
           </ul>
         </div>
