@@ -187,6 +187,10 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
   // 재생목록 삭제
   const onClickDelete = async (playlistId: string) => {
+    const ConfirmDelete = confirm('재생목록을 삭제하시겠습니까?');
+    if (!ConfirmDelete) {
+      return;
+    }
     const token = Cookies.get('token');
     if (!token) return;
     try {

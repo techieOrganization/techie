@@ -44,18 +44,19 @@
     flex-direction: column;
   }
   .deleteBtn {
-    position: relative;
+    position: absolute;
     opacity: 0;
     color: black;
     font-weight: bold;
     font-size: 1.2rem;
     justify-content: center;
     align-items: center;
-    margin-left: 18rem;
     visibility: hidden;
     transition:
       opacity 0.3s ease,
       visibility 0.5s ease;
+    top: 0.5rem;
+    right: 1rem;
   }
 }
 
