@@ -357,17 +357,29 @@
         align-items: center;
         text-align: center;
         gap: 1.5rem;
+        border-bottom: 1px solid #aeabab;
+        margin-bottom: 1rem;
         justify-content: space-between;
         input {
           width: 2rem;
           height: 2rem;
           cursor: pointer;
         }
+        &:hover .deleteBtn {
+          visibility: visible;
+          opacity: 1;
+        }
+
         .deleteBtn {
           background-color: red;
           text-align: center;
           font-size: 1rem;
           font-weight: 600;
+          opacity: 0;
+          visibility: hidden;
+          transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease;
         }
       }
     }

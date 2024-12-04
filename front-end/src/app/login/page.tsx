@@ -60,8 +60,7 @@ const Login = () => {
         console.error('Failed to log in, unexpected response status');
       }
     } catch (error) {
-      console.error('Error during login request:', error);
-      setError('로그인 중 오류가 발생했습니다.');
+      handleLoginError(error);
     }
   };
 
