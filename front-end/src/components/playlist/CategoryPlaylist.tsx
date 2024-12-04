@@ -26,7 +26,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [selectVideo, setSelectVideo] = useState<string>('');
-  const [playlistNmae, setPlayListName] = useState('');
+  const [playlistName, setPlayListName] = useState('');
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
@@ -116,18 +116,20 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       alert('선택된 영상이 없습니다.');
       return;
     }
+    if (!playlistName.trim()) {
+      alert('재생목록 이름을 입력해 주세요.');
+      return;
+    }
 
     try {
-      await saveVideo(selectVideo, playlistNmae, token);
-      alert('영상이 재생목록에 저장되었습니다.');
-      closeModal();
+      await saveVideo(selectVideo, playlistName, token);
       const data = await getVideo(token);
-      setPlaylists(data); // playlists 상태 업데이트
+      setPlaylists(data);
+      setPlayListName('');
     } catch (error) {
       console.error('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
-    setSelectVideo('');
   };
 
   const handleVideoSelect = (videoId: string) => {
@@ -175,7 +177,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
     if (!token) return;
     try {
-      await addVideo(playlistNmae, selectVideo, playlistId, token);
+      await addVideo(playlistName, selectVideo, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
       console.error(error);
@@ -198,11 +200,9 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
             }
           : undefined,
       );
-      alert('재생목록이 삭제 되었습니다');
     } catch (error) {
       console.error(error);
     }
-    closeModal();
   };
 
   const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -298,10 +298,12 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
               사용자 재생목록
               <input
                 type="text"
-                value={playlistNmae}
+                value={playlistName}
                 onChange={onChangePlaylistName}
                 placeholder="재생목록 이름 입력"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
               />
               <button onClick={handleSaveVideo}>재생목록 추가</button>
               <div className="playlist_content_container">
