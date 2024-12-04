@@ -75,25 +75,26 @@ const TeacherPlaylist = () => {
 
   useEffect(() => {}, [selectedVideoIds]);
 
-  // 비디오를 재생목록에 저장
   const handleSaveVideo = async () => {
     const token = Cookies.get('token');
     if (selectedVideoIds.length === 0) {
       alert('선택된 영상이 없습니다.');
       return;
     }
+    if (!playlistName.trim()) {
+      alert('재생목록 이름을 입력해 주세요.');
+      return;
+    }
 
     try {
-      await saveVideo(selectedVideoIds, playlistName, token); // 선택된 비디오 ID와 재생목록 이름 전송
-      alert('영상이 재생목록에 저장되었습니다.');
-      closeModal(); // 저장 후 모달 닫기
+      await saveVideo(selectedVideoIds, playlistName, token);
       const data = await getVideo(token);
-      setPlaylists(data); // playlists 상태 업데이트
+      setPlaylists(data);
+      setPlayListName('');
     } catch (error) {
       console.error('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
-    setSelectedVideoIds('');
   };
 
   // 페이지 로드 시 재생목록 데이터 가져오기
@@ -145,11 +146,9 @@ const TeacherPlaylist = () => {
             }
           : undefined,
       );
-      alert('재생목록이 삭제 되었습니다');
     } catch (error) {
       console.error(error);
     }
-    closeModal();
   };
 
   const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -238,6 +237,7 @@ const TeacherPlaylist = () => {
           {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
             <div className="modal_content" onClick={(e) => e.stopPropagation()}>
+              사용자 재생목록
               <input
                 type="text"
                 value={playlistName}
