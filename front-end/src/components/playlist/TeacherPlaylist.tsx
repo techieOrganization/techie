@@ -134,6 +134,10 @@ const TeacherPlaylist = () => {
   const onClickDelete = async (playlistId: string) => {
     const token = Cookies.get('token');
     if (!token) return;
+    const ConfirmDelete = confirm(`재생목록을 삭제하시겠습니까?`);
+    if (!ConfirmDelete) {
+      return;
+    }
 
     try {
       await deletepPlaylist(playlistId, token);

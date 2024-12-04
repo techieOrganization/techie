@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { DetailPlayList, PlayLists } from '@/types/playlist'; // 인터페이스 임포트
 import { useRouter } from 'next/navigation';
-import { getVideo, detailPlaylist } from '@/app/api/playlistApi';
+import { getVideo, detailPlaylist, deletepPlaylist } from '@/app/api/playlistApi';
 import Cookies from 'js-cookie';
 
 const MyVideoSection: React.FC = () => {
@@ -42,6 +42,24 @@ const MyVideoSection: React.FC = () => {
     fetchPlaylists(); // 컴포넌트가 마운트될 때 재생목록을 가져옴
   }, [fetchPlaylists, detailPlaylistData]);
 
+  const onClickDeleteBtn = async (playlistId: string) => {
+    const confirmDelete = confirm('재생목록을 삭제하시겠습니까?');
+    setIsLoading(true);
+    if (!confirmDelete) {
+      setIsLoading(false);
+      return;
+    }
+    const token = Cookies.get('token');
+    try {
+      await deletepPlaylist(playlistId, token);
+      fetchPlaylists();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       <h2 className="video-title">내 재생목록 모음</h2>
@@ -57,6 +75,15 @@ const MyVideoSection: React.FC = () => {
               router.push(`my-video-list/playlistId/${playlist.playlistId}`);
             }}
           >
+            <button
+              className="delete-btn"
+              onClick={(e) => {
+                onClickDeleteBtn(playlist.playlistId);
+                e.stopPropagation();
+              }}
+            >
+              ✕
+            </button>
             <h3 className="playlist-name">{playlist.playlistName}</h3>
             <p>{playlist.videoCount} 개의 저장된 영상</p>
           </div>
