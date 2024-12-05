@@ -20,7 +20,7 @@ const MyVideoSection: React.FC = () => {
       const response = await getVideo(token);
       setPlaylists(response); // PlayLists 형태로 응답을 설정
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to fetch playlists', error);
     } finally {
       setIsLoading(false);
     }
