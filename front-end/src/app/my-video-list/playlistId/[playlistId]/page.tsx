@@ -8,6 +8,7 @@ import { DetailPlayList } from '@/types/playlist';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { devConsoleError } from '@/utils/logger';
+
 interface Params {
   playlistId?: string;
 }
@@ -28,15 +29,14 @@ const MyVideoList = () => {
       devConsoleError('비디오 삭제 중 오류 발생:', error);
     }
   };
-
   const fetchVideo = useCallback(async () => {
     try {
       const response = await detailPlaylist(playlistId, token);
       setPlaylist(response);
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to fetch playlist details', error);
     }
-  }, [playlistId, token]); // 의존성 배열에 playlistId와 token 추가
+  }, [playlistId, token]);
 
   useEffect(() => {
     fetchVideo();
