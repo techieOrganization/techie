@@ -117,6 +117,11 @@ const TeacherPlaylist = () => {
   // 재생목록에 영상 추가
   const onClickCheckBox = async (playlistId: string) => {
     const token = Cookies.get('token');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
     if (selectedVideoIds.length === 0) {
       alert('선택된 영상이 없습니다.');
       return;
@@ -126,7 +131,7 @@ const TeacherPlaylist = () => {
       await addVideo(playlistName, selectedVideoIds, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to add videos to playlist', error);
     }
     closeModal();
   };
