@@ -17,12 +17,13 @@ const VideoPlayerPage: React.FC = () => {
   const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
   const [videoDetails, setVideoDetails] = useState<{ title: string } | null>(null);
 
+  const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null); // 로그인 상태 확인
+
+  // Pass isLoggedIn to useMemos
   const { memoTime, handleAddMemo, seekToTime } = useYouTubePlayer({ videoId: normalizedVideoId });
   const { memos, hasMoreMemos, setCurrentPage, addMemo, updateMemoById, deleteMemoById } = useMemos(
-    { videoId: normalizedVideoId },
+    { videoId: normalizedVideoId, isLoggedIn },
   );
-
-  const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null); // 로그인 상태 확인
 
   const [isAddingMemo, setIsAddingMemo] = useState(false);
   const [editingMemo, setEditingMemo] = useState<{
@@ -118,10 +119,7 @@ const VideoPlayerPage: React.FC = () => {
                 onCancel={() => setEditingMemo(null)}
               />
             ) : (
-              <button
-                onClick={handleAddMemoClick} // 변경된 핸들러 적용
-                className="add_button"
-              >
+              <button onClick={handleAddMemoClick} className="add_button">
                 메모 추가
               </button>
             )}
