@@ -107,7 +107,7 @@ const TeacherPlaylist = () => {
         const data = await getVideo(token);
         setPlaylists(data);
       } catch (error) {
-        devConsoleError(error); // 오류 메시지를 상태에 저장
+        devConsoleError('Failed to fetch playlists', error);
       }
     };
 
