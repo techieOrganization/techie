@@ -155,7 +155,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         const data = await getVideo(token);
         setPlaylists(data);
       } catch (error) {
-        devConsoleError(error); // 오류 메시지를 상태에 저장
+        devConsoleError('Failed to fetch playlists', error); // 명확한 메시지와 에러 전달
       } finally {
         setLoadingPlaylists(false);
       }
@@ -181,19 +181,21 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       await addVideo(playlistName, selectVideo, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to add video to playlist', error); // 명확한 메시지와 에러 전달
     }
     closeModal();
   };
 
   // 재생목록 삭제
   const onClickDelete = async (playlistId: string) => {
-    const ConfirmDelete = confirm('재생목록을 삭제하시겠습니까?');
-    if (!ConfirmDelete) {
+    const confirmDelete = confirm('재생목록을 삭제하시겠습니까?'); // 변수 이름 수정
+    if (!confirmDelete) {
       return;
     }
+
     const token = Cookies.get('token');
     if (!token) return;
+
     try {
       await deletepPlaylist(playlistId, token);
       setPlaylists((prevPlaylists: PlayLists | undefined) =>
@@ -206,7 +208,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           : undefined,
       );
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to delete playlist', error); // 에러 메시지와 에러 전달
     }
   };
 

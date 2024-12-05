@@ -20,7 +20,7 @@ const MyVideoSection: React.FC = () => {
       const response = await getVideo(token);
       setPlaylists(response); // PlayLists 형태로 응답을 설정
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to fetch playlists', error);
     } finally {
       setIsLoading(false);
     }
@@ -33,7 +33,7 @@ const MyVideoSection: React.FC = () => {
       const response = await detailPlaylist(playlistId, token);
       setDetailPlaylistData(response); // 상세 재생목록 데이터를 설정
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to fetch playlist details', error);
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +55,7 @@ const MyVideoSection: React.FC = () => {
       await deletepPlaylist(playlistId, token);
       fetchPlaylists();
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to delete playlist', error);
     } finally {
       setIsLoading(false);
     }
