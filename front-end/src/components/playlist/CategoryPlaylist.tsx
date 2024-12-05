@@ -181,7 +181,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       await addVideo(playlistName, selectVideo, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to add video to playlist', error); // 명확한 메시지와 에러 전달
     }
     closeModal();
   };

@@ -135,8 +135,9 @@ const TeacherPlaylist = () => {
   const onClickDelete = async (playlistId: string) => {
     const token = Cookies.get('token');
     if (!token) return;
-    const ConfirmDelete = confirm(`재생목록을 삭제하시겠습니까?`);
-    if (!ConfirmDelete) {
+
+    const confirmDelete = confirm(`재생목록을 삭제하시겠습니까?`);
+    if (!confirmDelete) {
       return;
     }
 
@@ -152,7 +153,7 @@ const TeacherPlaylist = () => {
           : undefined,
       );
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to delete playlist', error); // 명확한 메시지와 에러 전달
     }
   };
 
