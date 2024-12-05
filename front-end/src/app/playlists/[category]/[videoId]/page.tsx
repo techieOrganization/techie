@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import { useYouTubePlayer } from '@/hooks/memo/useYouTubePlayer';
 import { useMemos } from '@/hooks/memo/useMemos';
 import MemoList from '@/components/memo/MemoList';
@@ -9,15 +11,19 @@ import MemoForm from '@/components/memo/MemoForm';
 import ConfirmModal from '@/components/memo/ConfirmModal';
 import { fetchVideoDetails } from '@/app/api/videoAPIDetail';
 import '@/styles/pages/playlist/playlist.scss';
+import { devConsoleError } from '@/utils/logger';
 
 const VideoPlayerPage: React.FC = () => {
   const { videoId } = useParams();
   const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
   const [videoDetails, setVideoDetails] = useState<{ title: string } | null>(null);
-  const { memoTime, handleAddMemo, seekToTime } = useYouTubePlayer({ videoId: normalizedVideoId });
 
+  const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null); // 로그인 상태 확인
+
+  // Pass isLoggedIn to useMemos
+  const { memoTime, handleAddMemo, seekToTime } = useYouTubePlayer({ videoId: normalizedVideoId });
   const { memos, hasMoreMemos, setCurrentPage, addMemo, updateMemoById, deleteMemoById } = useMemos(
-    { videoId: normalizedVideoId },
+    { videoId: normalizedVideoId, isLoggedIn },
   );
 
   const [isAddingMemo, setIsAddingMemo] = useState(false);
@@ -37,7 +43,7 @@ const VideoPlayerPage: React.FC = () => {
           const details = await fetchVideoDetails(normalizedVideoId);
           setVideoDetails(details);
         } catch (error) {
-          console.error('Failed to fetch video details:', error);
+          devConsoleError('Failed to fetch video details:', error);
         }
       }
     };
@@ -62,6 +68,17 @@ const VideoPlayerPage: React.FC = () => {
   // 메모 더 로드
   const loadMoreMemos = () => {
     setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // 메모 추가 클릭 시
+  const handleAddMemoClick = () => {
+    if (!isLoggedIn) {
+      alert('로그인 후 시도하세요.');
+      return;
+    }
+
+    handleAddMemo();
+    setIsAddingMemo(true);
   };
 
   return (
@@ -103,13 +120,7 @@ const VideoPlayerPage: React.FC = () => {
                 onCancel={() => setEditingMemo(null)}
               />
             ) : (
-              <button
-                onClick={() => {
-                  handleAddMemo();
-                  setIsAddingMemo(true);
-                }}
-                className="add_button"
-              >
+              <button onClick={handleAddMemoClick} className="add_button">
                 메모 추가
               </button>
             )}

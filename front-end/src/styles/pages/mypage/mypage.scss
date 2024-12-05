@@ -110,6 +110,10 @@
       justify-content: space-between;
       transition: all 0.3s;
 
+      span {
+        color: var(--sub-btn-color);
+      }
+
       &:hover {
         transform: translateY(-10px);
       }
@@ -131,6 +135,7 @@
       p {
         color: #333;
         font-size: 1.4rem;
+        margin-bottom: 1rem;
       }
     }
     .video-title {
@@ -157,7 +162,8 @@
         min-height: 15rem;
         position: relative;
         .playlist-name {
-          font-size: 1.8rem;
+          font-size: 1.4rem;
+          color: #333;
         }
         &:hover {
           transform: translateY(-10px);

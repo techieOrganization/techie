@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
-
+import { devConsoleError } from '@/utils/logger';
 import { fetchRegisterUser } from '@/app/api/registerUserApi';
 import '@/styles/pages/register/register.scss';
 
@@ -67,7 +67,7 @@ const Signup = () => {
     } else {
       setError('회원가입 중 오류가 발생했습니다.');
     }
-    console.error('회원가입 오류:', error);
+    devConsoleError('회원가입 오류:', error);
   };
 
   return (

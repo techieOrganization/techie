@@ -12,6 +12,7 @@ import { fetchVideosByCategory } from '@/app/api/videoAPI';
 import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
 import useInfiniteScroll from '@/hooks/playlist/useInfiniteScroll';
 import { formatDuration } from '@/utils/playlist/formatDuration';
+import { devConsoleError } from '@/utils/logger';
 
 import '@/styles/pages/playlist/playlist.scss';
 
@@ -58,7 +59,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           ),
         ]);
       } catch (err) {
-        console.error('Error fetching videos:', err);
+        devConsoleError('Error fetching videos:', err);
         setError('비디오를 불러오는 중 문제가 발생했습니다.');
       } finally {
         setLoadingVideos(false);
@@ -127,7 +128,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       setPlaylists(data);
       setPlayListName('');
     } catch (error) {
-      console.error('Error saving video:', error);
+      devConsoleError('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
   };
@@ -154,7 +155,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         const data = await getVideo(token);
         setPlaylists(data);
       } catch (error) {
-        console.error(error); // 오류 메시지를 상태에 저장
+        devConsoleError(error); // 오류 메시지를 상태에 저장
       } finally {
         setLoadingPlaylists(false);
       }
@@ -180,7 +181,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       await addVideo(playlistName, selectVideo, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.error(error);
+      devConsoleError(error);
     }
     closeModal();
   };
@@ -205,7 +206,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           : undefined,
       );
     } catch (error) {
-      console.error(error);
+      devConsoleError(error);
     }
   };
 
@@ -238,8 +239,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         <div className="inner">
           {error && <p className="error_message">{error}</p>}
           {!error && videos.length === 0 && !loadingVideos && <p>검색 결과가 없습니다.</p>}
-          {loadingVideos && <p>로딩 중...</p>}
-          {/* 비디오 리스트 */}
+          {loadingVideos && page === 0 && <p>로딩 중...</p>} {/* 첫 페이지 로딩 중 */}
           <ul className="video_list">
             {videos.map((video, index) => {
               const isLastVideo = index === videos.length - 1;
@@ -286,8 +286,10 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
               );
             })}
           </ul>
+          {loadingVideos && page > 0 && <p>추가 로딩 중...</p>} {/* 추가 로딩 중 메시지 */}
         </div>
       </div>
+
       {/* 모달 */}
       {showModal && (
         <div

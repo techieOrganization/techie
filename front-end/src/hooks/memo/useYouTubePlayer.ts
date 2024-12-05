@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { formatTime } from '@/utils/memo/timeUtils';
+import { devConsoleError } from '@/utils/logger';
 
 interface UseYouTubePlayerProps {
   videoId: string;
@@ -52,7 +53,7 @@ export const useYouTubePlayer = ({ videoId }: UseYouTubePlayerProps) => {
           },
         });
       } catch (error) {
-        console.error('Failed to initialize YouTube Player:', error);
+        devConsoleError('Failed to initialize YouTube Player:', error);
       }
     }
   }, [isYouTubeAPIReady, videoId, handlePlayerStateChange]);
@@ -64,7 +65,7 @@ export const useYouTubePlayer = ({ videoId }: UseYouTubePlayerProps) => {
 
       setMemoTime(formattedTime);
     } else {
-      console.error('Player is not initialized. Cannot add memo.');
+      devConsoleError('Player is not initialized. Cannot add memo.');
     }
   };
 
@@ -73,7 +74,7 @@ export const useYouTubePlayer = ({ videoId }: UseYouTubePlayerProps) => {
       const [minutes, seconds] = time.split(':').map(Number);
       playerRef.current.seekTo(minutes * 60 + seconds, true);
     } else {
-      console.error('Player is not initialized.');
+      devConsoleError('Player is not initialized.');
     }
   };
 

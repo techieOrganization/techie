@@ -7,6 +7,7 @@ import { getUserInfo, updateUserNickname, updateUserPassword, deleteUser } from 
 import { RootState } from '@/redux/store';
 import { setUserInfo, clearUserInfo } from '@/redux/reducer';
 import Cookies from 'js-cookie';
+import { devConsoleError } from '@/utils/logger';
 
 const UserInfoSection: React.FC = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const UserInfoSection: React.FC = () => {
         dispatch(setUserInfo(userData));
         setNickname(userData.nickname);
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        devConsoleError('Error fetching user info:', error);
       }
     };
 
@@ -40,7 +41,7 @@ const UserInfoSection: React.FC = () => {
       dispatch(setUserInfo({ ...userInfo, nickname }));
       alert('닉네임이 성공적으로 수정되었습니다.');
     } catch (error: unknown) {
-      console.error('Error during nickname update:', error);
+      devConsoleError('Error during nickname update:', error);
       alert('닉네임 수정에 실패했습니다.');
     }
   };
@@ -57,7 +58,7 @@ const UserInfoSection: React.FC = () => {
       setCurrentPassword('');
       setNewPassword('');
     } catch (error: unknown) {
-      console.error('Error during password update:', error);
+      devConsoleError('Error during password update:', error);
       alert('비밀번호 수정에 실패했습니다.');
     }
   };
@@ -76,7 +77,7 @@ const UserInfoSection: React.FC = () => {
       window.dispatchEvent(new Event('loginStatusChanged'));
       router.push('/');
     } catch (error: unknown) {
-      console.error('Error during account deletion:', error);
+      devConsoleError('Error during account deletion:', error);
       alert('회원 탈퇴에 실패했습니다.');
     }
   };

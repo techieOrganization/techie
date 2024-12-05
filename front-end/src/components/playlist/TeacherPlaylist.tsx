@@ -12,6 +12,7 @@ import { addVideo, deletepPlaylist, getVideo, saveVideo } from '@/app/api/playli
 import Cookies from 'js-cookie';
 import instructorData from '@/data/instructorData';
 import { PlayLists } from '@/types/playlist';
+import { devConsoleError } from '@/utils/logger';
 
 const TeacherPlaylist = () => {
   const router = useRouter();
@@ -92,7 +93,7 @@ const TeacherPlaylist = () => {
       setPlaylists(data);
       setPlayListName('');
     } catch (error) {
-      console.error('Error saving video:', error);
+      devConsoleError('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
   };
@@ -106,7 +107,7 @@ const TeacherPlaylist = () => {
         const data = await getVideo(token);
         setPlaylists(data);
       } catch (error) {
-        console.error(error); // 오류 메시지를 상태에 저장
+        devConsoleError(error); // 오류 메시지를 상태에 저장
       }
     };
 
@@ -125,7 +126,7 @@ const TeacherPlaylist = () => {
       await addVideo(playlistName, selectedVideoIds, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.error(error);
+      devConsoleError(error);
     }
     closeModal();
   };
@@ -151,7 +152,7 @@ const TeacherPlaylist = () => {
           : undefined,
       );
     } catch (error) {
-      console.error(error);
+      devConsoleError(error);
     }
   };
 

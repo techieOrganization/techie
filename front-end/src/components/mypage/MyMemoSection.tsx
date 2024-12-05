@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { getAllMemos } from '@/app/api/memoAPI';
 import { Memo } from '@/types/memo';
+import { devConsoleError } from '@/utils/logger';
 
 const MyMemoSection: React.FC = () => {
   const [memos, setMemos] = useState<Memo[]>([]);
@@ -25,7 +26,7 @@ const MyMemoSection: React.FC = () => {
 
       setHasMoreMemos(!response.data.last);
     } catch (error) {
-      console.error('Failed to fetch memos:', error);
+      devConsoleError('Failed to fetch memos:', error);
     } finally {
       setIsLoading(false);
     }
