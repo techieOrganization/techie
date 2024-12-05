@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { DetailPlayList } from '@/types/playlist';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import { devConsoleError } from '@/utils/logger';
 interface Params {
   playlistId?: string;
 }
@@ -24,7 +25,7 @@ const MyVideoList = () => {
       // 비디오 삭제 후 재생목록을 다시 불러옵니다.
       fetchVideo();
     } catch (error) {
-      console.error('비디오 삭제 중 오류 발생:', error);
+      devConsoleError('비디오 삭제 중 오류 발생:', error);
     }
   };
 
@@ -33,7 +34,7 @@ const MyVideoList = () => {
       const response = await detailPlaylist(playlistId, token);
       setPlaylist(response);
     } catch (error) {
-      console.error(error);
+      devConsoleError(error);
     }
   }, [playlistId, token]); // 의존성 배열에 playlistId와 token 추가
 

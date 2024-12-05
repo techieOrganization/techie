@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Memo } from '@/types/memo';
 import { saveMemo, updateMemo, deleteMemo, getMemosByVideo } from '@/app/api/memoAPI';
+import { devConsoleError } from '@/utils/logger';
 
 interface UseMemosProps {
   videoId: string;
@@ -29,7 +30,7 @@ export const useMemos = ({ videoId, isLoggedIn }: UseMemosProps) => {
         const isEmptyContent = response.data.empty || response.data.content.length === 0;
         setHasMoreMemos(!isEmptyContent && !response.data.last);
       } catch (error) {
-        console.error('Failed to fetch memos for video:', error);
+        devConsoleError('Failed to fetch memos for video:', error);
       }
     },
     [videoId, isLoggedIn],
@@ -57,7 +58,7 @@ export const useMemos = ({ videoId, isLoggedIn }: UseMemosProps) => {
       setCurrentPage(0);
       fetchMemosForVideo(0);
     } catch (error) {
-      console.error('Failed to save memo:', error);
+      devConsoleError('Failed to save memo:', error);
     }
   };
 
@@ -83,7 +84,7 @@ export const useMemos = ({ videoId, isLoggedIn }: UseMemosProps) => {
       setCurrentPage(0);
       fetchMemosForVideo(0);
     } catch (error) {
-      console.error('Failed to update memo:', error);
+      devConsoleError('Failed to update memo:', error);
     }
   };
 
@@ -99,7 +100,7 @@ export const useMemos = ({ videoId, isLoggedIn }: UseMemosProps) => {
       setCurrentPage(0);
       fetchMemosForVideo(0);
     } catch (error) {
-      console.error('Failed to delete memo:', error);
+      devConsoleError('Failed to delete memo:', error);
     }
   };
 

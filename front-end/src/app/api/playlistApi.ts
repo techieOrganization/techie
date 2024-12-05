@@ -1,5 +1,6 @@
 import axios from 'axios';
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { devConsoleError } from '@/utils/logger';
 // 재생 목록 생성
 export const saveVideo = async (
   videoId: string,
@@ -22,7 +23,7 @@ export const saveVideo = async (
     );
     return response.data;
   } catch (error) {
-    console.error('Unexpected error:', error);
+    devConsoleError('Unexpected error:', error);
   }
 };
 

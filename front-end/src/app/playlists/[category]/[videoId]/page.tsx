@@ -11,6 +11,7 @@ import MemoForm from '@/components/memo/MemoForm';
 import ConfirmModal from '@/components/memo/ConfirmModal';
 import { fetchVideoDetails } from '@/app/api/videoAPIDetail';
 import '@/styles/pages/playlist/playlist.scss';
+import { devConsoleError } from '@/utils/logger';
 
 const VideoPlayerPage: React.FC = () => {
   const { videoId } = useParams();
@@ -42,7 +43,7 @@ const VideoPlayerPage: React.FC = () => {
           const details = await fetchVideoDetails(normalizedVideoId);
           setVideoDetails(details);
         } catch (error) {
-          console.error('Failed to fetch video details:', error);
+          devConsoleError('Failed to fetch video details:', error);
         }
       }
     };
