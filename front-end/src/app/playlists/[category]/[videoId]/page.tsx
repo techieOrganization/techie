@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store'; // Redux store 타입 가져오기
+import { RootState } from '@/redux/store';
 import { useYouTubePlayer } from '@/hooks/memo/useYouTubePlayer';
 import { useMemos } from '@/hooks/memo/useMemos';
 import MemoList from '@/components/memo/MemoList';
