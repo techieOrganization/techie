@@ -20,7 +20,6 @@ const VideoPlayerPage: React.FC = () => {
 
   const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null); // 로그인 상태 확인
 
-  // Pass isLoggedIn to useMemos
   const { memoTime, handleAddMemo, seekToTime } = useYouTubePlayer({ videoId: normalizedVideoId });
   const { memos, hasMoreMemos, setCurrentPage, addMemo, updateMemoById, deleteMemoById } = useMemos(
     { videoId: normalizedVideoId, isLoggedIn },
@@ -97,7 +96,14 @@ const VideoPlayerPage: React.FC = () => {
               memos={memos}
               hasMoreMemos={hasMoreMemos}
               loadMoreMemos={loadMoreMemos}
-              onEditMemo={(memo) => setEditingMemo(memo)}
+              onEditMemo={(memo) =>
+                setEditingMemo({
+                  id: memo.id,
+                  title: memo.title || '', // undefined 처리
+                  content: memo.content,
+                  noteTime: memo.noteTime,
+                })
+              }
               onDeleteMemo={(memoId) => setMemoToDelete(memoId)}
               onTimeClick={seekToTime}
             />
