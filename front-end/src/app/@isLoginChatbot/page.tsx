@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import '@/styles/pages/chatbot/chatbot.scss';
 import fetchChatBot from '../api/chatBotApi';
 import Cookies from 'js-cookie';
+import { devConsoleError } from '@/utils/logger';
 
 const Chatbot = () => {
   const [position, setPosition] = useState({ x: 1850, y: 1000 });
@@ -84,7 +85,7 @@ const Chatbot = () => {
       typeResponse(apiResponse.response);
       setTextarea('');
     } catch (error) {
-      console.error('함수요청 오류', error);
+      devConsoleError('함수요청 오류', error);
     } finally {
       setLoading(false);
     }

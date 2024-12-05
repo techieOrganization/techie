@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { devConsoleError } from '@/utils/logger';
 
 const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
@@ -19,7 +20,7 @@ export const fetchVideoDetails = async (videoId: string) => {
       channelTitle: item.snippet.channelTitle,
     };
   } catch (error) {
-    console.error('Failed to fetch video details:', error);
+    devConsoleError('Failed to fetch video details:', error);
     return null;
   }
 };

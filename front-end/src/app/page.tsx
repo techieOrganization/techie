@@ -11,6 +11,7 @@ import studentData from '@/data/studentData';
 import vidListData from '@/data/vidListData';
 import instructorData from '@/data/instructorData';
 import { Video } from '@/types/video';
+import { devConsoleError } from '@/utils/logger';
 
 export default function Home() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -24,7 +25,7 @@ export default function Home() {
 
         setVideos(latestVideos);
       } catch (error) {
-        console.error('Failed to fetch videos:', error);
+        devConsoleError('Failed to fetch videos:', error);
       }
     };
 
