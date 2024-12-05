@@ -188,12 +188,14 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
   // 재생목록 삭제
   const onClickDelete = async (playlistId: string) => {
-    const ConfirmDelete = confirm('재생목록을 삭제하시겠습니까?');
-    if (!ConfirmDelete) {
+    const confirmDelete = confirm('재생목록을 삭제하시겠습니까?'); // 변수 이름 수정
+    if (!confirmDelete) {
       return;
     }
+
     const token = Cookies.get('token');
     if (!token) return;
+
     try {
       await deletepPlaylist(playlistId, token);
       setPlaylists((prevPlaylists: PlayLists | undefined) =>
@@ -206,7 +208,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           : undefined,
       );
     } catch (error) {
-      devConsoleError(error);
+      devConsoleError('Failed to delete playlist', error); // 에러 메시지와 에러 전달
     }
   };
 
