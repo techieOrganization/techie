@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store'; // Redux store 타입 가져오기
 import { useYouTubePlayer } from '@/hooks/memo/useYouTubePlayer';
 import { useMemos } from '@/hooks/memo/useMemos';
 import MemoList from '@/components/memo/MemoList';
@@ -14,11 +16,13 @@ const VideoPlayerPage: React.FC = () => {
   const { videoId } = useParams();
   const normalizedVideoId = Array.isArray(videoId) ? videoId[0] : videoId;
   const [videoDetails, setVideoDetails] = useState<{ title: string } | null>(null);
-  const { memoTime, handleAddMemo, seekToTime } = useYouTubePlayer({ videoId: normalizedVideoId });
 
+  const { memoTime, handleAddMemo, seekToTime } = useYouTubePlayer({ videoId: normalizedVideoId });
   const { memos, hasMoreMemos, setCurrentPage, addMemo, updateMemoById, deleteMemoById } = useMemos(
     { videoId: normalizedVideoId },
   );
+
+  const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null); // 로그인 상태 확인
 
   const [isAddingMemo, setIsAddingMemo] = useState(false);
   const [editingMemo, setEditingMemo] = useState<{
@@ -64,6 +68,17 @@ const VideoPlayerPage: React.FC = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
+  // 메모 추가 클릭 시
+  const handleAddMemoClick = () => {
+    if (!isLoggedIn) {
+      alert('로그인 후 시도하세요.');
+      return;
+    }
+
+    handleAddMemo();
+    setIsAddingMemo(true);
+  };
+
   return (
     <div className="video_player_container">
       <div className="video_content">
@@ -104,10 +119,7 @@ const VideoPlayerPage: React.FC = () => {
               />
             ) : (
               <button
-                onClick={() => {
-                  handleAddMemo();
-                  setIsAddingMemo(true);
-                }}
+                onClick={handleAddMemoClick} // 변경된 핸들러 적용
                 className="add_button"
               >
                 메모 추가
