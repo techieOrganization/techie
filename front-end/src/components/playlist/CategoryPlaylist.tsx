@@ -239,8 +239,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         <div className="inner">
           {error && <p className="error_message">{error}</p>}
           {!error && videos.length === 0 && !loadingVideos && <p>검색 결과가 없습니다.</p>}
-          {loadingVideos && <p>로딩 중...</p>}
-          {/* 비디오 리스트 */}
+          {loadingVideos && page === 0 && <p>로딩 중...</p>} {/* 첫 페이지 로딩 중 */}
           <ul className="video_list">
             {videos.map((video, index) => {
               const isLastVideo = index === videos.length - 1;
@@ -287,8 +286,10 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
               );
             })}
           </ul>
+          {loadingVideos && page > 0 && <p>추가 로딩 중...</p>} {/* 추가 로딩 중 메시지 */}
         </div>
       </div>
+
       {/* 모달 */}
       {showModal && (
         <div
