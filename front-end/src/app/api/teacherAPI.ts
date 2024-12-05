@@ -1,6 +1,7 @@
 import axios from 'axios';
 import instructorData from '@/data/instructorData';
 import { Video, PlaylistResponse } from '@/types/video';
+import { devConsoleError } from '@/utils/logger';
 
 const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
@@ -18,7 +19,7 @@ export const getUploadsId = async (channelId: string): Promise<string | null> =>
 
     return res.data.items?.[0]?.contentDetails?.relatedPlaylists?.uploads || null;
   } catch (err) {
-    console.error('Error fetching uploads ID:', err);
+    devConsoleError('Error fetching uploads ID:', err);
     return null;
   }
 };
@@ -46,7 +47,7 @@ export const getVideosFromPlaylist = async (playlistId: string): Promise<Video[]
       category: 'General',
     }));
   } catch (err) {
-    console.error('Error fetching videos from playlist:', err);
+    devConsoleError('Error fetching videos from playlist:', err);
     return [];
   }
 };

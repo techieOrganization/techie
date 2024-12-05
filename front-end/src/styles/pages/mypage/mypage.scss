@@ -110,6 +110,10 @@
       justify-content: space-between;
       transition: all 0.3s;
 
+      span {
+        color: var(--sub-btn-color);
+      }
+
       &:hover {
         transform: translateY(-10px);
       }
@@ -131,30 +135,61 @@
       p {
         color: #333;
         font-size: 1.4rem;
+        margin-bottom: 1rem;
       }
+    }
+    .video-title {
+      font-size: 2rem;
+      font-weight: bold;
     }
     .playlist-container {
       display: flex;
-      gap: 2rem;
       flex-wrap: wrap;
       overflow-y: auto;
       .playlist-item {
+        border: 1px solid #ccc;
         display: flex;
         flex-direction: column;
         width: 15vw;
-        align-items: center;
         background-color: var(--bg-color);
         color: black;
-        border-radius: 15px;
+        border-radius: 1rem;
         cursor: pointer;
-        transition: 1s;
+        transition: all 0.3s;
         gap: 1rem;
-        margin-top: 10px;
+        margin: 2rem 1rem 0;
+        padding: 1rem 2rem;
+        min-height: 15rem;
+        position: relative;
         .playlist-name {
-          font-size: 1.8rem;
+          font-size: 1.4rem;
+          color: #333;
         }
         &:hover {
           transform: translateY(-10px);
+          .delete-btn {
+            opacity: 1;
+            visibility: visible;
+          }
+        }
+        h4 {
+          font-weight: bold;
+          margin-bottom: 1rem;
+        }
+        .delete-btn {
+          position: absolute;
+          top: 0.5rem;
+          right: 1rem;
+          opacity: 0;
+          font-size: 1.2rem;
+          background: none;
+          min-width: 0;
+          color: black;
+          font-weight: bold;
+          visibility: hidden;
+          transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease;
         }
       }
       a {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { devConsoleError } from '@/utils/logger';
 // 재생 목록 생성
 export const saveVideo = async (
   videoId: string,
@@ -20,10 +21,9 @@ export const saveVideo = async (
         },
       },
     );
-    console.log('영상저장 성공');
     return response.data;
   } catch (error) {
-    console.error('Unexpected error:', error);
+    devConsoleError('Unexpected error:', error);
   }
 };
 
@@ -45,7 +45,7 @@ export const getVideo = async (token: string | undefined) => {
   }
 };
 
-// 재생 목록 수정하기
+// 재생 목록에 영상 추가
 
 export const addVideo = async (
   playlistName: string,
@@ -60,6 +60,36 @@ export const addVideo = async (
         playlistName: playlistName,
         addVideoIds: [selectVideo],
         removeVideoIds: [],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error('api 요청 오류');
+  }
+};
+
+// 재생 목록에 영상 삭제
+
+export const deleteVideos = async (
+  videoId: string,
+  playlistId: string,
+  token: string | undefined,
+) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/api/playlists/${playlistId}`,
+      {
+        playlistName: '',
+        addVideoIds: [],
+        removeVideoIds: [videoId],
       },
       {
         headers: {

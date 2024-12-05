@@ -1,5 +1,5 @@
 import { FetchVideosOptions, ApiResponse } from '@/types/video';
-
+import { devConsoleError } from '@/utils/logger';
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const fetchVideosByCategory = async ({
@@ -24,14 +24,14 @@ export const fetchVideosByCategory = async ({
     const response = await fetch(url);
 
     if (!response.ok) {
-      console.error(`API response error: ${response.statusText}`);
+      devConsoleError(`API response error: ${response.statusText}`);
       throw new Error(`Failed to fetch videos for category: ${category}`);
     }
 
     const data: ApiResponse = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching videos:', error);
+    devConsoleError('Error fetching videos:', error);
     throw error;
   }
 };

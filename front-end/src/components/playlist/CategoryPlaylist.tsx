@@ -1,57 +1,54 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Video } from '@/types/video';
-import vidListData from '@/data/vidListData';
-import { fetchVideosByCategory } from '@/app/api/videoAPI';
-import '@/styles/pages/playlist/playlist.scss';
 import Cookies from 'js-cookie';
-import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
+import vidListData from '@/data/vidListData';
+import { Video } from '@/types/video';
 import { PlayLists } from '@/types/playlist';
+import { fetchVideosByCategory } from '@/app/api/videoAPI';
+import { addVideo, getVideo, saveVideo, deletepPlaylist } from '@/app/api/playlistApi';
+import useInfiniteScroll from '@/hooks/playlist/useInfiniteScroll';
+import { formatDuration } from '@/utils/playlist/formatDuration';
+import { devConsoleError } from '@/utils/logger';
+
+import '@/styles/pages/playlist/playlist.scss';
 
 interface CategoryPlaylistProps {
   category: string;
 }
 
-const formatDuration = (duration: string | undefined): string => {
-  if (!duration) return '0:00'; // duration이 없을 경우 0:00으로 표시
-  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-  if (!match) return '0:00';
-
-  const hours = parseInt(match[1]?.replace('H', '') || '0', 10);
-  const minutes = parseInt(match[2]?.replace('M', '') || '0', 10);
-  const seconds = parseInt(match[3]?.replace('S', '') || '0', 10);
-
-  const totalMinutes = hours * 60 + minutes;
-  return `${totalMinutes}:${seconds.toString().padStart(2, '0')}`;
-};
-
 const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCategory }) => {
   const [videos, setVideos] = useState<Video[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [category, setCategory] = useState(initialCategory);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [selectVideo, setSelectVideo] = useState<string>('');
-  const [playlistNmae, setPlayListName] = useState('');
+  const [playlistName, setPlayListName] = useState('');
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
   const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined);
+  const [loadingVideos, setLoadingVideos] = useState(true);
+  const [loadingPlaylists, setLoadingPlaylists] = useState(true);
+  const maxLength = 15;
 
+  // 비디오 로딩 함수
   const loadVideos = useCallback(
-    async (currentPage: number) => {
-      setLoading(true);
+    async (currentPage: number, currentCategory: string, currentQuery: string) => {
+      setLoadingVideos(true);
       setError('');
       try {
-        const data = await fetchVideosByCategory({ category, query, page: currentPage });
+        const data = await fetchVideosByCategory({
+          category: currentCategory,
+          query: currentQuery,
+          page: currentPage,
+        });
 
         setHasMore(!data.last);
 
@@ -62,27 +59,29 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           ),
         ]);
       } catch (err) {
-        console.error('Error fetching videos:', err);
+        devConsoleError('Error fetching videos:', err);
         setError('비디오를 불러오는 중 문제가 발생했습니다.');
       } finally {
-        setLoading(false);
+        setLoadingVideos(false);
       }
     },
-    [category, query],
+    [],
   );
 
+  // 카테고리나 검색어가 변경되면 비디오를 새로 로드
   useEffect(() => {
     setPage(0);
     setVideos([]);
     setHasMore(true);
-    loadVideos(0);
+    loadVideos(0, category, query);
   }, [category, query, loadVideos]);
 
+  // 페이지 번호가 변경되면 추가 비디오 로드
   useEffect(() => {
     if (page > 0) {
-      loadVideos(page);
+      loadVideos(page, category, query);
     }
-  }, [page, loadVideos]);
+  }, [page, category, query, loadVideos]);
 
   const handleCategoryClick = (newCategory: string) => {
     if (newCategory === category) return;
@@ -91,30 +90,16 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     router.push(`/playlists/${newCategory}`);
   };
 
-  const lastVideoElementRef = useCallback(
-    (node: HTMLLIElement | null) => {
-      if (loading || !hasMore) return;
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            setPage((prevPage) => prevPage + 1);
-          }
-        },
-        { threshold: 0.1 },
-      );
-
-      if (node) observer.current.observe(node);
-    },
-    [loading, hasMore],
-  );
-
-  useEffect(() => {
-    return () => {
-      if (observer.current) observer.current.disconnect();
-    };
+  // 무한 스크롤 기능
+  const onLoadMore = useCallback(() => {
+    setPage((prevPage) => prevPage + 1);
   }, []);
+
+  const { lastElementRef } = useInfiniteScroll({
+    hasMore,
+    loading: loadingVideos,
+    onLoadMore,
+  });
 
   const openModal = () => {
     setShowModal(true);
@@ -123,6 +108,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const closeModal = () => {
     setShowModal(false);
     setPlayListName('');
+    setSelectVideo('');
   };
 
   const handleSaveVideo = async () => {
@@ -131,18 +117,20 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       alert('선택된 영상이 없습니다.');
       return;
     }
+    if (!playlistName.trim()) {
+      alert('재생목록 이름을 입력해 주세요.');
+      return;
+    }
 
     try {
-      await saveVideo(selectVideo, playlistNmae, token);
-      alert('영상이 재생목록에 저장되었습니다.');
-      closeModal();
+      await saveVideo(selectVideo, playlistName, token);
       const data = await getVideo(token);
-      setPlaylists(data); // playlists 상태 업데이트
+      setPlaylists(data);
+      setPlayListName('');
     } catch (error) {
-      console.error('Error saving video:', error);
+      devConsoleError('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
-    setSelectVideo('');
   };
 
   const handleVideoSelect = (videoId: string) => {
@@ -153,10 +141,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
     }
   };
 
-  useEffect(() => {
-    console.log(selectVideo);
-  }, [selectVideo]);
-
   const token = Cookies.get('token');
 
   const toggleBottomBar = (index: number) => {
@@ -166,19 +150,21 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   // 재생목록 렌더링
   useEffect(() => {
     const fetchData = async () => {
+      setLoadingPlaylists(true);
       try {
         const data = await getVideo(token);
-        console.log(data);
         setPlaylists(data);
       } catch (error) {
-        console.error(error); // 오류 메시지를 상태에 저장
+        devConsoleError(error); // 오류 메시지를 상태에 저장
       } finally {
-        setLoading(false); // 로딩 상태를 false로 설정
+        setLoadingPlaylists(false);
       }
     };
 
     if (token) {
       fetchData(); // 데이터 가져오기 호출
+    } else {
+      setLoadingPlaylists(false); // 토큰이 없으면 로딩 상태를 false로 설정
     }
   }, [token]);
 
@@ -192,16 +178,20 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
     if (!token) return;
     try {
-      await addVideo(playlistNmae, selectVideo, playlistId, token);
+      await addVideo(playlistName, selectVideo, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.log(error);
+      devConsoleError(error);
     }
     closeModal();
-    setSelectVideo('');
   };
+
   // 재생목록 삭제
   const onClickDelete = async (playlistId: string) => {
+    const ConfirmDelete = confirm('재생목록을 삭제하시겠습니까?');
+    if (!ConfirmDelete) {
+      return;
+    }
     const token = Cookies.get('token');
     if (!token) return;
     try {
@@ -215,13 +205,20 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
             }
           : undefined,
       );
-      alert('재생목록이 삭제 되었습니다');
     } catch (error) {
-      console.log(error);
+      devConsoleError(error);
     }
-    closeModal();
-    setSelectVideo('');
   };
+
+  const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value.length <= maxLength) {
+      setPlayListName(value);
+    } else {
+      alert('재생목록의 이름은 15자 이내로 작성하여야합니다');
+    }
+  };
+
   return (
     <div className="playlists_container">
       <ul className="dev_list">
@@ -240,8 +237,9 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       </ul>
       <div className="video_list_cont">
         <div className="inner">
-          {loading && videos.length === 0 && <p>로딩 중...</p>}
           {error && <p className="error_message">{error}</p>}
+          {!error && videos.length === 0 && !loadingVideos && <p>검색 결과가 없습니다.</p>}
+          {loadingVideos && page === 0 && <p>로딩 중...</p>} {/* 첫 페이지 로딩 중 */}
           <ul className="video_list">
             {videos.map((video, index) => {
               const isLastVideo = index === videos.length - 1;
@@ -249,7 +247,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                 <li
                   key={video.videoId}
                   className="video_item"
-                  ref={isLastVideo ? lastVideoElementRef : null}
+                  ref={isLastVideo ? lastElementRef : null}
                 >
                   <Link href={`/playlists/${category}/${video.videoId}`}>
                     <Image
@@ -274,7 +272,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                       +
                     </button>
                   )}
-
                   <ul className={`bar-nav ${isOpen === index ? 'isOpen' : ''}`}>
                     <li
                       onClick={() => {
@@ -289,10 +286,10 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
               );
             })}
           </ul>
-          {loading && page > 0 && <p>추가 로딩 중...</p>}
-          {!loading && !error && videos.length === 0 && <p>로딩 중...</p>}
+          {loadingVideos && page > 0 && <p>추가 로딩 중...</p>} {/* 추가 로딩 중 메시지 */}
         </div>
       </div>
+
       {/* 모달 */}
       {showModal && (
         <div
@@ -303,18 +300,22 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
         >
           {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal_content" onClick={(e) => e.stopPropagation()}>
               사용자 재생목록
               <input
                 type="text"
-                value={playlistNmae}
-                onChange={(e) => setPlayListName(e.target.value)}
+                value={playlistName}
+                onChange={onChangePlaylistName}
                 placeholder="재생목록 이름 입력"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
               />
               <button onClick={handleSaveVideo}>재생목록 추가</button>
               <div className="playlist_content_container">
-                {playlists ? (
+                {loadingPlaylists ? (
+                  <p>재생목록을 불러오는 중입니다...</p>
+                ) : playlists ? (
                   playlists.playlists.map((playlist) => (
                     <div key={playlist.playlistId} className="playlist_item">
                       <input

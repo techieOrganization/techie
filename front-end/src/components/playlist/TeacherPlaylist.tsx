@@ -12,6 +12,7 @@ import { addVideo, deletepPlaylist, getVideo, saveVideo } from '@/app/api/playli
 import Cookies from 'js-cookie';
 import instructorData from '@/data/instructorData';
 import { PlayLists } from '@/types/playlist';
+import { devConsoleError } from '@/utils/logger';
 
 const TeacherPlaylist = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const TeacherPlaylist = () => {
   const [showModal, setShowModal] = useState(false); // 모달 열림 상태
   const [selectedVideoIds, setSelectedVideoIds] = useState<string>(''); // 선택된 비디오 ID
   const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined); // 재생목록 상태
+  const maxLength = 15;
 
   // 선택된 강사가 변경될 때 URL 업데이트
   const handleTeacherSelect = (inst: (typeof instructorData)[number]) => {
@@ -56,6 +58,7 @@ const TeacherPlaylist = () => {
   const closeModal = () => {
     setShowModal(false); // 모달 닫기
     setPlayListName(''); // 입력 필드 초기화
+    setSelectedVideoIds('');
   };
 
   const toggleBottomBar = (index: number) => {
@@ -71,29 +74,28 @@ const TeacherPlaylist = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(selectedVideoIds);
-  }, [selectedVideoIds]);
+  useEffect(() => {}, [selectedVideoIds]);
 
-  // 비디오를 재생목록에 저장
   const handleSaveVideo = async () => {
     const token = Cookies.get('token');
     if (selectedVideoIds.length === 0) {
       alert('선택된 영상이 없습니다.');
       return;
     }
+    if (!playlistName.trim()) {
+      alert('재생목록 이름을 입력해 주세요.');
+      return;
+    }
 
     try {
-      await saveVideo(selectedVideoIds, playlistName, token); // 선택된 비디오 ID와 재생목록 이름 전송
-      alert('영상이 재생목록에 저장되었습니다.');
-      closeModal(); // 저장 후 모달 닫기
+      await saveVideo(selectedVideoIds, playlistName, token);
       const data = await getVideo(token);
-      setPlaylists(data); // playlists 상태 업데이트
+      setPlaylists(data);
+      setPlayListName('');
     } catch (error) {
-      console.error('Error saving video:', error);
+      devConsoleError('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
     }
-    setSelectedVideoIds('');
   };
 
   // 페이지 로드 시 재생목록 데이터 가져오기
@@ -103,10 +105,9 @@ const TeacherPlaylist = () => {
       if (!token) return;
       try {
         const data = await getVideo(token);
-        console.log(data);
         setPlaylists(data);
       } catch (error) {
-        console.error(error); // 오류 메시지를 상태에 저장
+        devConsoleError(error); // 오류 메시지를 상태에 저장
       }
     };
 
@@ -125,16 +126,19 @@ const TeacherPlaylist = () => {
       await addVideo(playlistName, selectedVideoIds, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      console.log(error);
+      devConsoleError(error);
     }
     closeModal();
-    setSelectedVideoIds('');
   };
 
   // 재생목록 삭제
   const onClickDelete = async (playlistId: string) => {
     const token = Cookies.get('token');
     if (!token) return;
+    const ConfirmDelete = confirm(`재생목록을 삭제하시겠습니까?`);
+    if (!ConfirmDelete) {
+      return;
+    }
 
     try {
       await deletepPlaylist(playlistId, token);
@@ -147,12 +151,18 @@ const TeacherPlaylist = () => {
             }
           : undefined,
       );
-      alert('재생목록이 삭제 되었습니다');
     } catch (error) {
-      console.log(error);
+      devConsoleError(error);
     }
-    closeModal();
-    setSelectedVideoIds('');
+  };
+
+  const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value.length <= maxLength) {
+      setPlayListName(value);
+    } else {
+      alert('재생목록의 이름은 15자 이내로 작성하여야합니다');
+    }
   };
 
   const videos = selected.name === 'ALL' ? allQuery.data || [] : instQuery.data || [];
@@ -182,7 +192,7 @@ const TeacherPlaylist = () => {
         <div className="inner">
           <ul className="video_list">
             {allQuery.isLoading || instQuery.isLoading ? (
-              <p>로딩 중입니다...</p>
+              <p>로딩 중...</p>
             ) : videos.length > 0 ? (
               videos.map((video, index) => (
                 <li key={video.videoId} className="video_item">
@@ -231,11 +241,12 @@ const TeacherPlaylist = () => {
         <div className="overlay" onClick={closeModal}>
           {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal_content" onClick={(e) => e.stopPropagation()}>
+              사용자 재생목록
               <input
                 type="text"
                 value={playlistName}
-                onChange={(e) => setPlayListName(e.target.value)}
+                onChange={onChangePlaylistName}
                 placeholder="재생목록 이름 입력"
                 onClick={(e) => e.stopPropagation()}
               />

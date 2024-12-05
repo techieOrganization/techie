@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import { loginUser } from '@/app/api/loginUserApi';
 import '@/styles/pages/login/login.scss';
 import { setUserInfo } from '@/redux/reducer';
+import { devConsoleError } from '@/utils/logger';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -54,14 +55,13 @@ const Login = () => {
           const decodedJWT = decodeJWT(token);
           dispatch(setUserInfo(decodedJWT));
         } else {
-          console.error('Token is undefined in the response headers');
+          devConsoleError('Token is undefined in the response headers');
         }
       } else {
-        console.error('Failed to log in, unexpected response status');
+        devConsoleError('Failed to log in, unexpected response status');
       }
     } catch (error) {
-      console.error('Error during login request:', error);
-      setError('로그인 중 오류가 발생했습니다.');
+      handleLoginError(error);
     }
   };
 
@@ -90,7 +90,7 @@ const Login = () => {
     } else {
       setError('로그인 중 오류가 발생했습니다.');
     }
-    console.error('로그인 오류:', axiosError);
+    devConsoleError('로그인 오류:', axiosError);
   };
 
   return (

@@ -1,9 +1,8 @@
-'use client';
-
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { getAllMemos } from '@/app/api/memoAPI';
 import { Memo } from '@/types/memo';
+import { devConsoleError } from '@/utils/logger';
 
 const MyMemoSection: React.FC = () => {
   const [memos, setMemos] = useState<Memo[]>([]);
@@ -27,7 +26,7 @@ const MyMemoSection: React.FC = () => {
 
       setHasMoreMemos(!response.data.last);
     } catch (error) {
-      console.error('Failed to fetch memos:', error);
+      devConsoleError('Failed to fetch memos:', error);
     } finally {
       setIsLoading(false);
     }
@@ -52,6 +51,9 @@ const MyMemoSection: React.FC = () => {
     fetchMemos(currentPage);
   }, [currentPage, fetchMemos]);
 
+  const truncateText = (text: string, maxLength: number) =>
+    text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+
   return (
     <div className="memo_section">
       <h2>내 메모 모음</h2>
@@ -68,8 +70,8 @@ const MyMemoSection: React.FC = () => {
               ref={isLastMemo ? lastMemoRef : null}
             >
               <Link href={videoUrl}>
-                <h4>{memo.title || '제목 없음'}</h4>
-                <p>{memo.content}</p>
+                <h4>{memo.title || ''}</h4>
+                <p>{truncateText(memo.content || '', 100)}</p>
                 <span>{memo.noteTime}</span>
               </Link>
             </div>
