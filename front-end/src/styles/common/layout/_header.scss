@@ -5,6 +5,10 @@
     display: flex;
     justify-content: space-between;
     padding: 1.5rem 0;
+
+    @include pc_1680 {
+      padding: 1.5rem 2rem;
+    }
   }
   .header_menu {
     display: flex;
