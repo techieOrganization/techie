@@ -1,6 +1,6 @@
 // abstracts
-@import "../../common/abstracts/mixins";
-@import "../../common/abstracts/responsive";
+@import '../../common/abstracts/mixins';
+@import '../../common/abstracts/responsive';
 
 .section {
   h2 {
@@ -14,8 +14,9 @@
     }
 
     @include mo_500 {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
     }
+
   }
   .sub_title {
     font-size: 1.7rem;
@@ -45,6 +46,10 @@
     &:after {
       font-size: 1.6rem;
     }
+
+    @include mo {
+      display: none;
+    }
   }
 
   &.sec01 {
@@ -52,6 +57,10 @@
       width: 100%;
       height: 40rem;
       background: var(--gradient-bg);
+
+      @include mo {
+        height: 25rem;
+      }
 
       .inner {
         height: 100%;
@@ -104,6 +113,13 @@
         @include pc_1550 {
           left: 10rem;
         }
+
+        @include mo_989 {
+          width: 100%;
+          left: 50%;
+          max-width: none;
+          transform: translate(-50%, -50%);
+        }
       }
 
       .right_cover {
@@ -115,6 +131,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @include pc_1440 {
+          width: 60rem;
+        }
+
+        @include pc_1280 {
+          width: 40rem;
+        }
+
+        @include mo_989 {
+          display: none;
+        }
       }
 
       .tag {
@@ -129,6 +157,10 @@
           align-items: center;
           justify-content: center;
           font-weight: 700;
+
+          @include mo {
+            font-size: 1.4rem;
+          }
         }
       }
 
@@ -138,10 +170,26 @@
         font-size: 3.2rem;
         letter-spacing: -0.2rem;
         line-height: 1.5;
+
+        @include pc_1280 {
+          font-size: 3rem;
+        }
+
+        @include mo_989 {
+          font-size: 2.5rem;
+        }
+
+        @include mo {
+          font-size: 2rem;
+        }
       }
 
       p {
         font-size: 1.6rem;
+
+        @include mo {
+          font-size: 1.5rem;
+        }
       }
     }
   }
@@ -160,24 +208,25 @@
       margin-bottom: 5rem;
       gap: 2rem;
 
-      @include pc_1550{
+      @include pc_1550 {
         gap: 1rem;
       }
 
-      @include pc_1280{
+      @include pc_1280 {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         padding: 0 2rem;
       }
 
-      @include mo_989{
+      @include mo_989 {
         grid-template-columns: repeat(6, 1fr);
       }
 
-      @include mo{
+      @include mo {
         grid-template-columns: repeat(4, 1fr);
         margin-bottom: 0;
       }
+
 
       li {
         &.active {
@@ -196,15 +245,23 @@
             padding: 1rem 2rem;
           }
 
+          @include mo {
+            padding: 1rem;
+          }
+
           &:hover {
             background: var(--bg-color);
           }
           img {
             margin: 0 auto;
 
-            @include pc_1550{
+            @include pc_1550 {
               width: 4rem;
               height: 4rem;
+            }
+            @include mo {
+              width: 3rem;
+              height: 3rem;
             }
           }
 
@@ -212,6 +269,9 @@
             font-weight: 500;
             @include pc_1280 {
               white-space: nowrap;
+            }
+            @include mo {
+              font-size: 1.4rem;
             }
           }
         }
@@ -243,7 +303,7 @@
       max-width: 168rem;
 
       @include mo {
-        padding: 5rem 2rem; 
+        padding: 5rem 2rem;
       }
     }
     h2 {
@@ -253,7 +313,7 @@
       padding: 7rem 0;
 
       @include mo {
-        padding: 5rem 0; 
+        padding: 2rem 0;
       }
     }
     .swiper-slide {
@@ -314,25 +374,24 @@
       @include mo {
         padding: 5rem 2rem;
       }
-
     }
     .instructor_list {
       display: flex;
       gap: 2rem;
 
       @include pc_1280 {
-       display: grid;
-       grid-template-columns:  repeat(3, 1fr);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
       }
 
       @include mo {
         display: grid;
-        grid-template-columns:  repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
       }
 
       @include mo_500 {
         display: grid;
-        grid-template-columns:  repeat(1, 1fr);
+        grid-template-columns: repeat(1, 1fr);
       }
 
       li {
