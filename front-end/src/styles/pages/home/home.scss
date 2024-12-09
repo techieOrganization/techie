@@ -1,9 +1,22 @@
+// abstracts
+@import '../../common/abstracts/mixins';
+@import '../../common/abstracts/responsive';
+
 .section {
   h2 {
     font-size: 3.5rem;
     font-weight: 700;
     text-align: center;
     letter-spacing: -0.2rem;
+
+    @include mo {
+      font-size: 3rem;
+    }
+
+    @include mo_500 {
+      font-size: 2.3rem;
+    }
+
   }
   .sub_title {
     font-size: 1.7rem;
@@ -11,6 +24,10 @@
     text-align: center;
     margin-bottom: 4rem;
     color: gray;
+
+    @include mo {
+      font-size: 1.5rem;
+    }
   }
 
   .swiper-pagination-bullet-active {
@@ -29,6 +46,10 @@
     &:after {
       font-size: 1.6rem;
     }
+
+    @include mo {
+      display: none;
+    }
   }
 
   &.sec01 {
@@ -36,6 +57,10 @@
       width: 100%;
       height: 40rem;
       background: var(--gradient-bg);
+
+      @include mo {
+        height: 25rem;
+      }
 
       .inner {
         height: 100%;
@@ -84,6 +109,17 @@
         top: 44%;
         transform: translateY(-50%);
         max-width: 60rem;
+
+        @include pc_1550 {
+          left: 10rem;
+        }
+
+        @include mo_989 {
+          width: 100%;
+          left: 50%;
+          max-width: none;
+          transform: translate(-50%, -50%);
+        }
       }
 
       .right_cover {
@@ -95,6 +131,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @include pc_1440 {
+          width: 60rem;
+        }
+
+        @include pc_1280 {
+          width: 40rem;
+        }
+
+        @include mo_989 {
+          display: none;
+        }
       }
 
       .tag {
@@ -109,6 +157,10 @@
           align-items: center;
           justify-content: center;
           font-weight: 700;
+
+          @include mo {
+            font-size: 1.4rem;
+          }
         }
       }
 
@@ -118,10 +170,26 @@
         font-size: 3.2rem;
         letter-spacing: -0.2rem;
         line-height: 1.5;
+
+        @include pc_1280 {
+          font-size: 3rem;
+        }
+
+        @include mo_989 {
+          font-size: 2.5rem;
+        }
+
+        @include mo {
+          font-size: 2rem;
+        }
       }
 
       p {
         font-size: 1.6rem;
+
+        @include mo {
+          font-size: 1.5rem;
+        }
       }
     }
   }
@@ -129,12 +197,36 @@
   &.sec02 {
     .inner {
       padding: 7rem 0;
+
+      @include mo {
+        padding: 4rem 0;
+      }
     }
     .dev_list {
       display: flex;
       justify-content: center;
       margin-bottom: 5rem;
       gap: 2rem;
+
+      @include pc_1550 {
+        gap: 1rem;
+      }
+
+      @include pc_1280 {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        padding: 0 2rem;
+      }
+
+      @include mo_989 {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      @include mo {
+        grid-template-columns: repeat(4, 1fr);
+        margin-bottom: 0;
+      }
+
 
       li {
         &.active {
@@ -148,15 +240,39 @@
           padding: 1rem 3rem;
           border-radius: 1rem;
           transition: all 0.5s;
+
+          @include pc_1280 {
+            padding: 1rem 2rem;
+          }
+
+          @include mo {
+            padding: 1rem;
+          }
+
           &:hover {
             background: var(--bg-color);
           }
           img {
             margin: 0 auto;
+
+            @include pc_1550 {
+              width: 4rem;
+              height: 4rem;
+            }
+            @include mo {
+              width: 3rem;
+              height: 3rem;
+            }
           }
 
           span {
             font-weight: 500;
+            @include pc_1280 {
+              white-space: nowrap;
+            }
+            @include mo {
+              font-size: 1.4rem;
+            }
           }
         }
       }
@@ -185,12 +301,20 @@
     .inner {
       padding: 10rem 5rem;
       max-width: 168rem;
+
+      @include mo {
+        padding: 5rem 2rem;
+      }
     }
     h2 {
       margin-bottom: 0;
     }
     .mySwiper {
       padding: 7rem 0;
+
+      @include mo {
+        padding: 2rem 0;
+      }
     }
     .swiper-slide {
       .vid_desc {
@@ -242,10 +366,33 @@
   &.sec04 {
     .inner {
       padding: 15rem 0;
+
+      @include pc_1440 {
+        padding: 10rem 2rem;
+      }
+
+      @include mo {
+        padding: 5rem 2rem;
+      }
     }
     .instructor_list {
       display: flex;
       gap: 2rem;
+
+      @include pc_1280 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @include mo {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include mo_500 {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+      }
 
       li {
         border: 0.1rem solid #ccc;
@@ -255,6 +402,10 @@
 
         &:hover {
           transform: scale(1.05);
+
+          @include mo {
+            transform: scale(1);
+          }
         }
 
         a {
@@ -264,11 +415,22 @@
           gap: 2rem;
           padding: 3rem 1.5rem;
 
+          @include mo_500 {
+            padding: 2rem 1rem;
+            align-items: baseline;
+            gap: 1rem;
+          }
+
           img {
             border-radius: 50%;
             border: 0.1rem solid #ccc;
             width: 15rem;
             height: 15rem;
+
+            @include mo_500 {
+              width: 8rem;
+              height: 8rem;
+            }
           }
         }
 
@@ -278,9 +440,16 @@
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+
+            @include mo {
+              font-size: 1.6rem;
+            }
           }
           p {
             line-height: 1.5;
+            @include mo {
+              font-size: 1.4rem;
+            }
           }
         }
       }
@@ -290,6 +459,10 @@
   &.sec05 {
     background: var(--bg-color);
     padding: 15rem 0;
+
+    @include mo {
+      padding: 5rem 0;
+    }
 
     .personaSwiper {
       width: 100%;
@@ -310,12 +483,22 @@
         align-items: center;
         background: #fff;
 
+        @include mo {
+          width: 20rem;
+          height: auto;
+          flex-direction: column;
+        }
+
         .img_box {
           border-radius: 50%;
           min-width: 18rem;
           height: 18rem;
           background: linear-gradient(120deg, #6a83ff77, #6ab5ff75);
           position: relative;
+
+          @include mo {
+            display: none;
+          }
 
           .memoji {
             position: absolute;
@@ -340,6 +523,10 @@
             font-weight: 400;
             line-height: 1.5;
             letter-spacing: -0.12rem;
+
+            @include mo {
+              font-size: 1.4rem;
+            }
           }
           .student_details {
             text-align: right;

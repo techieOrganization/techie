@@ -1,6 +1,10 @@
 .inner {
   max-width: 144rem;
   margin: 0 auto;
+
+  @include pc_1680 {
+    padding: 0 2rem;
+  }
 }
 .section_title {
   font-size: 4rem;

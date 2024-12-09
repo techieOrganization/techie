@@ -1,6 +1,7 @@
 /*반응형 화면 크기*/
 $pc: 1921px;
 $pc_1800: 1800px;
+$pc_1680: 1680px;
 $pc_1550: 1550px;
 $pc_1440: 1440px;
 $pc_1280: 1280px;
@@ -28,6 +29,13 @@ $mo_350: 350px;
 /* 1800px 이상일때 */
 @mixin pc_1800 {
   @media (max-width: $pc_1800) {
+    @content;
+  }
+}
+
+/* 1680px 이상일때 */
+@mixin pc_1680 {
+  @media (max-width: $pc_1680) {
     @content;
   }
 }

@@ -147,12 +147,26 @@ export default function Home() {
           <p className="sub_title">최신 트렌드와 함께 배우세요.</p>
           <Swiper
             spaceBetween={20}
-            slidesPerView={5}
+            slidesPerView={1}
             navigation={true}
             loop={true}
             grabCursor={true}
             modules={[Navigation]}
             className="mySwiper"
+            breakpoints={{
+              1280: {
+                slidesPerView: 5,
+              },
+              989: {
+                slidesPerView: 3,
+              },
+              767: {
+                slidesPerView: 2,
+              },
+              500: {
+                slidesPerView: 1,
+              },
+            }}
           >
             {videos.map((video, index) => (
               <SwiperSlide key={index}>
@@ -200,7 +214,6 @@ export default function Home() {
         <h2>성장한 수강생들의 진솔한 후기✍️</h2>
         <p className="sub_title">함께 이룬 성장을 자랑스럽게 소개합니다.</p>
         <Swiper
-          spaceBetween={20}
           slidesPerView={'auto'}
           loop={true}
           autoplay={{
@@ -210,6 +223,14 @@ export default function Home() {
           speed={3000}
           modules={[Autoplay]}
           className="personaSwiper"
+          breakpoints={{
+            501: {
+              spaceBetween: 20,
+            },
+            500: {
+              spaceBetween: 10,
+            },
+          }}
         >
           {studentData.map((student, index) => (
             <SwiperSlide key={index} className="persona_slide">
