@@ -81,7 +81,7 @@ const Signup = () => {
           type="text"
           name="nickname"
           className="input"
-          placeholder="Techie Project 에서 사용하실 닉네임을 입력해주세요"
+          placeholder="Techie Project 에서 사용하실 닉네임을 입력해주세요."
           onChange={handleChange}
           value={formData.nickname}
           required

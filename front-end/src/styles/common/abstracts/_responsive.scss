@@ -10,7 +10,7 @@ $mo_989: 989px;
 $mo_600: 600px;
 $mo: 767px;
 $mo_500: 500px;
-$mo_350: 350px;
+$mo_330: 330px;
 
 /* pc 사이즈만 */
 @mixin only_pc {
@@ -53,7 +53,7 @@ $mo_350: 350px;
     @content;
   }
 }
-
+// pc
 /* 1280px 이상일때 */
 @mixin pc_1280 {
   @media (max-width: $pc_1280) {
@@ -75,16 +75,17 @@ $mo_350: 350px;
   }
 }
 
-/* 600px 이상일때 */
-@mixin mo_600 {
-  @media (max-width: $mo_600) {
+// 태블릿
+/* 767px 이상일때 */
+@mixin mo {
+  @media (max-width: $mo) {
     @content;
   }
 }
 
-/* 767px 이상일때 */
-@mixin mo {
-  @media (max-width: $mo) {
+/* 600px 이상일때 */
+@mixin mo_600 {
+  @media (max-width: $mo_600) {
     @content;
   }
 }
@@ -95,6 +96,8 @@ $mo_350: 350px;
     @content;
   }
 }
+
+// 모바일
 
 /* 330px 이상일때 */
 @mixin mo_330 {
