@@ -15,6 +15,7 @@ import { formatDuration } from '@/utils/playlist/formatDuration';
 import { devConsoleError } from '@/utils/logger';
 
 import '@/styles/pages/playlist/playlist.scss';
+import axios from 'axios';
 
 interface CategoryPlaylistProps {
   category: string;
@@ -181,8 +182,15 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       await addVideo(playlistName, selectVideo, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      devConsoleError('Failed to add video to playlist', error); // 명확한 메시지와 에러 전달
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 500) {
+          alert('해당 영상은 재생목록 내에 존재하는 영상입니다');
+        } else {
+          devConsoleError('Failed to update video in playlist', error);
+        }
+      }
     }
+
     closeModal();
   };
 

@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import instructorData from '@/data/instructorData';
 import { PlayLists } from '@/types/playlist';
 import { devConsoleError } from '@/utils/logger';
+import axios from 'axios';
 
 const TeacherPlaylist = () => {
   const router = useRouter();
@@ -131,7 +132,13 @@ const TeacherPlaylist = () => {
       await addVideo(playlistName, selectedVideoIds, playlistId, token);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
-      devConsoleError('Failed to add videos to playlist', error);
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 500) {
+          alert('해당 영상은 재생목록 내에 존재하는 영상입니다');
+        } else {
+          devConsoleError('Failed to update video in playlist', error);
+        }
+      }
     }
     closeModal();
   };
