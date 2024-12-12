@@ -69,7 +69,10 @@ export const addVideo = async (
     );
     return response.data;
   } catch (error: unknown) {
-    throw error;
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
+    throw new Error('api 요청 오류');
   }
 };
 
