@@ -14,12 +14,21 @@ const LogoutChatBot = () => {
 
   useEffect(() => {
     const yOffset = 70; // 하단에서의 오프셋
-    const xOffset = 90;
+    const xOffset = 100;
     const handleResize = () => {
       const { innerHeight, innerWidth } = window;
 
-      if (innerWidth > 0) {
+      if (innerWidth > 767) {
         setPosition({ x: innerWidth - xOffset, y: innerHeight - yOffset });
+      }
+      if (innerWidth < 767) {
+        setPosition({ x: innerWidth - xOffset + 20, y: innerHeight - yOffset + 10 });
+      }
+      if (innerWidth < 500) {
+        setPosition({ x: innerWidth - xOffset + 40, y: innerHeight - yOffset + 20 });
+      }
+      if (innerWidth < 330) {
+        setPosition({ x: innerWidth - xOffset + 60, y: innerHeight - yOffset + 25 });
       }
     };
 
@@ -74,7 +83,7 @@ const LogoutChatBot = () => {
       <div className="icon">💬</div>
       <div
         className={`chatbot-content_logout ${isOpen ? 'isOpen' : ''}`}
-        style={{ left: position.x - 380, top: position.y - 50, position: 'fixed' }}
+        style={{ right: 50, bottom: 40, position: 'absolute' }}
       >
         <div onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
           GPT 기능은 &nbsp;

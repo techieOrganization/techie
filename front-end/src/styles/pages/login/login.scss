@@ -1,3 +1,6 @@
+@import '../../common/abstracts/mixins';
+@import '../../common/abstracts/responsive';
+
 .login-container {
   padding: 10rem 0;
 
@@ -6,13 +9,40 @@
     font-weight: 700;
     margin-bottom: 3.2rem;
     text-align: center;
+    @include mo {
+      font-size: 3.2rem;
+    }
+    @include mo_500 {
+      font-size: 3rem;
+    }
+    @include mo_330 {
+      font-size: 2.8rem;
+    }
   }
   .input-wrapper {
     max-width: 50rem;
     margin: 0 auto;
+    @include mo {
+      max-width: 40rem;
+    }
+    @include mo_500 {
+      max-width: 27rem;
+    }
+    @include mo_330 {
+      max-width: 18rem;
+    }
     strong {
       font-size: 1.7rem;
       font-weight: 700;
+      @include mo {
+        font-size: 1.5rem;
+      }
+      @include mo_500 {
+        font-size: 1.2rem;
+      }
+      @include mo_330 {
+        font-size: 1.1rem;
+      }
     }
     input:focus {
       outline: none;
@@ -25,6 +55,15 @@
       width: 100%;
       height: 4.5rem;
       padding: 0 1rem;
+      @include mo {
+        height: 3.8rem;
+      }
+      @include mo_500 {
+        height: 3rem;
+      }
+      @include mo_330 {
+        height: 2.5rem;
+      }
     }
     .email-wrapper {
       margin-bottom: 2rem;
@@ -48,6 +87,18 @@
       width: 100%;
       height: 4.5rem;
       margin-bottom: 3rem;
+      @include mo {
+        height: 3.8rem;
+        font-size: 1.3rem;
+      }
+      @include mo_500 {
+        height: 3rem;
+        font-size: 1.2rem;
+      }
+      @include mo_330 {
+        height: 2.5rem;
+        font-size: 1.1rem;
+      }
     }
   }
 }
