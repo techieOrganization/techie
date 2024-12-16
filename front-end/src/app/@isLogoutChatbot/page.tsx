@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 const LogoutChatBot = () => {
   const [position, setPosition] = useState({ x: 1450, y: 650 });
-  const [contentPosition, setContentPosition] = useState({ x: 1070, y: 600 });
   const [isOpen, setIsOpen] = useState(false);
   const MOVE_THRESHOLD = 10;
 
