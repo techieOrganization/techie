@@ -231,21 +231,21 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
   return (
     <div className="playlists_container">
-      <div className='dev_list_cont'>
+      <div className="dev_list_cont">
         <ul className="dev_list">
-        {vidListData.map((tab) => (
-          <li key={tab.id} className={tab.id === category ? 'active' : ''}>
-            <button
-              type="button"
-              onClick={() => handleCategoryClick(tab.id)}
-              disabled={tab.id === category}
-            >
-              <Image src={tab.img} alt={tab.title} width={40} height={40} />
-              <span>{tab.title}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
+          {vidListData.map((tab) => (
+            <li key={tab.id} className={tab.id === category ? 'active' : ''}>
+              <button
+                type="button"
+                onClick={() => handleCategoryClick(tab.id)}
+                disabled={tab.id === category}
+              >
+                <Image src={tab.img} alt={tab.title} width={40} height={40} />
+                <span>{tab.title}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="video_list_cont">
         <div className="inner">
