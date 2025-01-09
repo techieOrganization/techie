@@ -60,7 +60,9 @@
   }
   .dev_list_cont {
     width: 100%;
-    overflow-x: scroll;
+    @include pc_1280 {
+      overflow-x: scroll;
+    }
   }
   .dev_list {
     display: flex;
