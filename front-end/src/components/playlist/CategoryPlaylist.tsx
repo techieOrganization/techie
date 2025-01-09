@@ -231,7 +231,8 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
 
   return (
     <div className="playlists_container">
-      <ul className="dev_list">
+      <div className='dev_list_cont'>
+        <ul className="dev_list">
         {vidListData.map((tab) => (
           <li key={tab.id} className={tab.id === category ? 'active' : ''}>
             <button
@@ -245,6 +246,7 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           </li>
         ))}
       </ul>
+      </div>
       <div className="video_list_cont">
         <div className="inner">
           {error && <p className="error_message">{error}</p>}
