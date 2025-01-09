@@ -74,6 +74,14 @@
       width: 128rem;
     }
 
+    &.teacher {
+      width: 100%;
+
+      @include mo_989 {
+        width: 100rem;
+      }
+    }
+
     @include mo {
       justify-content: flex-start;
       padding: 2rem;
