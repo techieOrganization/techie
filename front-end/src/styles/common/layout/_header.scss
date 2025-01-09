@@ -108,18 +108,24 @@
     }
   }
   .header_menu_mo_list {
+    position: absolute;
     width: 100%;
     height: 100%;
-    position: absolute;
     top: 0;
-    right: -100%;
-    transition: all 0.5s;
+    right: 0;
     background: #fff;
     z-index: 9999;
     padding: 5rem 2rem;
+    overflow: hidden;
+    transform: translateX(100%);
+    opacity: 0;
+    transition:
+      transform 0.5s ease,
+      opacity 0.5s ease;
 
     &.active {
-      right: 0;
+      transform: translateX(0);
+      opacity: 1;
     }
   }
   .close_button {
