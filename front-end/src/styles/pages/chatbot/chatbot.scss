@@ -1,6 +1,9 @@
+@import '../../common/abstracts/responsive';
+@import '../../common/abstracts/mixins';
+
 .chatbot {
-  width: 50px;
-  height: 50px;
+  width: 5rem;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,17 +12,38 @@
   user-select: none;
   z-index: 1000;
   cursor: pointer;
+  @include mo {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  @include mo_500 {
+    width: 4rem;
+    height: 4rem;
+  }
+  @include mo_330 {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
 }
 
 .icon {
   font-size: 1.5rem;
+  @include mo {
+    font-size: 1.3rem;
+  }
+  @include mo_500 {
+    font-size: 1.1rem;
+  }
+  @include mo_330 {
+    font-size: 1rem;
+  }
 }
 
 .chatbot-content_login {
   width: 50rem;
+  height: 30rem;
   display: flex;
   flex-direction: row;
-  position: fixed;
   opacity: 0;
   transform: scale(0) translateY(-10px);
   transform-origin: bottom right;
@@ -27,7 +51,24 @@
     opacity 0.3s ease,
     transform 0.3s ease;
   gap: 10px;
-  min-width: 620px;
+
+  @include mo {
+    width: 40rem;
+    font-size: 1.2rem;
+    height: 23rem;
+    right: 0;
+    bottom: 0;
+  }
+  @include mo_500 {
+    width: 30rem;
+    font-size: 1rem;
+    height: 20rem;
+  }
+  @include mo_330 {
+    width: 23rem;
+    font-size: 0.8rem;
+    height: 13rem;
+  }
 
   &.isOpen {
     opacity: 1;
@@ -38,14 +79,21 @@
     width: 50%;
     border: 1px solid #c9c9c9;
     border-radius: 10px;
-    min-width: 300px;
-    min-height: 300px;
     resize: none;
     padding: 10px;
     scrollbar-width: thin;
     scrollbar-color: var(--btn-color) #f1f1f1;
     outline: none;
     color: var(--btn-color);
+    @include mo {
+      font-size: 1.2rem;
+    }
+    @include mo_500 {
+      font-size: 1rem;
+    }
+    @include mo_330 {
+      font-size: 0.8rem;
+    }
     :focus {
       outline: none;
     }
@@ -58,8 +106,7 @@
     padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 300px;
-    min-height: 300px;
+    max-height: 30rem;
     user-select: text;
     scrollbar-width: thin;
     scrollbar-color: var(--btn-color) #f1f1f1;
@@ -67,6 +114,15 @@
     p {
       color: white;
       cursor: text;
+      @include mo {
+        font-size: 1.2rem;
+      }
+      @include mo_500 {
+        font-size: 1rem;
+      }
+      @include mo_330 {
+        font-size: 0.8rem;
+      }
     }
   }
 
@@ -75,15 +131,76 @@
     top: 85%;
     right: 2%;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 3rem;
+    height: 3rem;
     background-color: var(--btn-color);
     border-radius: 50%;
+    text-align: center;
+    line-height: 3rem;
     color: white;
+    font-size: 1.5rem;
+    @include mo {
+      width: 2.8rem;
+      height: 2.8rem;
+      line-height: 2.8rem;
+    }
+    @include mo_500 {
+      width: 2.5rem;
+      height: 2.5rem;
+      line-height: 2.5rem;
+      font-size: 1rem;
+    }
+    @include mo_330 {
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+      font-size: 0.8rem;
+      top: 80%;
+    }
+    p {
+      @include mo {
+        font-size: 1.2rem;
+      }
+      @include mo_500 {
+        font-size: 1rem;
+      }
+      @include mo_330 {
+        font-size: 0.8rem;
+      }
+    }
   }
 }
 
 /// 로그아웃
+.chatbot {
+  width: 5rem;
+  height: 5rem;
+  @include mo {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  @include mo_500 {
+    width: 4rem;
+    height: 4rem;
+  }
+  @include mo_330 {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  .icon {
+    font-size: 1.5rem;
+    @include mo {
+      font-size: 1.3rem;
+    }
+    @include mo_500 {
+      font-size: 1.1rem;
+    }
+    @include mo_330 {
+      font-size: 1rem;
+    }
+  }
+}
+
 .chatbot-content_logout {
   width: 25vw;
   display: flex;
@@ -101,13 +218,37 @@
     background-color: var(--btn-color);
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 10px;
     border-radius: 10px;
     color: white;
     font-weight: 700;
     width: 38rem;
+    margin-left: auto;
+    margin-top: auto;
+    @include mo {
+      width: 30rem;
+      font-size: 1.2rem;
+    }
+    @include mo_500 {
+      width: 25rem;
+      font-size: 1rem;
+    }
+    @include mo_330 {
+      width: 20rem;
+      font-size: 0.8rem;
+    }
     .logout-link {
       color: rgb(255, 235, 59);
+      @include mo {
+        font-size: 1.2rem;
+      }
+      @include mo_500 {
+        font-size: 1rem;
+      }
+      @include mo_330 {
+        font-size: 0.8rem;
+      }
     }
   }
 

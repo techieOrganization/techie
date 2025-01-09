@@ -23,8 +23,17 @@ const Chatbot = () => {
     const handleResize = () => {
       const { innerHeight, innerWidth } = window;
 
-      if (innerWidth > 0) {
+      if (innerWidth > 767) {
         setPosition({ x: innerWidth - xOffset, y: innerHeight - yOffset });
+      }
+      if (innerWidth < 767) {
+        setPosition({ x: innerWidth - xOffset + 20, y: innerHeight - yOffset + 10 });
+      }
+      if (innerWidth < 500) {
+        setPosition({ x: innerWidth - xOffset + 40, y: innerHeight - yOffset + 20 });
+      }
+      if (innerWidth < 330) {
+        setPosition({ x: innerWidth - xOffset + 60, y: innerHeight - yOffset + 25 });
       }
     };
 
@@ -120,7 +129,7 @@ const Chatbot = () => {
       <div className="icon">💬</div>
       <div
         className={`chatbot-content_login ${isOpen ? 'isOpen' : ''}`}
-        style={{ left: position.x - 630, top: position.y - 300, position: 'fixed' }}
+        style={{ right: 50, bottom: 40, position: 'absolute' }}
       >
         <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
           <p>{loading ? '응답을 받아오는 중입니다...' : gptResponse}</p>
