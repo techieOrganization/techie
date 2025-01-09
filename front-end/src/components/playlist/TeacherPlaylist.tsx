@@ -185,7 +185,7 @@ const TeacherPlaylist = () => {
   return (
     <div className="playlists_container">
       {/* 강사 리스트 */}
-      <div className='dev_list_cont'>
+      <div className="dev_list_cont">
         <ul className="dev_list teacher">
           {instructorData.map((inst) => (
             <li key={inst.name} className={selected.name === inst.name ? 'active' : ''}>

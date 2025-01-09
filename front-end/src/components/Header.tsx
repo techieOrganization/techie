@@ -122,13 +122,13 @@ const Header = () => {
             )}
           </ul>
         </div>
-        
+
         <div className="header_menu_mo">
           <div className="menu_icon" onClick={toggleMenu}>
             <Image src="/assets/images/main/icon_menu.png" alt="icon_menu" width={25} height={25} />
           </div>
           <div className={`header_menu_mo_list ${isMenuOpen ? 'active' : ''}`}>
-          <Image
+            <Image
               src="/assets/images/main/icon_close_menu.png"
               alt="close_menu"
               className="close_button"
@@ -136,62 +136,65 @@ const Header = () => {
               height={25}
               onClick={toggleMenu}
             />
-          <ul className="menu_list_mo">
-            <li className="menu_item">
-              <Link href="/playlists/ALL">강의 탐색 🔍</Link>
-            </li>
-            <li className="menu_item">
-              <Link href="/teacher-lists">성장 멘토 🌱</Link>
-            </li>
-          </ul>
-          <div className="search_box_mo">
-            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-              <option value="LANG">언어</option>
-              <option value="GAME">게임 개발</option>
-              <option value="BACK">백엔드</option>
-              <option value="MOBILE">모바일</option>
-              <option value="FRONT">프론트엔드</option>
-              <option value="DATA">데이터</option>
-              <option value="AI">인공지능</option>
-              <option value="SEC">보안</option>
-              <option value="CS">CS</option>
-              <option value="CLOUD">클라우드</option>
-            </select>
-
-            <input
-              type="text"
-              placeholder="배우고 싶은 개발 지식을 검색해보세요."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <button type="button" onClick={handleSearch}>
-              <FiSearch size={20} />
-            </button>
-          </div>
-          <div className="auth_box_mo">
-            <ul className="auth_list">
-              {isLoggedIn ? (
-                <>
-                  <li className="auth_item">
-                    <button onClick={handleLogout}>로그아웃</button>
-                  </li>
-                  <li className="auth_item">
-                    <Link href="/mypage">마이페이지</Link>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="auth_item login">
-                    <Link href="/login">로그인</Link>
-                  </li>
-                  <li className="auth_item signup">
-                    <Link href="/signup">회원가입</Link>
-                  </li>
-                </>
-              )}
+            <ul className="menu_list_mo">
+              <li className="menu_item">
+                <Link href="/playlists/ALL">강의 탐색 🔍</Link>
+              </li>
+              <li className="menu_item">
+                <Link href="/teacher-lists">성장 멘토 🌱</Link>
+              </li>
             </ul>
-          </div>
+            <div className="search_box_mo">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="LANG">언어</option>
+                <option value="GAME">게임 개발</option>
+                <option value="BACK">백엔드</option>
+                <option value="MOBILE">모바일</option>
+                <option value="FRONT">프론트엔드</option>
+                <option value="DATA">데이터</option>
+                <option value="AI">인공지능</option>
+                <option value="SEC">보안</option>
+                <option value="CS">CS</option>
+                <option value="CLOUD">클라우드</option>
+              </select>
+
+              <input
+                type="text"
+                placeholder="배우고 싶은 개발 지식을 검색해보세요."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button type="button" onClick={handleSearch}>
+                <FiSearch size={20} />
+              </button>
+            </div>
+            <div className="auth_box_mo">
+              <ul className="auth_list">
+                {isLoggedIn ? (
+                  <>
+                    <li className="auth_item">
+                      <button onClick={handleLogout}>로그아웃</button>
+                    </li>
+                    <li className="auth_item">
+                      <Link href="/mypage">마이페이지</Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="auth_item login">
+                      <Link href="/login">로그인</Link>
+                    </li>
+                    <li className="auth_item signup">
+                      <Link href="/signup">회원가입</Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
