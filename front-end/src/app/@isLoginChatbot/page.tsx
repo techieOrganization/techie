@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import '@/styles/pages/chatbot/chatbot.scss';
 import fetchChatBot from '../api/chatBotApi';
 import Cookies from 'js-cookie';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+// import { useSelector } from 'react-redux';
+// import { RootState } from '@/redux/store';
 import { devConsoleError } from '@/utils/logger';
 
 const Chatbot = () => {
@@ -15,7 +15,7 @@ const Chatbot = () => {
   const [gptlog, setGptlog] = useState<{ user: string; bot: string }[]>([]);
   const MOVE_THRESHOLD = 10;
 
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  // const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
   const toggleTextArea = () => {
     setIsOpen((prev) => !prev);
