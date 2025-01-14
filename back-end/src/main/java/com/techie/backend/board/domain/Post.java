@@ -2,6 +2,8 @@ package com.techie.backend.board.domain;
 
 import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,17 +17,17 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column @NotBlank
     private String title;
 
-    @Column(nullable = false)
+    @Column @Lob @NotBlank
     private String content;
 
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(nullable = false)
+    @Column @NotNull
     @Enumerated(EnumType.STRING)
     private PostCategory category;
 }
