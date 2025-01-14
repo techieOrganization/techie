@@ -5,13 +5,15 @@ import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Table(name = "posts")
 @Entity
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseTime {
 
     @Id
@@ -31,4 +33,20 @@ public class Post extends BaseTime {
     @Column @NotNull
     @Enumerated(EnumType.STRING)
     private PostCategory category;
+
+    @Builder
+    public Post(String title, String content, User user, PostCategory category) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+        this.category = category;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }
