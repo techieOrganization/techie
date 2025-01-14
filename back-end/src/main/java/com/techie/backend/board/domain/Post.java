@@ -1,5 +1,6 @@
 package com.techie.backend.board.domain;
 
+import com.techie.backend.global.BaseTime;
 import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -11,16 +12,16 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Getter
 @RequiredArgsConstructor
-public class Post {
+public class Post extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column @NotBlank
+    @Column @NotBlank(message = "제목은 비어있을 수 없습니다.")
     private String title;
 
-    @Column @Lob @NotBlank
+    @Column @Lob @NotBlank(message = "내용은 비어있을 수 없습니다.")
     private String content;
 
     @JoinColumn(name = "user_id", nullable = false)
