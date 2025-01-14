@@ -151,7 +151,11 @@ export default function Home() {
             navigation={true}
             loop={true}
             grabCursor={true}
-            modules={[Navigation]}
+            modules={[Navigation, Autoplay]}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
             className="mySwiper"
             breakpoints={{
               1280: {

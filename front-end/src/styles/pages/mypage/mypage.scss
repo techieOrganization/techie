@@ -1,9 +1,21 @@
+// abstracts
+@import '../../common/abstracts/mixins';
+@import '../../common/abstracts/responsive';
+
 .mypage_container {
   padding: 10rem 0;
+
+  @include mo {
+    padding: 5rem 0;
+  }
 
   .user_info_section {
     max-width: 50rem;
     margin: 0 auto;
+
+    @include mo {
+      max-width: none;
+    }
   }
 
   strong {
@@ -71,8 +83,20 @@
   display: flex;
   gap: 5rem;
 
+  @include mo {
+    flex-direction: column;
+  }
+
   .left_cont {
     width: 20%;
+
+    @include pc_1280 {
+      width: 30%;
+    }
+
+    @include mo {
+      width: 100%;
+    }
 
     .title {
       font-size: 1.8rem;
@@ -83,6 +107,14 @@
 
   .right_cont {
     width: 80%;
+
+    @include pc_1280 {
+      width: 70%;
+    }
+
+    @include mo {
+      width: 100%;
+    }
 
     .memo_section {
       h2 {
@@ -219,6 +251,10 @@
       padding: 1.5rem 1rem;
       border-bottom: 1px solid #ddd;
       cursor: pointer;
+
+      @include mo {
+        padding: 1rem;
+      }
 
       &.active {
         background: #f9f9f9;
