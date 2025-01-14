@@ -3,15 +3,19 @@ import { useEffect, useState } from 'react';
 import '@/styles/pages/chatbot/chatbot.scss';
 import fetchChatBot from '../api/chatBotApi';
 import Cookies from 'js-cookie';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import { devConsoleError } from '@/utils/logger';
 
 const Chatbot = () => {
   const [position, setPosition] = useState({ x: 1850, y: 1000 });
   const [isOpen, setIsOpen] = useState(false);
   const [textarea, setTextarea] = useState('');
-  const [gptResponse, setGptResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [gptlog, setGptlog] = useState<{ user: string; bot: string }[]>([]);
   const MOVE_THRESHOLD = 10;
+
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
   const toggleTextArea = () => {
     setIsOpen((prev) => !prev);
@@ -91,7 +95,15 @@ const Chatbot = () => {
     try {
       setLoading(true);
       const apiResponse = await fetchChatBot({ request: textarea, token: token });
-      typeResponse(apiResponse.response);
+      // typeResponse(apiResponse.response);
+
+      setGptlog((prev) => [
+        ...prev,
+        {
+          user: textarea,
+          bot: apiResponse.response,
+        },
+      ]);
       setTextarea('');
     } catch (error) {
       devConsoleError('함수요청 오류', error);
@@ -100,18 +112,18 @@ const Chatbot = () => {
     }
   };
 
-  const typeResponse = (text: string) => {
-    setGptResponse('');
-    let index = -1;
-    const interval = setInterval(() => {
-      if (index < text.length - 1) {
-        setGptResponse((prev) => prev + text[index]);
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 50);
-  };
+  // const typeResponse = (text: string) => {
+  //   setGptResponse('');
+  //   let index = -1;
+  //   const interval = setInterval(() => {
+  //     if (index < text.length - 1) {
+  //       setGptResponse((prev) => prev + text[index]);
+  //       index++;
+  //     } else {
+  //       clearInterval(interval);
+  //     }
+  //   }, 50);
+  // };
 
   const keyDownEnter = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -129,10 +141,21 @@ const Chatbot = () => {
       <div className="icon">💬</div>
       <div
         className={`chatbot-content_login ${isOpen ? 'isOpen' : ''}`}
-        style={{ right: 50, bottom: 40, position: 'absolute' }}
+        style={{ left: position.x - 480, top: position.y - 380, position: 'fixed' }}
       >
         <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
-          <p>{loading ? '응답을 받아오는 중입니다...' : gptResponse}</p>
+          <div className="log-container">
+            {gptlog.map((log, index) => (
+              <div className="chatbot-log" key={`${log.user}-${index}`}>
+                {/* {userInfo?.nickname} */}
+                <span className="user-req">{log.user}</span>
+                Techie
+                <span className="bot-res">
+                  {loading ? 'Techie 가 답변을 준비중이에요!..' : log.bot}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
         <textarea
           value={textarea}
