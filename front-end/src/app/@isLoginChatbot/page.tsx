@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 // import { useSelector } from 'react-redux';
 // import { RootState } from '@/redux/store';
 import { devConsoleError } from '@/utils/logger';
+import { text } from 'stream/consumers';
 
 const Chatbot = () => {
   const [position, setPosition] = useState({ x: 1850, y: 1000 });
@@ -26,19 +27,7 @@ const Chatbot = () => {
     const xOffset = 90;
     const handleResize = () => {
       const { innerHeight, innerWidth } = window;
-
-      if (innerWidth > 767) {
-        setPosition({ x: innerWidth - xOffset, y: innerHeight - yOffset });
-      }
-      if (innerWidth < 767) {
-        setPosition({ x: innerWidth - xOffset + 20, y: innerHeight - yOffset + 10 });
-      }
-      if (innerWidth < 500) {
-        setPosition({ x: innerWidth - xOffset + 40, y: innerHeight - yOffset + 20 });
-      }
-      if (innerWidth < 330) {
-        setPosition({ x: innerWidth - xOffset + 60, y: innerHeight - yOffset + 25 });
-      }
+      setPosition({ x: innerWidth - xOffset, y: innerHeight - yOffset });
     };
 
     // 초기 호출
@@ -52,7 +41,6 @@ const Chatbot = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const offsetX = e.clientX - position.x;
     const offsetY = e.clientY - position.y;
@@ -94,16 +82,17 @@ const Chatbot = () => {
     if (!token) return;
     try {
       setLoading(true);
+
+      const newLogEntry = { user: textarea, bot: '' };
+      setGptlog((prev) => [...prev, newLogEntry]);
       const apiResponse = await fetchChatBot({ request: textarea, token: token });
       // typeResponse(apiResponse.response);
 
-      setGptlog((prev) => [
-        ...prev,
-        {
-          user: textarea,
-          bot: apiResponse.response,
-        },
-      ]);
+      setGptlog((prev) =>
+        prev.map((log, index) =>
+          index === prev.length - 1 ? { ...log, bot: apiResponse.response } : log,
+        ),
+      );
       setTextarea('');
     } catch (error) {
       devConsoleError('함수요청 오류', error);
@@ -141,7 +130,7 @@ const Chatbot = () => {
       <div className="icon">💬</div>
       <div
         className={`chatbot-content_login ${isOpen ? 'isOpen' : ''}`}
-        style={{ left: position.x - 480, top: position.y - 380, position: 'fixed' }}
+        style={{ left: position.x - 580, top: position.y - 400, position: 'fixed' }}
       >
         <div className="chatbot-response" onMouseDown={(e) => e.stopPropagation()}>
           <div className="log-container">
@@ -151,7 +140,9 @@ const Chatbot = () => {
                 <span className="user-req">{log.user}</span>
                 Techie
                 <span className="bot-res">
-                  {loading ? 'Techie 가 답변을 준비중이에요!..' : log.bot}
+                  {loading && index === gptlog.length - 1
+                    ? 'Techie 가 답변을 준비중이에요!..'
+                    : log.bot}
                 </span>
               </div>
             ))}
