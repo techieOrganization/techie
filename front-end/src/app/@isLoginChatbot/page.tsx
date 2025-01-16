@@ -6,7 +6,6 @@ import Cookies from 'js-cookie';
 // import { useSelector } from 'react-redux';
 // import { RootState } from '@/redux/store';
 import { devConsoleError } from '@/utils/logger';
-import { text } from 'stream/consumers';
 
 const Chatbot = () => {
   const [position, setPosition] = useState({ x: 1850, y: 1000 });
