@@ -185,20 +185,22 @@ const TeacherPlaylist = () => {
   return (
     <div className="playlists_container">
       {/* 강사 리스트 */}
-      <ul className="dev_list teacher">
-        {instructorData.map((inst) => (
-          <li key={inst.name} className={selected.name === inst.name ? 'active' : ''}>
-            <button
-              type="button"
-              onClick={() => handleTeacherSelect(inst)}
-              disabled={selected.name === inst.name}
-            >
-              <Image src={inst.img} alt={inst.name} width={70} height={70} />
-              <span>{inst.name}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="dev_list_cont">
+        <ul className="dev_list teacher">
+          {instructorData.map((inst) => (
+            <li key={inst.name} className={selected.name === inst.name ? 'active' : ''}>
+              <button
+                type="button"
+                onClick={() => handleTeacherSelect(inst)}
+                disabled={selected.name === inst.name}
+              >
+                <Image src={inst.img} alt={inst.name} width={70} height={70} />
+                <span>{inst.name}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {/* 동영상 리스트 */}
       <div className="video_list_cont">

@@ -1,3 +1,7 @@
+// abstracts
+@import '../../common/abstracts/mixins';
+@import '../../common/abstracts/responsive';
+
 .inner {
   max-width: 144rem;
   margin: 0 auto;
@@ -6,9 +10,15 @@
     padding: 0 2rem;
   }
 }
+
 .section_title {
   font-size: 4rem;
   font-weight: 700;
   margin-bottom: 3.2rem;
   text-align: center;
+
+  @include mo {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
 }

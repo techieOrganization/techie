@@ -16,7 +16,6 @@
     @include mo_500 {
       font-size: 2.3rem;
     }
-
   }
   .sub_title {
     font-size: 1.7rem;
@@ -226,7 +225,6 @@
         grid-template-columns: repeat(4, 1fr);
         margin-bottom: 0;
       }
-
 
       li {
         &.active {

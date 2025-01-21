@@ -1,3 +1,7 @@
+// abstracts
+@import '../../common/abstracts/mixins';
+@import '../../common/abstracts/responsive';
+
 .playlists_container {
   .overlay {
     position: fixed;
@@ -54,13 +58,37 @@
   .inner {
     // padding: 10rem 0;
   }
+  .dev_list_cont {
+    width: 100%;
+    @include pc_1280 {
+      overflow-x: scroll;
+    }
+  }
   .dev_list {
     display: flex;
     justify-content: center;
     text-align: center;
-    padding: 4rem 0;
+    padding: 4rem 2rem;
     border-bottom: 1px solid #ccc;
     gap: 1rem;
+
+    @include pc_1280 {
+      width: 128rem;
+    }
+
+    &.teacher {
+      width: 100%;
+
+      @include mo_989 {
+        width: 100rem;
+      }
+    }
+
+    @include mo {
+      justify-content: flex-start;
+      padding: 2rem;
+      width: 85rem;
+    }
 
     &.teacher {
       li {
@@ -85,6 +113,10 @@
       transition: all 0.3s;
       cursor: pointer;
 
+      @include mo {
+        width: auto;
+      }
+
       &:hover {
         background: var(--bg-color);
       }
@@ -101,8 +133,18 @@
         cursor: pointer;
         gap: 0.5rem;
 
+        @include mo {
+          border: 1px solid #ccc;
+          border-radius: 1rem;
+          padding: 0.5rem 1rem;
+        }
+
         img {
           margin: 0 auto;
+
+          @include mo {
+            display: none;
+          }
         }
         span {
           display: block;
@@ -119,10 +161,26 @@
     padding: 5rem 0;
     margin-bottom: 2rem;
 
+    @include pc_1280 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @include mo_989 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include mo {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     .video_item {
       &:hover {
         img {
           transform: translateY(-10px);
+
+          @include mo {
+            transform: translateY(0px);
+          }
         }
       }
       img {
@@ -130,19 +188,35 @@
         margin-bottom: 1rem;
         border: 1px solid #ccc;
         transition: all 0.3s;
+
+        @include mo {
+          width: 100%;
+        }
       }
       .title {
         font-size: 1.5rem;
         font-weight: 500;
         line-height: 1.5;
         margin-bottom: 1rem;
+
+        @include mo {
+          font-size: 1.4rem;
+        }
       }
       .channel_title {
         font-size: 1.3rem;
+
+        @include mo {
+          font-size: 1.2rem;
+        }
       }
       .date {
         color: #444;
         font-size: 1.25rem;
+
+        @include mo {
+          font-size: 1.2rem;
+        }
       }
       .duration {
         color: var(--sub-btn-color);
@@ -162,6 +236,7 @@
         margin-left: 80%;
         cursor: pointer;
         transition: 0.5s ease;
+
         &:hover {
           transform: rotateZ(-45deg);
         }
@@ -200,6 +275,11 @@
 }
 .video_player_container {
   padding: 5rem;
+
+  @include pc_1280 {
+    padding: 5rem 2rem;
+  }
+
   .inner {
     padding: 5rem 0;
   }
@@ -209,19 +289,37 @@
       font-weight: 600;
       margin-bottom: 2rem;
       letter-spacing: -1.2px;
+
+      @include mo {
+        font-size: 2rem;
+      }
     }
   }
   .video_frame_and_memo {
     display: flex;
     // gap: 2rem;
 
+    @include pc_1280 {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
     iframe {
       width: 100%;
       height: 60rem;
+
+      @include mo {
+        height: 30vh;
+      }
     }
     .memo_container {
       width: 80%;
       padding: 0 5rem;
+
+      @include pc_1280 {
+        width: 100%;
+        padding: 0;
+      }
 
       .memo_list {
         height: 30rem;
