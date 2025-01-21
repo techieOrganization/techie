@@ -12,7 +12,7 @@ public class PostResponse {
     private String content;
     private PostCategory category;
     private LocalDateTime writtenAt;
-    private Long userId;
+    private String email;
     private String nickname;
 
     public PostResponse(Post post) {
@@ -20,7 +20,7 @@ public class PostResponse {
         this.content = post.getContent();
         this.category = post.getCategory();
         this.writtenAt = post.getUpdatedAt();
-        this.userId = post.getUser().getId();
+        this.email = post.getUser().getEmail();
         this.nickname = post.getUser().getNickname();
     }
 }

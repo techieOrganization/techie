@@ -39,13 +39,18 @@ public class PostController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<Page<PostResponse>> getMyPost(Pageable pageable,
-                                                        @AuthenticationPrincipal UserDetailsCustom userDetails) {
-        Page<PostResponse> myPosts = postServiceImpl.getMyPost(pageable, userDetails);
+    public ResponseEntity<Page<PostResponse>> getMyPosts(@AuthenticationPrincipal UserDetailsCustom userDetails,
+                                                         Pageable pageable) {
+        Page<PostResponse> myPosts = postServiceImpl.getMyPosts(userDetails, pageable);
         return ResponseEntity.ok(myPosts);
     }
 
     @GetMapping("/{id}")
+    public ResponseEntity<Page<PostResponse>> getYourPosts(@PathVariable Long id,
+                                                           Pageable pageable) {
+        Page<PostResponse> yourPosts = postServiceImpl.getYourPosts(id, pageable);
+        return ResponseEntity.ok(yourPosts);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> updatePost(@RequestBody PostRequest.Update updateRequest,

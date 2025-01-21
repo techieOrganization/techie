@@ -7,6 +7,7 @@ import com.techie.backend.board.repository.PostRepository;
 import com.techie.backend.global.mapper.PostMapper;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.user.domain.User;
+import com.techie.backend.user.repository.UserRepository;
 import com.techie.backend.user.service.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -37,15 +38,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostResponse> getMyPost(Pageable pageable, UserDetailsCustom userDetails) {
+    public Page<PostResponse> getMyPosts(UserDetailsCustom userDetails, Pageable pageable) {
         User user = userService.getUserFromSecurityContext(userDetails);
-        return postRepository.searchAllByUser(pageable, user)
-                .map(postMapper::toDto);
+        return getPosts(user, pageable);
     }
 
     @Override
-    public PostResponse getPostById(Long postId, UserDetailsCustom userDetails) {
-        return null;
+    public Page<PostResponse> getYourPosts(Long userId, Pageable pageable) {
+        User user = userService.getUserById(userId);
+        return getPosts(user, pageable);
+    }
+
+    public Page<PostResponse> getPosts(User user, Pageable pageable) {
+        Page<Post> posts = postRepository.searchAllByUser(pageable, user);
+        if(posts.isEmpty()) {
+            throw new EntityNotFoundException("해당 사용자의 게시물이 없습니다.");
+        }
+        return posts.map(postMapper::toDto);
     }
 
     @Override
