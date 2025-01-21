@@ -17,6 +17,6 @@ public class PostResponse {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
-        this.writtenAt = post.getCreatedAt();
+        this.writtenAt = post.getUpdatedAt();
     }
 }

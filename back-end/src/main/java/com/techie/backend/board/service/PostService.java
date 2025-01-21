@@ -11,7 +11,8 @@ public interface PostService {
     // CREATE
     public PostResponse createPost(PostRequest postRequest, UserDetailsCustom userDetails);
     // READ
-    public PostResponse getPost(Long id, UserDetailsCustom userDetails);
+    public Page<PostResponse> getMyPost(Pageable pageable, UserDetailsCustom userDetails);
+    public PostResponse getPostById(Long postId, UserDetailsCustom userDetails);
     public Page<PostResponse> getPostList(Pageable pageable, UserDetailsCustom userDetails);
 
     // UPDATE
