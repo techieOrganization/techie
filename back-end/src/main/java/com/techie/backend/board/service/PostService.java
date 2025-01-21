@@ -5,7 +5,6 @@ import com.techie.backend.board.dto.PostResponse;
 import com.techie.backend.global.security.UserDetailsCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 public interface PostService {
     // CREATE

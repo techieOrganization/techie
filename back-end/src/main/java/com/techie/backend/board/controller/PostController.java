@@ -21,7 +21,7 @@ TODO
  ----------------
  5. 글 작성하기 V
  6. 글 수정하기 V
- 7. 글 삭제하기
+ 7. 글 삭제하기 V
  */
 
 @RestController
@@ -44,6 +44,8 @@ public class PostController {
         Page<PostResponse> myPosts = postServiceImpl.getMyPost(pageable, userDetails);
         return ResponseEntity.ok(myPosts);
     }
+
+    @GetMapping("/{id}")
 
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> updatePost(@RequestBody PostRequest.Update updateRequest,
