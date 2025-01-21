@@ -21,4 +21,9 @@ public class PostMapper {
         return new PostResponse(post);
     }
 
+    public void updateDto(PostRequest.Update updateRequest, Post post) {
+        post.changeTitle(updateRequest.getTitle());
+        post.changeContent(updateRequest.getContent());
+    }
+
 }

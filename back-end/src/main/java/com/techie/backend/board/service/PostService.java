@@ -16,8 +16,8 @@ public interface PostService {
     public Page<PostResponse> getPostList(Pageable pageable, UserDetailsCustom userDetails);
 
     // UPDATE
-    public PostResponse updatePost(Long id, PostRequest postRequest, UserDetailsCustom userDetails);
+    public PostResponse updatePost(Long id, PostRequest.Update updateRequest, UserDetailsCustom userDetails);
 
     // DELETE
-    public PostResponse deletePost(Long id, UserDetailsCustom userDetails);
+    public void deletePost(Long id, UserDetailsCustom userDetails);
 }
