@@ -1,11 +1,12 @@
 package com.techie.backend.board.controller;
 
+import com.techie.backend.board.domain.PostCategory;
 import com.techie.backend.board.dto.PostRequest;
 import com.techie.backend.board.dto.PostResponse;
-import com.techie.backend.board.service.PostService;
 import com.techie.backend.board.service.PostServiceImpl;
 import com.techie.backend.global.security.UserDetailsCustom;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 /*
 TODO
  1. 나의 글 찾기 V
- 2. 다른 유저 글 찾기
- 3. 모든 글 찾기
+ 2. 다른 유저 글 찾기 V
+ 3. 모든 글 찾기 V
  4. 제목+내용 글 찾기
  ----------------
  5. 글 작성하기 V
@@ -27,6 +28,7 @@ TODO
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/post")
+@Slf4j
 public class PostController {
 
     private final PostServiceImpl postServiceImpl;
@@ -51,6 +53,14 @@ public class PostController {
         Page<PostResponse> yourPosts = postServiceImpl.getYourPosts(id, pageable);
         return ResponseEntity.ok(yourPosts);
     }
+
+    @GetMapping("category/{category}")
+    public ResponseEntity<Page<PostResponse>> getPostsByCategory(@PathVariable("category") PostCategory category,
+                                                                 Pageable pageable) {
+        Page<PostResponse> posts = postServiceImpl.getAllPosts(category, pageable);
+        return ResponseEntity.ok(posts);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> updatePost(@RequestBody PostRequest.Update updateRequest,

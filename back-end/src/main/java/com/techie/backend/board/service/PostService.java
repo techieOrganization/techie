@@ -1,5 +1,6 @@
 package com.techie.backend.board.service;
 
+import com.techie.backend.board.domain.PostCategory;
 import com.techie.backend.board.dto.PostRequest;
 import com.techie.backend.board.dto.PostResponse;
 import com.techie.backend.global.security.UserDetailsCustom;
@@ -12,7 +13,7 @@ public interface PostService {
     // READ
     public Page<PostResponse> getMyPosts(UserDetailsCustom userDetails, Pageable pageable);
     public Page<PostResponse> getYourPosts(Long userId, Pageable pageable);
-    public Page<PostResponse> getPostList(Pageable pageable, UserDetailsCustom userDetails);
+    Page<PostResponse> getAllPosts(PostCategory category, Pageable pageable);
 
     // UPDATE
     public PostResponse updatePost(Long id, PostRequest.Update updateRequest, UserDetailsCustom userDetails);
