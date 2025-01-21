@@ -13,17 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-/*
-TODO
- 1. 나의 글 찾기 V
- 2. 다른 유저 글 찾기 V
- 3. 모든 글 찾기 V
- 4. 제목+내용 글 찾기
- ----------------
- 5. 글 작성하기 V
- 6. 글 수정하기 V
- 7. 글 삭제하기 V
- */
 
 @RestController
 @RequiredArgsConstructor
@@ -55,12 +44,19 @@ public class PostController {
     }
 
     @GetMapping("category/{category}")
-    public ResponseEntity<Page<PostResponse>> getPostsByCategory(@PathVariable("category") PostCategory category,
+    public ResponseEntity<Page<PostResponse>> getPostsByCategory(@PathVariable PostCategory category,
                                                                  Pageable pageable) {
         Page<PostResponse> posts = postServiceImpl.getAllPosts(category, pageable);
         return ResponseEntity.ok(posts);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<PostResponse>> searchPost(@RequestParam PostCategory category,
+                                                         @RequestParam String query,
+                                                         Pageable pageable) {
+        Page<PostResponse> posts = postServiceImpl.searchPost(category, query, pageable);
+        return ResponseEntity.ok(posts);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> updatePost(@RequestBody PostRequest.Update updateRequest,

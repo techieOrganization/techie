@@ -9,7 +9,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> searchAllByUser(Pageable pageable, User user);
     Page<Post> searchAllByCategory(Pageable pageable, PostCategory category);
+
+    @Query("""
+           SELECT p FROM Post p
+           WHERE p.category = :category
+           AND (p.title LIKE %:query% OR p.content LIKE %:query%)
+           """)
+    Page<Post> searchByQuery(Pageable pageable, PostCategory category, @Param("query") String query);
 }

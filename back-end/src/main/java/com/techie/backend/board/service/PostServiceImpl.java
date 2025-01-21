@@ -9,7 +9,6 @@ import com.techie.backend.global.mapper.PostMapper;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.service.UserService;
-import com.techie.backend.video.domain.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +61,11 @@ public class PostServiceImpl implements PostService {
     public Page<PostResponse> getAllPosts(PostCategory category, Pageable pageable) {
         // 게시글이 없다면 빈 페이지 반환
         return postRepository.searchAllByCategory(pageable, category).map(postMapper::toDto);
+    }
+
+    public Page<PostResponse> searchPost(PostCategory postCategory, String query, Pageable pageable) {
+        // 게시글이 없다면 빈 페이지 반환
+        return postRepository.searchByQuery(pageable, postCategory, query).map(postMapper::toDto);
     }
 
     @Override
