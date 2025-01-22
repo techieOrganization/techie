@@ -5,6 +5,7 @@ import com.techie.backend.board.domain.PostCategory;
 import com.techie.backend.board.dto.PostRequest;
 import com.techie.backend.board.dto.PostResponse;
 import com.techie.backend.board.repository.PostRepository;
+import com.techie.backend.global.exception.user.NoChangesException;
 import com.techie.backend.global.mapper.PostMapper;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.user.domain.User;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -84,12 +87,14 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public void deletePost(Long id, UserDetailsCustom userDetails) {
-        Post post = postRepository.findById(id).orElseThrow(() 
-                                                -> new EntityNotFoundException("게시글이 없습니다."));
+    @Transactional
+    public void deletePost(PostRequest.Delete delRequest, UserDetailsCustom userDetails) {
+        List<Long> postIds = delRequest.getPostIds();
+        if(postIds == null || postIds.isEmpty()) {
+            throw new NoChangesException();
+        }
         User user = userService.getUserFromSecurityContext(userDetails);
-        validateOwner(user, post);
-        postRepository.delete(post);
+        postRepository.deleteAllByIds(postIds, user.getId());
     }
 
     private void validateOwner(User user, Post post) {

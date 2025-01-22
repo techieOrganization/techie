@@ -19,5 +19,5 @@ public interface PostService {
     public PostResponse updatePost(Long id, PostRequest.Update updateRequest, UserDetailsCustom userDetails);
 
     // DELETE
-    public void deletePost(Long id, UserDetailsCustom userDetails);
+    public void deletePost(PostRequest.Delete delRequest, UserDetailsCustom userDetails);
 }

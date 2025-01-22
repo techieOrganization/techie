@@ -66,10 +66,10 @@ public class PostController {
         return ResponseEntity.ok(postResponse);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id,
+    @DeleteMapping
+    public ResponseEntity<Void> deletePost(@RequestBody PostRequest.Delete delRequest,
                                            @AuthenticationPrincipal UserDetailsCustom userDetails) {
-        postServiceImpl.deletePost(id, userDetails);
+        postServiceImpl.deletePost(delRequest, userDetails);
         return ResponseEntity.noContent().build();
     }
 }
