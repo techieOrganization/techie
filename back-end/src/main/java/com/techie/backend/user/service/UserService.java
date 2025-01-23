@@ -11,4 +11,5 @@ public interface UserService {
     Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request);
     User getUserFromSecurityContext(UserDetailsCustom userDetailsCustom);
     Boolean deleteUser(UserDetailsCustom userDetails, UserRequest.Delete request);
+    User getUserById(Long id);
 }
