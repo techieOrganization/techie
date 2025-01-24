@@ -2,11 +2,13 @@ package com.techie.backend.comment.controller;
 
 import com.techie.backend.board.domain.Post;
 import com.techie.backend.board.repository.PostRepository;
+import com.techie.backend.comment.domain.Comment;
 import com.techie.backend.comment.dto.CommentRequest;
 import com.techie.backend.comment.dto.CommentResponse;
 import com.techie.backend.comment.repository.CommentRepository;
 import com.techie.backend.comment.service.CommentService;
 import com.techie.backend.global.security.UserDetailsCustom;
+import com.techie.backend.user.domain.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +54,8 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long postId,
                                               @PathVariable Long commentId,
                                               @AuthenticationPrincipal UserDetailsCustom userDetailsCustom) {
-        return null;
+
+        commentService.deleteComment(postId, commentId, userDetailsCustom);
+        return ResponseEntity.noContent().build();
     }
 }

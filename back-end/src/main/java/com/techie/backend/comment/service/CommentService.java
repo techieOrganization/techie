@@ -13,4 +13,6 @@ public interface CommentService {
     List<CommentResponse> getCommentsByPostId(Long postId);
 
     void updateComment(Long postId, Long commentId, CommentRequest.Update updateRequest, UserDetailsCustom userDetailsCustom);
+
+    void deleteComment(Long postId, Long commentId, UserDetailsCustom userDetailsCustom);
 }

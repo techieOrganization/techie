@@ -64,7 +64,6 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
-
         User user = userService.getUserFromSecurityContext(userDetailsCustom);
 
         if (!comment.getUser().getId().equals(user.getId())) {
@@ -74,6 +73,19 @@ public class CommentServiceImpl implements CommentService {
         comment.updateContent(updateRequest.getContent());
     }
 
+    @Override
+    public void deleteComment(Long postId,
+                              Long commentId,
+                              UserDetailsCustom userDetailsCustom) {
 
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+        User user = userService.getUserFromSecurityContext(userDetailsCustom);
+
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("댓글 작성자가 아닙니다.");
+        }
+        commentRepository.delete(comment);
+    }
 
 }
