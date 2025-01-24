@@ -35,6 +35,7 @@ public class CommentServiceImpl implements CommentService {
                                          UserDetailsCustom userDetails) {
 
         User user = userService.getUserFromSecurityContext(userDetails);
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
 
@@ -46,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentResponse> getCommentsByPostId(Long postId) {
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
 
@@ -62,8 +64,9 @@ public class CommentServiceImpl implements CommentService {
                               CommentRequest.Update updateRequest,
                               UserDetailsCustom userDetailsCustom) {
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+        Comment comment = commentRepository.findCommentByPostIdAndCommentId(postId, commentId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 게시물에 댓글이 존재하지 않습니다."));
+
         User user = userService.getUserFromSecurityContext(userDetailsCustom);
 
         if (!comment.getUser().getId().equals(user.getId())) {
@@ -72,6 +75,7 @@ public class CommentServiceImpl implements CommentService {
 
         comment.updateContent(updateRequest.getContent());
     }
+
 
     @Override
     public void deleteComment(Long postId,
