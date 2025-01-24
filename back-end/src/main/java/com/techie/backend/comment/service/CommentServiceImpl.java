@@ -16,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponse createComment(Long postId,
                                          CommentRequest commentRequest,
                                          UserDetailsCustom userDetails) {
+
         User user = userService.getUserFromSecurityContext(userDetails);
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
@@ -39,4 +43,37 @@ public class CommentServiceImpl implements CommentService {
 
         return commentMapper.toDto(createComment);
     }
+
+    @Override
+    public List<CommentResponse> getCommentsByPostId(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+
+        List<Comment> comments = commentRepository.findByPost(post);
+
+        return comments.stream()
+                .map(commentMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateComment(Long postId,
+                              Long commentId,
+                              CommentRequest.Update updateRequest,
+                              UserDetailsCustom userDetailsCustom) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+
+        User user = userService.getUserFromSecurityContext(userDetailsCustom);
+
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("댓글 작성자가 아닙니다.");
+        }
+
+        comment.updateContent(updateRequest.getContent());
+    }
+
+
+
 }
