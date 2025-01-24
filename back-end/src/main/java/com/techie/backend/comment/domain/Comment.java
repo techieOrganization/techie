@@ -1,6 +1,7 @@
 package com.techie.backend.comment.domain;
 
 import com.techie.backend.board.domain.Post;
+import com.techie.backend.global.BaseTime;
 import com.techie.backend.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comment")
-public class Comment {
+public class Comment extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
