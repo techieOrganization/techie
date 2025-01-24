@@ -6,4 +6,8 @@ import lombok.Data;
 public class CommentRequest {
     private String content;
 
+    @Data
+    public static class Update {
+        private String content;
+    }
 }
