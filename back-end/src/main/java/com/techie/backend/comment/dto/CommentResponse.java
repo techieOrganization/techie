@@ -1,20 +1,22 @@
 
 package com.techie.backend.comment.dto;
 
+import com.techie.backend.comment.domain.Comment;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 public class CommentResponse {
-    private Long id;
     private String content;
     private String writerNickname;
-    private Long postId;
+    private LocalDateTime createDate;
 
-    public CommentResponse(Long id, String content, String writerNickname, Long postId) {
-        this.id = id;
-        this.content = content;
-        this.writerNickname = writerNickname;
-        this.postId = postId;
+    public CommentResponse(Comment comment) {
+
+        this.content = comment.getContent();
+        this.writerNickname = comment.getUser().getNickname();
+        this.createDate = comment.getPost().getCreatedAt();
     }
 
 }
