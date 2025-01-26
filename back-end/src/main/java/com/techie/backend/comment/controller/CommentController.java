@@ -1,9 +1,7 @@
 package com.techie.backend.comment.controller;
 
-import com.techie.backend.board.repository.PostRepository;
 import com.techie.backend.comment.dto.CommentRequest;
 import com.techie.backend.comment.dto.CommentResponse;
-import com.techie.backend.comment.repository.CommentRepository;
 import com.techie.backend.comment.service.CommentService;
 import com.techie.backend.global.security.UserDetailsCustom;
 import lombok.RequiredArgsConstructor;
