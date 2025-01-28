@@ -38,6 +38,12 @@
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 5px;
+      @include mo {
+        font-size: 1.2rem;
+      }
+      @include mo_500 {
+        font-size: 1rem;
+      }
     }
 
     button {
@@ -51,6 +57,12 @@
 
       &:hover {
         background-color: #5a9bdb; // 버튼 호버 색상
+      }
+      @include mo {
+        font-size: 1.2rem;
+      }
+      @include mo_500 {
+        font-size: 1rem;
       }
     }
   }
@@ -240,6 +252,12 @@
         &:hover {
           transform: rotateZ(-45deg);
         }
+        @include mo {
+          font-size: 1.5rem;
+        }
+        @include mo_500 {
+          font-size: 1.3rem;
+        }
       }
       .bar-nav {
         opacity: 0;
@@ -428,7 +446,6 @@
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100vh;
-
   .modal_content {
     position: absolute;
     top: 50%;
@@ -447,6 +464,12 @@
     overflow: auto;
     max-height: 70vh;
     overflow-x: auto;
+    @include mo {
+      font-size: 1.2rem;
+    }
+    @include mo_500 {
+      font-size: 1rem;
+    }
     .playlist_content_container {
       width: 100%;
       .playlist_item {
@@ -462,6 +485,14 @@
           width: 2rem;
           height: 2rem;
           cursor: pointer;
+          @include mo {
+            width: 1.5rem;
+            height: 1.5rem;
+          }
+          @include mo_500 {
+            width: 1.3rem;
+            height: 1.3rem;
+          }
         }
         &:hover .deleteBtn {
           visibility: visible;
@@ -478,6 +509,21 @@
           transition:
             opacity 0.3s ease,
             visibility 0.3s ease;
+          @include mo {
+            font-size: 0.7rem;
+          }
+          @include mo_500 {
+            font-size: 0.5rem;
+          }
+        }
+        h3 {
+          font-size: 1.5rem;
+          @include mo {
+            font-size: 1.2rem;
+          }
+          @include mo_500 {
+            font-size: 1rem;
+          }
         }
       }
     }

@@ -1,3 +1,6 @@
+@import '../../common/abstracts/responsive';
+@import '../../common/abstracts/mixins';
+
 .video_container {
   width: 100vw;
   display: flex;

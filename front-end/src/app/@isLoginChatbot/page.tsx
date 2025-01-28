@@ -26,6 +26,7 @@ const Chatbot = () => {
     const xOffset = 90;
     const handleResize = () => {
       const { innerHeight, innerWidth } = window;
+
       setPosition({ x: innerWidth - xOffset, y: innerHeight - yOffset });
     };
 
@@ -137,7 +138,8 @@ const Chatbot = () => {
               <div className="chatbot-log" key={`${log.user}-${index}`}>
                 {/* {userInfo?.nickname} */}
                 <span className="user-req">{log.user}</span>
-                Techie
+                <span className="bot-name">Techie</span>
+
                 <span className="bot-res">
                   {loading && index === gptlog.length - 1
                     ? 'Techie 가 답변을 준비중이에요!..'
