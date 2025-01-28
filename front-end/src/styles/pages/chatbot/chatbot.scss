@@ -40,10 +40,10 @@
 }
 
 .chatbot-content_login {
-  width: 50rem;
-  height: 30rem;
+  width: 55rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  position: fixed;
   opacity: 0;
   transform: scale(0) translateY(-10px);
   transform-origin: bottom right;
@@ -51,24 +51,7 @@
     opacity 0.3s ease,
     transform 0.3s ease;
   gap: 10px;
-
-  @include mo {
-    width: 40rem;
-    font-size: 1.2rem;
-    height: 23rem;
-    right: 0;
-    bottom: 0;
-  }
-  @include mo_500 {
-    width: 30rem;
-    font-size: 1rem;
-    height: 20rem;
-  }
-  @include mo_330 {
-    width: 23rem;
-    font-size: 0.8rem;
-    height: 13rem;
-  }
+  min-width: 320px;
 
   &.isOpen {
     opacity: 1;
@@ -76,52 +59,68 @@
   }
 
   textarea {
-    width: 50%;
-    border: 1px solid #c9c9c9;
+    width: 100%;
+    border: 1px solid gainsboro;
     border-radius: 10px;
+    min-width: 300px;
+    min-height: 100px;
     resize: none;
     padding: 10px;
     scrollbar-width: thin;
     scrollbar-color: var(--btn-color) #f1f1f1;
     outline: none;
     color: var(--btn-color);
-    @include mo {
-      font-size: 1.2rem;
-    }
-    @include mo_500 {
-      font-size: 1rem;
-    }
-    @include mo_330 {
-      font-size: 0.8rem;
-    }
     :focus {
       outline: none;
     }
   }
 
   .chatbot-response {
-    width: 50%;
+    width: 100%;
     background-color: #2c3e50;
     border-radius: 10px;
     padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 30rem;
+    max-height: 300px;
+    min-height: 300px;
     user-select: text;
     scrollbar-width: thin;
     scrollbar-color: var(--btn-color) #f1f1f1;
     cursor: auto;
-    p {
-      color: white;
+    .log-container {
       cursor: text;
-      @include mo {
-        font-size: 1.2rem;
+      color: white;
+      flex-direction: column;
+      display: flex;
+      gap: 8rem;
+      span {
+        color: var(--btn-color);
+        padding: 1rem;
       }
-      @include mo_500 {
-        font-size: 1rem;
-      }
-      @include mo_330 {
-        font-size: 0.8rem;
+      .chatbot-log {
+        display: grid;
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        color: white;
+
+        .user-req {
+          justify-self: end;
+          text-align: right;
+
+          background-color: var(--btn-color);
+          color: white;
+          border-radius: 2rem;
+          max-width: fit-content;
+          margin-right: 1rem;
+        }
+        .bot-res {
+          text-align: left;
+          justify-self: start;
+          background-color: white;
+          border-radius: 2rem;
+          margin-left: 2rem;
+        }
       }
     }
   }
