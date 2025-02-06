@@ -12,12 +12,12 @@ export default function PostForm() {
   };
 
   return (
-    <div className='posts_container'>
+    <div className="posts_container">
       <div className="inner">
-        <h2 className='section_title'>커뮤니티 게시판</h2>
+        <h2 className="section_title">커뮤니티 게시판</h2>
         <label>카테고리</label>
-        <select 
-          value={newPost.category} 
+        <select
+          value={newPost.category}
           onChange={(e) => setNewPost({ ...newPost, category: e.target.value })}
         >
           <option value="FREE">자유게시판</option>

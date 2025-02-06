@@ -19,18 +19,20 @@ const dummyPost: Post = {
   category: 'FREE',
   writtenAt: '2025-02-04 14:30',
   email: 'user@example.com',
-  nickname: '김혜인'
+  nickname: '김혜인',
 };
 
 export default function PostDetail({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   return (
-    <div className='posts_container'>
+    <div className="posts_container">
       <div className="inner">
         <h2>{dummyPost.title}</h2>
         <p>카테고리: {dummyPost.category === 'FREE' ? '자유게시판' : '질문게시판'}</p>
-        <p>작성자: {dummyPost.nickname} ({dummyPost.email})</p>
+        <p>
+          작성자: {dummyPost.nickname} ({dummyPost.email})
+        </p>
         <p>작성일: {dummyPost.writtenAt}</p>
         <p>{dummyPost.content}</p>
 

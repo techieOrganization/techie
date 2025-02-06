@@ -16,9 +16,9 @@ export default function PostEdit({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className='posts_container'>
+    <div className="posts_container">
       <div className="inner">
-        <h2 className='section_title'>게시글 수정</h2>
+        <h2 className="section_title">게시글 수정</h2>
         <label>카테고리</label>
         <select
           value={post.category}
