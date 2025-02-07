@@ -33,6 +33,7 @@
     }
 
     input[type='text'] {
+      // 재생목록 이름
       width: 100%;
       padding: 0.5rem;
       margin-bottom: 1rem;
@@ -42,11 +43,15 @@
         font-size: 1.2rem;
       }
       @include mo_500 {
-        font-size: 1rem;
+        font-size: 0.9rem;
+      }
+      @include mo_330 {
+        font-size: 0.7rem;
       }
     }
 
-    button {
+    .add_playlist {
+      // 재생목록 추가 버튼
       background-color: #6ab5ffd5;
       color: white;
       border: none;
@@ -54,15 +59,26 @@
       padding: 0.5rem 1rem;
       cursor: pointer;
       margin: 0.5rem 0;
+      font-size: 1.5rem;
+      @include mo {
+      }
+      @include mo_500 {
+      }
 
       &:hover {
         background-color: #5a9bdb; // 버튼 호버 색상
       }
       @include mo {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        width: 70%;
       }
       @include mo_500 {
-        font-size: 1rem;
+        font-size: 0.8rem;
+        width: 70%;
+      }
+      @include mo_330 {
+        font-size: 0.7rem;
+        width: 70%;
       }
     }
   }
@@ -237,6 +253,7 @@
         margin-bottom: 0.5rem;
       }
       .button {
+        // + 버튼
         background-color: #6ab5ffd5;
         font-size: 1.8rem;
         color: white;
@@ -251,12 +268,6 @@
 
         &:hover {
           transform: rotateZ(-45deg);
-        }
-        @include mo {
-          font-size: 1.5rem;
-        }
-        @include mo_500 {
-          font-size: 1.3rem;
         }
       }
       .bar-nav {
@@ -466,9 +477,40 @@
     overflow-x: auto;
     @include mo {
       font-size: 1.2rem;
+      width: 50vw;
     }
     @include mo_500 {
       font-size: 1rem;
+      width: 50vw;
+    }
+    .mo-close-btn {
+      visibility: hidden;
+      position: absolute;
+      top: 3%;
+      right: 3%;
+      font-size: 1rem;
+      background-color: var(--btn-color);
+      color: white;
+      padding: 0rem 0.6rem;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+      @include mo {
+        visibility: visible;
+      }
+      @include mo_500 {
+        visibility: visible;
+        font-size: 0.6rem;
+        padding: 0rem 0.4rem;
+      }
+      @include mo_330 {
+        visibility: visible;
+        font-size: 0.5rem;
+        padding: 0rem 0.3rem;
+      }
     }
     .playlist_content_container {
       width: 100%;
@@ -502,18 +544,36 @@
         .deleteBtn {
           background-color: red;
           text-align: center;
-          font-size: 1rem;
+          font-size: 1.1rem;
           font-weight: 600;
           opacity: 0;
           visibility: hidden;
           transition:
             opacity 0.3s ease,
             visibility 0.3s ease;
+          padding: 0.3rem 0.6rem;
+          color: white;
+          border-radius: 5px;
+          margin-bottom: 3px;
           @include mo {
             font-size: 0.7rem;
+            opacity: 1;
+            visibility: visible;
+            padding: 0.3rem, 0.5rem;
           }
           @include mo_500 {
             font-size: 0.5rem;
+            opacity: 1;
+            visibility: visible;
+            padding: 0.3rem 0.4rem;
+            margin-bottom: 3px;
+          }
+          @include mo_330 {
+            opacity: 1;
+            visibility: visible;
+            font-size: 0.5rem;
+            padding: 0.2rem 0.4rem;
+            margin-bottom: 1px;
           }
         }
         h3 {

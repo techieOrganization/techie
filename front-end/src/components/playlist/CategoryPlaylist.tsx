@@ -313,6 +313,14 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
             <div className="modal_content" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="mo-close-btn"
+                onClick={() => {
+                  closeModal();
+                }}
+              >
+                X
+              </button>
               사용자 재생목록
               <input
                 type="text"
