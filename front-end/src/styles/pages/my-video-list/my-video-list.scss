@@ -9,6 +9,7 @@
   height: 70vh;
   align-items: center;
   gap: 4rem;
+  margin-bottom: 5.5rem;
 }
 .video-item-container {
   display: flex;
@@ -36,6 +37,16 @@
     font-size: 1.5rem;
     font-weight: bold;
     padding: 1rem 2rem;
+    @include tablet {
+      width: 25vw;
+    }
+    @include mo {
+      width: 38vw;
+    }
+    @include mo_330 {
+      width: 75vw;
+      min-height: 15vh;
+    }
     &:hover {
       transform: translateY(-10px);
       .deleteBtn {
@@ -68,4 +79,7 @@
   font-weight: bold;
   margin-top: 5rem;
   margin-bottom: 3rem;
+  @include mo_330 {
+    font-size: 3rem;
+  }
 }
