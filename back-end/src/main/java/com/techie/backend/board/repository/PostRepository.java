@@ -24,6 +24,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
            """)
     Page<Post> searchByQuery(Pageable pageable, PostCategory category, @Param("query") String query);
 
+    Page<Post> findByUser_Nickname(Pageable pageable, String nickname);
+
     @Modifying(clearAutomatically = true)
     @Query("""
            DELETE FROM Post p

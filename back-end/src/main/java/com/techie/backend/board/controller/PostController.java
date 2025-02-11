@@ -51,12 +51,22 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PostResponse>> searchPost(@RequestParam PostCategory category,
-                                                         @RequestParam String query,
-                                                         Pageable pageable) {
-        Page<PostResponse> posts = postService.searchPost(category, query, pageable);
+    public ResponseEntity<Page<PostResponse>> searchPostByContent(@RequestParam PostCategory category,
+                                                                  @RequestParam String query,
+                                                                  Pageable pageable) {
+        Page<PostResponse> posts = postService.searchPostByContent(category, query, pageable);
         return ResponseEntity.ok(posts);
     }
+
+    @GetMapping("nickname/{nickname}")
+    public ResponseEntity<Page<PostResponse>> searchPostByNickname(@PathVariable String nickname,
+                                                                  Pageable pageable) {
+        Page<PostResponse> posts = postService.searchPostByNickname(nickname, pageable);
+        return ResponseEntity.ok(posts);
+    }
+
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> updatePost(@RequestBody PostRequest.Update updateRequest,
