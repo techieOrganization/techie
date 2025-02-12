@@ -9,7 +9,7 @@ import '@/styles/pages/post/post.scss';
 interface NewPost {
   title: string;
   content: string;
-  category: "FREE" | "QNA";
+  category: 'FREE' | 'QNA';
 }
 
 export default function PostForm() {
@@ -54,7 +54,7 @@ export default function PostForm() {
         <label>카테고리</label>
         <select
           value={newPost.category}
-          onChange={(e) => setNewPost({ ...newPost, category: e.target.value as "FREE" | "QNA" })}
+          onChange={(e) => setNewPost({ ...newPost, category: e.target.value as 'FREE' | 'QNA' })}
         >
           <option value="FREE">자유게시판</option>
           <option value="QNA">질문게시판</option>

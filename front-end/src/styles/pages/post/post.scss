@@ -16,7 +16,9 @@
       cursor: pointer;
       background: #f5f5f5;
       font-weight: normal;
-      transition: background 0.3s, font-weight 0.3s;
+      transition:
+        background 0.3s,
+        font-weight 0.3s;
 
       &:hover {
         background: #ddd;
@@ -63,7 +65,8 @@
     border-collapse: collapse;
     margin-top: 1rem;
 
-    th, td {
+    th,
+    td {
       border: 0.1rem solid #ddd;
       padding: 0.8rem;
       text-align: left;
@@ -110,7 +113,6 @@
   }
 }
 
-
 .posts_container.new_post {
   width: 100%;
   max-width: 80rem;
@@ -122,7 +124,7 @@
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+
   label {
     font-size: 1.6rem;
     font-weight: bold;

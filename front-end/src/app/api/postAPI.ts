@@ -24,7 +24,11 @@ export const fetchPostDetail = async (id: string) => {
   }
 };
 
-export const createPost = async (newPost: { title: string; content: string; category: 'FREE' | 'QNA' }) => {
+export const createPost = async (newPost: {
+  title: string;
+  content: string;
+  category: 'FREE' | 'QNA';
+}) => {
   try {
     const response = await apiClient.post('/post', newPost);
     return response.data;
