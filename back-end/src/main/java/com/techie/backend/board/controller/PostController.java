@@ -43,7 +43,7 @@ public class PostController {
         return ResponseEntity.ok(yourPosts);
     }
 
-    @GetMapping("category/{category}")
+    @GetMapping("/category/{category}")
     public ResponseEntity<Page<PostResponse>> getPostsByCategory(@PathVariable PostCategory category,
                                                                  Pageable pageable) {
         Page<PostResponse> posts = postService.getAllPosts(category, pageable);
@@ -58,14 +58,12 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("nickname/{nickname}")
+    @GetMapping("/nickname/{nickname}")
     public ResponseEntity<Page<PostResponse>> searchPostByNickname(@PathVariable String nickname,
                                                                   Pageable pageable) {
         Page<PostResponse> posts = postService.searchPostByNickname(nickname, pageable);
         return ResponseEntity.ok(posts);
     }
-
-
 
 
     @PutMapping("/{id}")
