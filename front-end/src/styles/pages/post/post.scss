@@ -1,0 +1,198 @@
+.posts_container {
+  width: 100%;
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .tab_menu {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    button {
+      padding: 0.8rem 1.6rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      background: #f5f5f5;
+      font-weight: normal;
+      transition:
+        background 0.3s,
+        font-weight 0.3s;
+
+      &:hover {
+        background: #ddd;
+      }
+
+      &.active {
+        font-weight: bold;
+        background: var(--btn-color);
+        color: #fff;
+      }
+    }
+  }
+
+  .search_bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    select,
+    input {
+      padding: 0.8rem;
+      border: 0.1rem solid #ccc;
+      border-radius: 0.5rem;
+    }
+
+    button {
+      padding: 0.8rem 1.2rem;
+      background: var(--btn-color);
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: var(--btn-color);
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+
+    th,
+    td {
+      border: 0.1rem solid #ddd;
+      padding: 0.8rem;
+      text-align: left;
+    }
+
+    th {
+      background: #f5f5f5;
+    }
+
+    tr {
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #f1f1f1;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    gap: 1rem;
+
+    button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      background: var(--btn-color);
+      color: white;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      transition: background 0.3s;
+
+      &:hover {
+        background: var(--btn-color);
+      }
+
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.posts_container.new_post {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  label {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  select,
+  input,
+  textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--btn-color);
+    }
+  }
+
+  textarea {
+    height: 15rem;
+    resize: vertical;
+  }
+
+  .button_group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    gap: 1rem;
+
+    button {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      font-size: 1.6rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:first-child {
+        background: var(--btn-color);
+        color: #fff;
+
+        &:hover {
+          background: var(--btn-color);
+        }
+
+        &:disabled {
+          background: #ccc;
+          cursor: not-allowed;
+        }
+      }
+
+      &:last-child {
+        background: #ccc;
+        color: #333;
+
+        &:hover {
+          background: #bbb;
+        }
+
+        &:disabled {
+          background: #ddd;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

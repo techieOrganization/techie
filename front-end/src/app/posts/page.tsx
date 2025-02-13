@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { fetchPosts } from '@/app/api/postAPI';
+import '@/styles/pages/post/post.scss';
 
 interface Post {
-  id: number;
   title: string;
-  content: string;
   nickname: string;
   writtenAt: string;
   category: 'FREE' | 'QNA';
@@ -15,59 +15,68 @@ interface Post {
 export default function PostList() {
   const router = useRouter();
   const [category, setCategory] = useState<'FREE' | 'QNA'>('FREE');
+  const [query, setQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
-  const dummyPosts: Post[] = [
-    {
-      id: 1,
-      title: '첫 번째 자유게시글',
-      content: '내용입니다.',
-      nickname: '사용자1',
-      writtenAt: '2025-02-04',
-      category: 'FREE',
-    },
-    {
-      id: 2,
-      title: '두 번째 자유게시글',
-      content: '또 다른 내용입니다.',
-      nickname: '사용자2',
-      writtenAt: '2025-02-03',
-      category: 'FREE',
-    },
-    {
-      id: 3,
-      title: '첫 번째 질문게시글',
-      content: '질문 내용입니다.',
-      nickname: '사용자3',
-      writtenAt: '2025-02-02',
-      category: 'QNA',
-    },
-    {
-      id: 4,
-      title: '두 번째 질문게시글',
-      content: '또 다른 질문 내용입니다.',
-      nickname: '사용자4',
-      writtenAt: '2025-02-01',
-      category: 'QNA',
-    },
-  ];
+  const loadPosts = async () => {
+    try {
+      const data = await fetchPosts(category, searchQuery, currentPage);
+      setPosts(data.content);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error('게시글 로딩 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadPosts();
+  }, [category, searchQuery, currentPage]);
+
+  const handleSearch = () => {
+    setSearchQuery(query);
+    setCurrentPage(0);
+  };
 
   return (
     <div className="posts_container">
       <div className="inner">
         <h2 className="section_title">커뮤니티 게시판</h2>
+
         <div className="tab_menu">
           <button
-            onClick={() => setCategory('FREE')}
-            style={{ fontWeight: category === 'FREE' ? 'bold' : 'normal' }}
+            onClick={() => {
+              setCategory('FREE');
+              setSearchQuery('');
+              setCurrentPage(0);
+            }}
+            className={category === 'FREE' ? 'active' : ''}
           >
             자유게시판
           </button>
           <button
-            onClick={() => setCategory('QNA')}
-            style={{ fontWeight: category === 'QNA' ? 'bold' : 'normal' }}
+            onClick={() => {
+              setCategory('QNA');
+              setSearchQuery('');
+              setCurrentPage(0);
+            }}
+            className={category === 'QNA' ? 'active' : ''}
           >
             질문게시판
           </button>
+        </div>
+
+        <div className="search_bar">
+          <input
+            type="text"
+            placeholder="검색어 입력"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          />
+          <button onClick={handleSearch}>검색</button>
         </div>
 
         <button onClick={() => router.push('/posts/new')}>새 글 작성</button>
@@ -82,22 +91,42 @@ export default function PostList() {
             </tr>
           </thead>
           <tbody>
-            {dummyPosts
-              .filter((post) => post.category === category)
-              .map((post) => (
-                <tr
-                  key={post.id}
-                  onClick={() => router.push(`/posts/${post.id}`)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <td>{post.id}</td>
+            {posts.length > 0 ? (
+              posts.map((post, index) => (
+                <tr key={index} onClick={() => router.push(`/posts/${index + 1}`)}>
+                  <td>{index + 1 + currentPage * 20}</td>
                   <td>{post.title}</td>
                   <td>{post.nickname}</td>
-                  <td>{post.writtenAt}</td>
+                  <td>{new Date(post.writtenAt).toLocaleDateString()}</td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} style={{ textAlign: 'center' }}>
+                  게시글이 없습니다.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
+
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+            disabled={currentPage === 0}
+          >
+            이전
+          </button>
+          <span>
+            {currentPage + 1} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => (prev < totalPages - 1 ? prev + 1 : prev))}
+            disabled={currentPage === totalPages - 1}
+          >
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );

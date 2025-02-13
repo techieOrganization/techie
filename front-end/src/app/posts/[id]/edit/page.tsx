@@ -1,18 +1,50 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import apiClient from '@/components/axios/apiClient';
 
 export default function PostEdit({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [post, setPost] = useState({
-    title: '첫 번째 게시글',
-    content: '수정할 내용을 입력하세요.',
+    title: '',
+    content: '',
     category: 'FREE',
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleUpdate = () => {
-    router.push(`/posts/${params.id}`);
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await apiClient.get(`/post/${params.id}`);
+        setPost(response.data);
+      } catch (error) {
+        console.error('게시글 불러오기 실패:', error);
+        alert('게시글을 불러오지 못했습니다.');
+        router.back();
+      }
+    };
+
+    fetchPost();
+  }, [params.id]);
+
+  const handleUpdate = async () => {
+    if (!post.title.trim() || !post.content.trim()) {
+      alert('제목과 내용을 입력해주세요.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await apiClient.put(`/post/${params.id}`, post);
+      alert('게시글이 수정되었습니다.');
+      router.push(`/posts/${params.id}`);
+    } catch (error) {
+      console.error('게시글 수정 실패:', error);
+      alert('게시글 수정에 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,15 +61,21 @@ export default function PostEdit({ params }: { params: { id: string } }) {
         </select>
         <input
           type="text"
+          placeholder="제목을 입력하세요"
           value={post.title}
           onChange={(e) => setPost({ ...post, title: e.target.value })}
         />
         <textarea
+          placeholder="내용을 입력하세요"
           value={post.content}
           onChange={(e) => setPost({ ...post, content: e.target.value })}
         />
-        <button onClick={handleUpdate}>수정 완료</button>
-        <button onClick={() => router.back()}>취소</button>
+        <button onClick={handleUpdate} disabled={loading}>
+          {loading ? '수정 중...' : '수정 완료'}
+        </button>
+        <button onClick={() => router.back()} disabled={loading}>
+          취소
+        </button>
       </div>
     </div>
   );
