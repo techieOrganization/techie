@@ -106,14 +106,8 @@ export default function PostList() {
               posts.map((post, index) => (
                 <tr key={index}>
                   <td>{index + 1 + currentPage * 20}</td>
-                  <td 
-                    onClick={() => router.push(`/posts/${index + 1}`)}
-                  >
-                    {post.title}
-                  </td>
-                  <td 
-                    onClick={() => router.push(`/posts/nickname/${post.nickname}`)}
-                  >
+                  <td onClick={() => router.push(`/posts/${index + 1}`)}>{post.title}</td>
+                  <td onClick={() => router.push(`/posts/nickname/${post.nickname}`)}>
                     {post.nickname}
                   </td>
                   <td>{new Date(post.writtenAt).toLocaleDateString()}</td>
@@ -121,7 +115,9 @@ export default function PostList() {
               ))
             ) : (
               <tr>
-                <td colSpan={4} style={{ textAlign: 'center' }}>게시글이 없습니다.</td>
+                <td colSpan={4} style={{ textAlign: 'center' }}>
+                  게시글이 없습니다.
+                </td>
               </tr>
             )}
           </tbody>

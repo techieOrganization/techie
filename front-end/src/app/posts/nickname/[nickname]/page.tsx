@@ -47,7 +47,7 @@ export default function UserPosts() {
       <div className="inner">
         <h2>{decodedNickname} 님의 게시글</h2>
         <button onClick={() => router.push('/posts')}>게시판으로 돌아가기</button>
-        
+
         <table>
           <thead>
             <tr>
@@ -62,18 +62,16 @@ export default function UserPosts() {
               posts.map((post, index) => (
                 <tr key={post.id}>
                   <td>{index + 1}</td>
-                  <td 
-                    onClick={() => router.push(`/posts/${post.id}`)}
-                  >
-                    {post.title}
-                  </td>
+                  <td onClick={() => router.push(`/posts/${post.id}`)}>{post.title}</td>
                   <td>{post.category === 'FREE' ? '자유게시판' : '질문게시판'}</td>
                   <td>{new Date(post.writtenAt).toLocaleDateString()}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={4} style={{ textAlign: 'center' }}>게시글이 없습니다.</td>
+                <td colSpan={4} style={{ textAlign: 'center' }}>
+                  게시글이 없습니다.
+                </td>
               </tr>
             )}
           </tbody>

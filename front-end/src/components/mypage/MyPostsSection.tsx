@@ -26,7 +26,7 @@ export default function MyPostsSection() {
   useEffect(() => {
     const fetchMyPosts = async () => {
       try {
-        const response = await apiClient.get(`/post/my?page=${currentPage}`); 
+        const response = await apiClient.get(`/post/my?page=${currentPage}`);
         setPosts(response.data.content);
         setTotalPages(response.data.totalPages);
       } catch (error) {
