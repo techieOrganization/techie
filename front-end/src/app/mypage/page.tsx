@@ -8,11 +8,11 @@ import { RootState } from '@/redux/store';
 import UserInfoSection from '@/components/mypage/UserInfoSection';
 import MyMemoSection from '@/components/mypage/MyMemoSection';
 import MyVideoSection from '@/components/mypage/MyVideoSection';
+import MyPostsSection from '@/components/mypage/MyPostsSection';
 
 const Mypage = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
-
-  const [activeSection, setActiveSection] = useState<'info' | 'memos' | 'videos'>('info');
+  const [activeSection, setActiveSection] = useState<'info' | 'memos' | 'videos' | 'posts'>('info');
 
   return (
     <div className="mypage_container">
@@ -42,12 +42,19 @@ const Mypage = () => {
               >
                 내 영상 모음
               </li>
+              <li
+                className={activeSection === 'posts' ? 'active' : ''}
+                onClick={() => setActiveSection('posts')}
+              >
+                내가 쓴 글 모음
+              </li>
             </ul>
           </div>
           <div className="right_cont">
             {activeSection === 'info' && <UserInfoSection />}
             {activeSection === 'memos' && <MyMemoSection />}
             {activeSection === 'videos' && <MyVideoSection />}
+            {activeSection === 'posts' && <MyPostsSection />}
           </div>
         </div>
       </div>
