@@ -313,6 +313,14 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
           {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
             <div className="modal_content" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="mo-close-btn"
+                onClick={() => {
+                  closeModal();
+                }}
+              >
+                X
+              </button>
               사용자 재생목록
               <input
                 type="text"
@@ -323,7 +331,9 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
                   e.stopPropagation();
                 }}
               />
-              <button onClick={handleSaveVideo}>재생목록 추가</button>
+              <button onClick={handleSaveVideo} className="add_playlist">
+                재생목록 추가
+              </button>
               <div className="playlist_content_container">
                 {loadingPlaylists ? (
                   <p>재생목록을 불러오는 중입니다...</p>
