@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 import { fetchPosts } from '@/app/api/postAPI';
 import '@/styles/pages/post/post.scss';
 
@@ -14,6 +16,7 @@ interface Post {
 
 export default function PostList() {
   const router = useRouter();
+  const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null);
   const [category, setCategory] = useState<'FREE' | 'QNA'>('FREE');
   const [query, setQuery] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -38,6 +41,14 @@ export default function PostList() {
   const handleSearch = () => {
     setSearchQuery(query);
     setCurrentPage(0);
+  };
+
+  const handleNewPost = () => {
+    if (!isLoggedIn) {
+      alert('로그인 후 시도하세요');
+      return;
+    }
+    router.push('/posts/new');
   };
 
   return (
@@ -79,7 +90,7 @@ export default function PostList() {
           <button onClick={handleSearch}>검색</button>
         </div>
 
-        <button onClick={() => router.push('/posts/new')}>새 글 작성</button>
+        <button onClick={handleNewPost}>새 글 작성</button>
 
         <table>
           <thead>
@@ -93,10 +104,12 @@ export default function PostList() {
           <tbody>
             {posts.length > 0 ? (
               posts.map((post, index) => (
-                <tr key={index} onClick={() => router.push(`/posts/${index + 1}`)}>
+                <tr key={index}>
                   <td>{index + 1 + currentPage * 20}</td>
-                  <td>{post.title}</td>
-                  <td>{post.nickname}</td>
+                  <td onClick={() => router.push(`/posts/${index + 1}`)}>{post.title}</td>
+                  <td onClick={() => router.push(`/posts/nickname/${post.nickname}`)}>
+                    {post.nickname}
+                  </td>
                   <td>{new Date(post.writtenAt).toLocaleDateString()}</td>
                 </tr>
               ))
