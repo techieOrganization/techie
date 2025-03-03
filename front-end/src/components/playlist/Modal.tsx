@@ -1,5 +1,5 @@
 // components/Modal.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { PlayLists } from '@/types/playlist';
 import Cookies from 'js-cookie';
 import { addVideo, getVideo, saveVideo } from '@/app/api/playlistApi';
@@ -22,7 +22,6 @@ const Modal: React.FC<ModalProps> = ({
   onClickDelete,
 }) => {
   const [playlistName, setPlayListName] = useState('');
-  const [isOpen, setIsOpen] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadingPlaylists, setLoadingPlaylists] = useState(true);
   const maxLength = 15;
@@ -83,7 +82,7 @@ const Modal: React.FC<ModalProps> = ({
     onClose();
   };
   ///////////////////////////////////////// 영상 렌더링
-  useEffect(() => {
+  useCallback(() => {
     const fetchData = async () => {
       setLoadingPlaylists(true);
       try {

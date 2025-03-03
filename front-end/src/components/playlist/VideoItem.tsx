@@ -1,5 +1,5 @@
 // components/VideoItem.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Video } from '@/types/video';
@@ -24,7 +24,6 @@ const VideoItem: React.FC<VideoItemProps> = ({
   const token = Cookies.get('token');
   const [selectVideo, setSelectVideo] = useState<string>('init');
   const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [showModal, setShowModal] = useState(false);
   const handleVideoSelect = (videoId: string) => {
     if (selectVideo.includes(videoId)) {
       setSelectVideo(selectVideo.replace(videoId, ''));
