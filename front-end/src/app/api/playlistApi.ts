@@ -108,7 +108,7 @@ export const deleteVideos = async (
 
 // 재생목록 삭제
 
-export const deletepPlaylist = async (playlistId: string, token: string | undefined) => {
+export const deletePlaylist = async (playlistId: string, token: string | undefined) => {
   try {
     const response = await axios.delete(`${baseUrl}/api/playlists/${playlistId}`, {
       headers: {
