@@ -193,9 +193,36 @@
         padding: 1rem 2rem;
         min-height: 15rem;
         position: relative;
+        p {
+          font-size: 1.2rem;
+        }
+        @include tablet {
+          width: 20vw;
+        }
+        @include mo {
+          width: 25vw;
+        }
+        @include mo_500 {
+          width: 30vw;
+        }
+        @include mo_330 {
+          width: 35vw;
+        }
         .playlist-name {
-          font-size: 2rem;
+          font-size: 1.5rem;
           color: #333;
+          @include tablet {
+            font-size: 1.3rem;
+          }
+          @include mo {
+            font-size: 1.3rem;
+          }
+          @include mo_500 {
+            font-size: 1rem;
+          }
+          @include mo_330 {
+            font-size: 1rem;
+          }
         }
         &:hover {
           transform: translateY(-10px);

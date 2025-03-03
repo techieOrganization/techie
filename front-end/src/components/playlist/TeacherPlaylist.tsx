@@ -257,6 +257,14 @@ const TeacherPlaylist = () => {
           {/* 오버레이 추가 */}
           <div className="modal" onClick={closeModal}>
             <div className="modal_content" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="mo-close-btn"
+                onClick={() => {
+                  closeModal();
+                }}
+              >
+                X
+              </button>
               사용자 재생목록
               <input
                 type="text"
@@ -265,7 +273,9 @@ const TeacherPlaylist = () => {
                 placeholder="재생목록 이름 입력"
                 onClick={(e) => e.stopPropagation()}
               />
-              <button onClick={handleSaveVideo}>재생목록 추가</button>
+              <button onClick={handleSaveVideo} className="add_playlist">
+                재생목록 추가
+              </button>
               <div className="playlist_content_container">
                 {playlists ? (
                   playlists.playlists.map((playlist) => (
