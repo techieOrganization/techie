@@ -70,6 +70,9 @@ const Header = () => {
             <li className="menu_item">
               <Link href="/teacher-lists">성장 멘토 🌱</Link>
             </li>
+            <li className="menu_item">
+              <Link href="/posts">커뮤니티 🐻‍❄️</Link>
+            </li>
           </ul>
         </div>
 
@@ -142,6 +145,9 @@ const Header = () => {
               </li>
               <li className="menu_item">
                 <Link href="/teacher-lists">성장 멘토 🌱</Link>
+              </li>
+              <li className="menu_item">
+                <Link href="/posts">커뮤니티 🐻‍❄️</Link>
               </li>
             </ul>
             <div className="search_box_mo">

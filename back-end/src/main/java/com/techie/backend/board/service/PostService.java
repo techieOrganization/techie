@@ -57,15 +57,19 @@ public class PostService {
         return posts.map(postMapper::toDto);
     }
 
+    // 게시글이 없다면 빈 페이지 반환
     public Page<PostResponse> getAllPosts(PostCategory category, Pageable pageable) {
-        // 게시글이 없다면 빈 페이지 반환
         return postRepository.searchAllByCategory(pageable, category).map(postMapper::toDto);
     }
 
-    public Page<PostResponse> searchPost(PostCategory postCategory, String query, Pageable pageable) {
-        // 게시글이 없다면 빈 페이지 반환
+    public Page<PostResponse> searchPostByContent(PostCategory postCategory, String query, Pageable pageable) {
         return postRepository.searchByQuery(pageable, postCategory, query).map(postMapper::toDto);
     }
+
+    public Page<PostResponse> searchPostByNickname(String nickname, Pageable pageable) {
+        return postRepository.findByUser_Nickname(pageable, nickname).map(postMapper::toDto);
+    }
+
 
     public PostResponse updatePost(Long id, PostRequest.Update updateRequest, UserDetailsCustom userDetails) {
         Post post = postRepository.findById(id).orElseThrow(()

@@ -17,6 +17,7 @@ const Chatbot = () => {
     const xOffset = 90;
     const handleResize = () => {
       const { innerHeight, innerWidth } = window;
+
       setPosition({ x: innerWidth - xOffset, y: innerHeight - yOffset });
     };
 
@@ -73,6 +74,7 @@ const Chatbot = () => {
         style={{ left: position.x - 580, top: position.y - 400, position: 'fixed' }}
       >
         <Chatlog />
+
       </div>
     </div>
   );
