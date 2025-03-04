@@ -1,5 +1,4 @@
-// components/Modal.tsx
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { PlayLists } from '@/types/playlist';
 import Cookies from 'js-cookie';
 import { addVideo, getVideo, saveVideo } from '@/app/api/playlistApi';
@@ -26,6 +25,7 @@ const Modal: React.FC<ModalProps> = ({
   const [loadingPlaylists, setLoadingPlaylists] = useState(true);
   const maxLength = 15;
   const token = Cookies.get('token');
+
   const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (value.length <= maxLength) {
@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({
       alert('재생목록의 이름은 15자 이내로 작성하여야합니다');
     }
   };
-  ///////////////////////////////////////////////// 영상 저장
+
   const handleSaveVideo = async () => {
     if (!selectVideo) {
       alert('선택된 영상이 없습니다.');
@@ -57,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({
       onClose();
     }
   };
-  //////////////////////////////////////////////////////////////////// 영상 추가
+
   const onClickCheckBox = async (playlistId: string) => {
     const token = Cookies.get('token');
     if (!selectVideo) {
@@ -81,8 +81,8 @@ const Modal: React.FC<ModalProps> = ({
 
     onClose();
   };
-  ///////////////////////////////////////// 영상 렌더링
-  useCallback(() => {
+
+  useEffect(() => {
     const fetchData = async () => {
       setLoadingPlaylists(true);
       try {
@@ -100,7 +100,7 @@ const Modal: React.FC<ModalProps> = ({
     } else {
       setLoadingPlaylists(false);
     }
-  }, [token]);
+  }, [token, setPlaylists]);
 
   return (
     <div className="overlay" onClick={onClose}>

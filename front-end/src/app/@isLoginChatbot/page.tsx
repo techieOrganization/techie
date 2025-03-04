@@ -74,7 +74,6 @@ const Chatbot = () => {
         style={{ left: position.x - 580, top: position.y - 400, position: 'fixed' }}
       >
         <Chatlog />
-
       </div>
     </div>
   );
