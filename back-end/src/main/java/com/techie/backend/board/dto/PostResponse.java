@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class PostResponse {
+    private Long id;
     private String title;
     private String content;
     private PostCategory category;
@@ -22,5 +23,6 @@ public class PostResponse {
         this.writtenAt = post.getUpdatedAt();
         this.email = post.getUser().getEmail();
         this.nickname = post.getUser().getNickname();
+        this.id = post.getId();
     }
 }

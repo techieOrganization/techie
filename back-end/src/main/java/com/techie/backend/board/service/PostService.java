@@ -5,7 +5,6 @@ import com.techie.backend.board.domain.PostCategory;
 import com.techie.backend.board.dto.PostRequest;
 import com.techie.backend.board.dto.PostResponse;
 import com.techie.backend.board.repository.PostRepository;
-import com.techie.backend.global.exception.user.NoChangesException;
 import com.techie.backend.global.mapper.PostMapper;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.user.domain.User;
@@ -75,29 +74,33 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(()
                                             -> new EntityNotFoundException("게시글이 없습니다."));
         User user = userService.getUserFromSecurityContext(userDetails);
-
         validateOwner(user, post);
-
         postMapper.updateDto(updateRequest, post);
-        em.flush(); // 수정 사항 바로 반영
-
+        em.flush();
         return postMapper.toDto(post);
     }
 
 
     @Transactional
     public void deletePost(PostRequest.Delete delRequest, UserDetailsCustom userDetails) {
-        List<Long> postIds = delRequest.getPostIds();
-        if(postIds == null || postIds.isEmpty()) {
-            throw new NoChangesException();
-        }
         User user = userService.getUserFromSecurityContext(userDetails);
+        List<Long> postIds = delRequest.getPostIds();
+        if (postIds.isEmpty()) {
+            throw new EntityNotFoundException("삭제할 게시글이 없습니다.");
+        }
+
+        for(Long postId : postIds) {
+            Post post = postRepository.findById(postId).orElseThrow(()
+                    -> new EntityNotFoundException("존재하지 않는 게시글입니다." + "ID: " + postId));
+            validateOwner(user, post);
+        }
+
         postRepository.deleteAllByIds(postIds, user.getId());
     }
 
     private void validateOwner(User user, Post post) {
         if(!user.getId().equals(post.getUser().getId())) {
-            throw new AccessDeniedException("수정/삭제할 권한이 없습니다.");
+            throw new AccessDeniedException("수정/삭제할 권한이 없습니다." + "ID: " + post.getId());
         }
     }
 }
