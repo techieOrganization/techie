@@ -33,7 +33,7 @@ export default function PostList() {
 
   useEffect(() => {
     loadPosts();
-  }, [category, searchQuery, currentPage]);
+  }, [loadPosts]);
 
   const handleSearch = () => {
     setSearchQuery(query);
