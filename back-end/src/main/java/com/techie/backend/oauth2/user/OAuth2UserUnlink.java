@@ -1,4 +1,5 @@
 package com.techie.backend.oauth2.user;
 
-public class OAuth2UserUnlink {
+public interface OAuth2UserUnlink {
+    void unlink(String accessToken);
 }
