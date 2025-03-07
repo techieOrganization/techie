@@ -34,11 +34,24 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(String email, String role, String nickname, Long expiredMs) {
+    public String createLocalJwt(String email, String role, String nickname, Long expiredMs) {
         return Jwts.builder()
                 .claim("email", email)
                 .claim("role", role)
                 .claim("nickname", nickname)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .signWith(secretKey)
+                .compact();
+    }
+
+
+    public String createSocialJwt(String email, String nickname, String role, String provider, Long expiredMs) {
+        return Jwts.builder()
+                .claim("email", email)
+                .claim("role", role)
+                .claim("nickname", nickname)
+                .claim("provider", provider)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
