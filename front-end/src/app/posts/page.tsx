@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
@@ -25,7 +25,7 @@ export default function PostList() {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  const loadPosts = async () => {
+  const loadPosts = useCallback(async () => {
     try {
       const data = await fetchPosts(category, searchQuery, currentPage);
       setPosts(data.content);
@@ -33,7 +33,7 @@ export default function PostList() {
     } catch (error) {
       console.error('게시글 로딩 실패:', error);
     }
-  };
+  }, [category, searchQuery, currentPage]);
 
   useEffect(() => {
     loadPosts();
