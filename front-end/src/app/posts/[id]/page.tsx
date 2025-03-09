@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import apiClient from '@/components/axios/apiClient';
+import { fetchPosts } from '@/app/api/postAPI';
+import '@/styles/pages/post/post.scss';
 
 interface Post {
   id: number;
@@ -23,8 +24,17 @@ export default function PostDetail({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await apiClient.get(`/post/${params.id}`);
-        setPost(response.data);
+        let foundPost = null;
+        const categories = ['FREE', 'QNA'];
+        for (const category of categories) {
+          const data = await fetchPosts(category, '', 0);
+          foundPost = data.content.find((post: Post) => post.id.toString() === params.id);
+          if (foundPost) break;
+        }
+        if (!foundPost) {
+          throw new Error(`게시글 ${params.id}을 찾을 수 없습니다.`);
+        }
+        setPost(foundPost);
       } catch (error) {
         console.error('게시글 불러오기 실패:', error);
         setError('게시글을 불러오지 못했습니다.');
@@ -40,7 +50,7 @@ export default function PostDetail({ params }: { params: { id: string } }) {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="posts_container">
+    <div className="posts_container post_detail">
       <div className="inner">
         <h2>{post?.title}</h2>
         <p>카테고리: {post?.category === 'FREE' ? '자유게시판' : '질문게시판'}</p>
