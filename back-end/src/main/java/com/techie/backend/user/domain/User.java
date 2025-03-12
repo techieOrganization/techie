@@ -8,16 +8,16 @@ import lombok.*;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "users",
+uniqueConstraints = {@UniqueConstraint(columnNames = {"email", "provider"})})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
@@ -26,10 +26,25 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    public User(String email, String password, String nickname, String role) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.role = role;
+    private String provider;
+
+    // 로컬 로그인용
+    public static User createLocalUser(String email, String password, String nickname, String role) {
+        return User.builder()
+                .email(email)
+                .password(password)
+                .nickname(nickname)
+                .role(role)
+                .build();
+    }
+
+    // 소셜 로그인용
+    public static User createSocialUser(String email, String nickname, String role, String provider) {
+        return User.builder()
+                .email(email)
+                .nickname(nickname)
+                .role(role)
+                .provider(provider)
+                .build();
     }
 }
