@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import { devConsoleError } from '@/utils/logger';
-import { fetchRegisterUser } from '@/app/api/registerUserApi';
+
+import { registerUser } from '@/components/authservice/registerservice';
 import '@/styles/pages/register/register.scss';
 
 const Signup = () => {
@@ -40,19 +41,6 @@ const Signup = () => {
       router.push('/login'); // 회원가입 성공 시 로그인 페이지로 이동
     } catch (error) {
       handleSignupError(error);
-    }
-  };
-
-  // 회원가입 요청 전송 함수
-  const registerUser = async (userData: {
-    nickname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }) => {
-    const response = await fetchRegisterUser(userData);
-    if (response.status === 200 || response.status === 201) {
-      alert('회원가입 완료');
     }
   };
 
