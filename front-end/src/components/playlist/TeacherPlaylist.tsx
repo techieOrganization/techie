@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
 import { Video } from '@/types/video';
 import '@/styles/pages/playlist/playlist.scss';
-import { addVideo, deletepPlaylist, getVideo, saveVideo } from '@/app/api/playlistApi';
+import { addVideo, deletePlaylist, getVideo, saveVideo } from '@/app/api/playlistApi';
 import Cookies from 'js-cookie';
 import instructorData from '@/data/instructorData';
 import { PlayLists } from '@/types/playlist';

@@ -7,7 +7,7 @@ import { AxiosError } from 'axios';
 import '@/styles/pages/login/login.scss';
 
 import { devConsoleError } from '@/utils/logger';
-import { performLogin, decodeJWT } from '@/components/authservice/authservice';
+import { performLogin, decodeJWT } from '@/components/authservice/AuthService';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { setUserInfo } from '@/redux/reducer';

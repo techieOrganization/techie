@@ -1,26 +1,13 @@
-import axios from 'axios';
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+import apiClient from '@/components/axios/apiClient';
 import { devConsoleError } from '@/utils/logger';
+import axios from 'axios';
 // 재생 목록 생성
-export const saveVideo = async (
-  videoId: string,
-  name: string,
-  token: string | undefined,
-): Promise<void> => {
+export const saveVideo = async (videoId: string, name: string): Promise<void> => {
   try {
-    const response = await axios.post(
-      `${baseUrl}/api/playlists`,
-      {
-        playlistName: name,
-        videoId: videoId,
-      },
-      {
-        headers: {
-          ContentType: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await apiClient.post(`/playlists`, {
+      playlistName: name,
+      videoId: videoId,
+    });
     return response.data;
   } catch (error) {
     devConsoleError('Unexpected error:', error);
@@ -29,13 +16,9 @@ export const saveVideo = async (
 
 // 재생 목록 받아오기
 
-export const getVideo = async (token: string | undefined) => {
+export const getVideo = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/playlists`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiClient.get(`/playlists`, {});
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -47,26 +30,13 @@ export const getVideo = async (token: string | undefined) => {
 
 // 재생 목록에 영상 추가
 
-export const addVideo = async (
-  playlistName: string,
-  selectVideo: string,
-  playlistId: string,
-  token: string | undefined,
-) => {
+export const addVideo = async (playlistName: string, selectVideo: string, playlistId: string) => {
   try {
-    const response = await axios.put(
-      `${baseUrl}/api/playlists/${playlistId}`,
-      {
-        playlistName: playlistName,
-        addVideoIds: [selectVideo],
-        removeVideoIds: [],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await apiClient.put(`/playlists/${playlistId}`, {
+      playlistName: playlistName,
+      addVideoIds: [selectVideo],
+      removeVideoIds: [],
+    });
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -78,25 +48,13 @@ export const addVideo = async (
 
 // 재생 목록에 영상 삭제
 
-export const deleteVideos = async (
-  videoId: string,
-  playlistId: string,
-  token: string | undefined,
-) => {
+export const deleteVideos = async (videoId: string, playlistId: string) => {
   try {
-    const response = await axios.put(
-      `${baseUrl}/api/playlists/${playlistId}`,
-      {
-        playlistName: '',
-        addVideoIds: [],
-        removeVideoIds: [videoId],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await apiClient.put(`/playlists/${playlistId}`, {
+      playlistName: '',
+      addVideoIds: [],
+      removeVideoIds: [videoId],
+    });
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -108,13 +66,9 @@ export const deleteVideos = async (
 
 // 재생목록 삭제
 
-export const deletePlaylist = async (playlistId: string, token: string | undefined) => {
+export const deletePlaylist = async (playlistId: string) => {
   try {
-    const response = await axios.delete(`${baseUrl}/api/playlists/${playlistId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiClient.delete(`/playlists/${playlistId}`, {});
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -130,7 +84,7 @@ export const detailPlaylist = async (playlistId: string | undefined, token: stri
   if (!playlistId || !token) return;
 
   try {
-    const response = await axios.get(`${baseUrl}/api/playlists/${playlistId}`, {
+    const response = await apiClient.get(`/playlists/${playlistId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
