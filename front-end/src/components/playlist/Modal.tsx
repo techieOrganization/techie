@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { PlayLists } from '@/types/playlist';
-import Cookies from 'js-cookie';
 import { addVideo, getVideo, saveVideo } from '@/app/api/playlistApi';
 import { devConsoleError } from '@/utils/logger';
 import axios from 'axios';
