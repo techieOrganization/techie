@@ -26,7 +26,7 @@ export default function PostEdit({ params }: { params: { id: string } }) {
     };
 
     fetchPost();
-  }, [params.id]);
+  }, [params.id, router]);
 
   const handleUpdate = async () => {
     if (!post.title.trim() || !post.content.trim()) {
