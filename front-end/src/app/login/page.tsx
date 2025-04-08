@@ -7,10 +7,11 @@ import { AxiosError } from 'axios';
 import '@/styles/pages/login/login.scss';
 
 import { devConsoleError } from '@/utils/logger';
-import { performLogin, decodeJWT } from '@/components/authservice/authservice';
+import { performLogin, decodeJWT } from '@/components/authservice/AuthLogin';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { setUserInfo } from '@/redux/reducer';
+import { loginWithGoogle, loginWithNaver } from '../api/socialLoginApi';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -85,6 +86,13 @@ const Login = () => {
           </button>
         </div>
       </form>
+      <button onClick={loginWithGoogle} className="googleLogin">
+        <img src="/assets/images/main/googleIcon.png" alt="구글 아이콘" className="googleIcon" />
+        Google 로그인
+      </button>
+      <button onClick={loginWithNaver} className="naverLogin">
+        Naver 로그인
+      </button>
     </div>
   );
 };
