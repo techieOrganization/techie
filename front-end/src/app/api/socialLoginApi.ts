@@ -1,6 +1,6 @@
 import socialLogin from '@/components/axios/socialLogin';
+const redirect_uri = 'http://localhost:3000/socialLoginCallback'; // 로그인 이후 리다이렉트 될 Url  이후 수정 예정
 
-const redirect_uri = 'http://localhost:3000'; // 로그인 이후 리다이렉트 될 Url  이후 수정 예정
 // 구글 로그인
 export const loginWithGoogle = async () => {
   const googleLoginUrl = `/oauth2/authorization/google?mode=login&redirect_uri=${redirect_uri}`;
