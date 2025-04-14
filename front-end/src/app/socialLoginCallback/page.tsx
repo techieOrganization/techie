@@ -8,7 +8,7 @@ import { setUserInfo } from '@/redux/reducer';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
-const socialcallback = () => {
+const Socialcallback = () => {
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -27,4 +27,4 @@ const socialcallback = () => {
   }, [dispatch, searchParams, router]);
   return <div>로그인 중...</div>;
 };
-export default socialcallback;
+export default Socialcallback;

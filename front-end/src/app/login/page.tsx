@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { setUserInfo } from '@/redux/reducer';
 import { loginWithGoogle, loginWithNaver } from '../api/socialLoginApi';
+import Image from 'next/image';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -87,7 +88,7 @@ const Login = () => {
         </div>
       </form>
       <button onClick={loginWithGoogle} className="googleLogin">
-        <img src="/assets/images/main/googleIcon.png" alt="구글 아이콘" className="googleIcon" />
+        <Image src="/assets/images/main/googleIcon.png" alt="구글 아이콘" className="googleIcon" />
         Google 로그인
       </button>
       <button onClick={loginWithNaver} className="naverLogin">
