@@ -12,7 +12,6 @@ import VideoList from './VideoList';
 import Modal from './Modal';
 import CategoryTabs from './CategoryTabs';
 import { devConsoleError } from '@/utils/logger';
-import Cookies from 'js-cookie';
 
 import '@/styles/pages/playlist/playlist.scss';
 import { deletePlaylist } from '@/app/api/playlistApi';
@@ -35,7 +34,6 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
-  const token = Cookies.get('token');
   const openModal = (videoId: string) => {
     setSelectVideo(videoId);
     setShowModal(true);
@@ -48,10 +46,8 @@ const CategoryPlaylist: React.FC<CategoryPlaylistProps> = ({ category: initialCa
       return;
     }
 
-    if (!token) return;
-
     try {
-      await deletePlaylist(playlistId, token);
+      await deletePlaylist(playlistId);
       setPlaylists((prevPlaylists: PlayLists | undefined) =>
         prevPlaylists
           ? {

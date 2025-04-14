@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { PlayLists } from '@/types/playlist';
-import Cookies from 'js-cookie';
 import { addVideo, getVideo, saveVideo } from '@/app/api/playlistApi';
 import { devConsoleError } from '@/utils/logger';
 import axios from 'axios';
@@ -24,7 +23,6 @@ const Modal: React.FC<ModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [loadingPlaylists, setLoadingPlaylists] = useState(true);
   const maxLength = 15;
-  const token = Cookies.get('token');
 
   const onChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -48,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({
     setLoading(true);
 
     try {
-      await saveVideo(selectVideo, playlistName, token);
+      await saveVideo(selectVideo, playlistName);
     } catch (error) {
       console.error('Error saving video:', error);
       alert('영상 저장에 실패했습니다.');
@@ -59,15 +57,13 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   const onClickCheckBox = async (playlistId: string) => {
-    const token = Cookies.get('token');
     if (!selectVideo) {
       alert('선택된 영상이 없습니다.');
       return;
     }
 
-    if (!token) return;
     try {
-      await addVideo(playlistName, selectVideo, playlistId, token);
+      await addVideo(playlistName, selectVideo, playlistId);
       alert('재생목록에 영상이 추가되었습니다');
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -86,7 +82,7 @@ const Modal: React.FC<ModalProps> = ({
     const fetchData = async () => {
       setLoadingPlaylists(true);
       try {
-        const data = await getVideo(token);
+        const data = await getVideo();
         setPlaylists(data);
       } catch (error) {
         devConsoleError('Failed to fetch playlists', error);
@@ -95,12 +91,8 @@ const Modal: React.FC<ModalProps> = ({
       }
     };
 
-    if (token) {
-      fetchData();
-    } else {
-      setLoadingPlaylists(false);
-    }
-  }, [token, setPlaylists]);
+    fetchData();
+  }, [setPlaylists]);
 
   return (
     <div className="overlay" onClick={onClose}>
