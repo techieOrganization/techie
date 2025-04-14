@@ -9,6 +9,27 @@ export default function EditPost({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [post, setPost] = useState({
+    title: '',
+    content: '',
+    category: 'FREE',
+  });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await apiClient.get(`/post/${params.id}`);
+        setPost(response.data);
+      } catch (error) {
+        console.error('게시글 불러오기 실패:', error);
+        alert('게시글을 불러오지 못했습니다.');
+        router.back();
+      }
+    };
+
+    fetchPost();
+  }, [params.id, router]);
 
   const handleUpdate = async () => {
     if (!title || !content) {
