@@ -4,8 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import { devConsoleError } from '@/utils/logger';
-
-import { registerUser } from '@/components/authservice/registerservice';
+import { registerUser } from '@/components/authservice/RegisterService';
 import '@/styles/pages/register/register.scss';
 
 const Signup = () => {
