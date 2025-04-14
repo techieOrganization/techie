@@ -1,30 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { updatePost } from '@/app/api/postAPI';
+import apiClient from '@/components/axios/apiClient';
 import '@/styles/pages/post/post.scss';
 
 export default function EditPost({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
-  const [post, setPost] = useState({
-    title: '',
-    content: '',
-    category: 'FREE',
-  });
-  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const response = await apiClient.get(`/post/${params.id}`);
-        setPost(response.data);
+        const { title, content } = response.data;
+        setTitle(title);
+        setContent(content);
       } catch (error) {
         console.error('게시글 불러오기 실패:', error);
         alert('게시글을 불러오지 못했습니다.');
         router.back();
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -46,6 +46,8 @@ export default function EditPost({ params }: { params: { id: string } }) {
       alert('게시글을 수정하는 중 오류가 발생했습니다.');
     }
   };
+
+  if (loading) return <p>게시글을 불러오는 중입니다...</p>;
 
   return (
     <div className="posts_container new_post">
