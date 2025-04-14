@@ -8,6 +8,7 @@ import { fetchPosts } from '@/app/api/postAPI';
 import '@/styles/pages/post/post.scss';
 
 interface Post {
+  id: number;
   title: string;
   nickname: string;
   writtenAt: string;
@@ -36,7 +37,7 @@ export default function PostList() {
 
   useEffect(() => {
     loadPosts();
-  }, [loadPosts]);
+  }, [category, searchQuery, currentPage, loadPosts]);
 
   const handleSearch = () => {
     setSearchQuery(query);
@@ -106,7 +107,7 @@ export default function PostList() {
               posts.map((post, index) => (
                 <tr key={index}>
                   <td>{index + 1 + currentPage * 20}</td>
-                  <td onClick={() => router.push(`/posts/${index + 1}`)}>{post.title}</td>
+                  <td onClick={() => router.push(`/posts/${post.id}`)}>{post.title}</td>
                   <td onClick={() => router.push(`/posts/nickname/${post.nickname}`)}>
                     {post.nickname}
                   </td>
