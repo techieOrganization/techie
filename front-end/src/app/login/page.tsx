@@ -88,7 +88,13 @@ const Login = () => {
         </div>
       </form>
       <button onClick={loginWithGoogle} className="googleLogin">
-        <Image src="/assets/images/main/googleIcon.png" alt="구글 아이콘" className="googleIcon" />
+        <Image
+          src="/assets/images/main/googleIcon.png"
+          alt="구글 아이콘"
+          className="googleIcon"
+          width={25}
+          height={25}
+        />
         Google 로그인
       </button>
       <button onClick={loginWithNaver} className="naverLogin">
