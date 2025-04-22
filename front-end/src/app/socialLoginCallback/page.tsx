@@ -14,15 +14,14 @@ const Socialcallback = () => {
   const router = useRouter();
   useEffect(() => {
     const token = searchParams.get('access_token');
-    console.log(token);
     if (token) {
       const decodedJWT = decodeJWT(token);
       dispatch(setUserInfo(decodedJWT));
       window.dispatchEvent(new Event('loginStatusChanged'));
-      router.push('/');
       Cookies.set('token', token);
+      router.push('/');
     } else {
-      console.error();
+      console.error('로그인 중 오류가 발생하였습니다.');
     }
   }, [dispatch, searchParams, router]);
   return <div>로그인 중...</div>;
