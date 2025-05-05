@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { addVideo, getVideo, saveVideo } from '@/app/api/playlistApi';
 import { devConsoleError } from '@/utils/logger';
 import axios from 'axios';
+import '@/styles/pages/playlist/playlist.scss';
 
 interface ModalProps {
   playlists: PlayLists | undefined;
@@ -105,7 +106,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        사용자 재생목록
+        <h3>사용자 재생목록</h3>
         <input
           type="text"
           value={playlistName}
@@ -115,7 +116,7 @@ const Modal: React.FC<ModalProps> = ({
             e.stopPropagation();
           }}
         />
-        <button onClick={handleSaveVideo} disabled={loading}>
+        <button onClick={handleSaveVideo} disabled={loading} className="save_button">
           {loading ? '저장 중...' : '저장하기'}
         </button>
         <div className="playlist_content_container">
@@ -147,7 +148,9 @@ const Modal: React.FC<ModalProps> = ({
             <div>재생목록이 없습니다.</div>
           )}
         </div>
-        <button onClick={onClose}>닫기</button>
+        <button onClick={onClose} className="mo-close-btn">
+          X
+        </button>
       </div>
     </div>
   );
