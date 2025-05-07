@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { PlayLists } from '@/types/playlist';
 import Cookies from 'js-cookie';
 import { addVideo, getVideo, saveVideo, deleteVideos, detailPlaylist } from '@/app/api/playlistApi';
@@ -43,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  const fetchPlaylists = async () => {
+  const fetchPlaylists = useCallback(async () => {
     if (!token) {
       setLoadingPlaylists(false);
       setPlaylists(undefined);
@@ -87,7 +87,7 @@ const Modal: React.FC<ModalProps> = ({
     } finally {
       setLoadingPlaylists(false);
     }
-  };
+  }, [token, setPlaylists, getVideo, detailPlaylist]);
 
   const handleSaveVideo = async () => {
     if (!selectVideo) {

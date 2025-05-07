@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ import { PlayLists } from '@/types/playlist';
 import { devConsoleError } from '@/utils/logger';
 
 import TeacherTabs from './TeacherTap';
-import TeacherVideoList from './teacherVideolist';
+import TeacherVideoList from './TeacherVideolist';
 import Modal from './Modal';
 
 const TeacherPlaylistPage = () => {
@@ -60,7 +60,7 @@ const TeacherPlaylistPage = () => {
     setSelectVideo(null);
   };
 
-  const fetchPlaylists = async () => {
+  const fetchPlaylists = useCallback(async () => {
     if (!token) {
       setPlaylists(undefined);
       return;
@@ -98,9 +98,8 @@ const TeacherPlaylistPage = () => {
     } catch (error) {
       devConsoleError('Failed to fetch playlists or details in page', error);
       setPlaylists(undefined);
-    } finally {
     }
-  };
+  }, [token, setPlaylists, getVideo, detailPlaylist]);
 
   useEffect(() => {
     fetchPlaylists();
