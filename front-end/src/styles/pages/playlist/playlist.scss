@@ -57,6 +57,32 @@
       border-bottom: 1px solid #aeabab;
       margin-bottom: 1rem;
       justify-content: space-between;
+      .remove-video-button {
+        color: white;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        margin-left: 0.8rem;
+        background-color: red;
+        width: 1.5rem;
+        justify-content: center;
+        height: 1.5rem;
+        border-radius: 5px;
+        padding: 10px;
+      }
+      .add-video-button {
+        color: white;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        margin-left: 0.8rem;
+        width: 1.5rem;
+        background-color: var(--btn-color);
+        justify-content: center;
+        border-radius: 5px;
+        height: 1.5rem;
+        padding: 10px;
+      }
       input {
         width: 2rem;
         height: 2rem;

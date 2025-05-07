@@ -79,7 +79,7 @@ export const addVideo = async (
 // 재생 목록에 영상 삭제
 
 export const deleteVideos = async (
-  videoId: string,
+  videoId: string | null,
   playlistId: string,
   token: string | undefined,
 ) => {
