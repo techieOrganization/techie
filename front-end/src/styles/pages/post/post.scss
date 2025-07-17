@@ -464,3 +464,134 @@
     }
   }
 }
+
+// 게시글 상세 페이지 스타일
+.posts_container.post_detail {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+
+  @include mo {
+    padding: 2rem 1rem;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background: #fff;
+    padding: 3rem;
+
+    @include mo {
+      padding: 2rem;
+      gap: 1.5rem;
+    }
+
+    .post_header {
+      border-bottom: 1px solid #e9ecef;
+      padding-bottom: 2rem;
+
+      .section_title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 1.5rem;
+        line-height: 1.4;
+
+        @include mo {
+          font-size: 2.2rem;
+          margin-bottom: 1rem;
+        }
+      }
+
+      .post_meta {
+        display: flex;
+        gap: 2rem;
+        color: #6c757d;
+        font-size: 1.4rem;
+
+        @include mo {
+          flex-direction: column;
+          gap: 0.5rem;
+          font-size: 1.3rem;
+        }
+
+        .category {
+          color: var(--btn-color);
+          font-weight: 600;
+        }
+
+        .author {
+          color: var(--btn-color);
+          font-weight: 600;
+        }
+
+        .date {
+          color: #6c757d;
+        }
+      }
+    }
+
+    .post_content {
+      padding: 2rem 0;
+      line-height: 1.8;
+      font-size: 1.6rem;
+      color: #495057;
+
+      @include mo {
+        padding: 1.5rem 0;
+        font-size: 1.5rem;
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+    }
+
+    .post_actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      padding-top: 2rem;
+      border-top: 1px solid #e9ecef;
+
+      @include mo {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      button {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1.4rem;
+
+        @include mo {
+          padding: 0.8rem 1.5rem;
+          font-size: 1.3rem;
+        }
+
+        &.edit_btn {
+          background: var(--btn-color);
+          color: #fff;
+        }
+
+        &.delete_btn {
+          background: #dc3545;
+          color: #fff;
+        }
+
+        &.list_btn {
+          background: #f8f9fa;
+          color: #495057;
+          border: 1px solid #dee2e6;
+        }
+      }
+    }
+  }
+}
