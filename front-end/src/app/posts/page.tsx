@@ -91,9 +91,9 @@ export default function PostList() {
           <button onClick={handleSearch}>검색</button>
         </div>
 
-        <button onClick={handleNewPost}>새 글 작성</button>
+        <button className="new_post_btn" onClick={handleNewPost}>새 글 작성</button>
 
-        <table>
+        <table className="posts_table">
           <thead>
             <tr>
               <th>번호</th>
@@ -116,7 +116,7 @@ export default function PostList() {
               ))
             ) : (
               <tr>
-                <td colSpan={4} style={{ textAlign: 'center' }}>
+                <td colSpan={4} className="empty_message">
                   게시글이 없습니다.
                 </td>
               </tr>
@@ -131,7 +131,7 @@ export default function PostList() {
           >
             이전
           </button>
-          <span>
+          <span className="page_info">
             {currentPage + 1} / {totalPages}
           </span>
           <button
