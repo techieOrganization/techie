@@ -43,29 +43,28 @@
       margin-left: auto;
       margin-right: auto;
 
-      button {
-        padding: 1.2rem 2.4rem;
-        border: none;
-        border-radius: 0.6rem;
-        cursor: pointer;
-        background: transparent;
-        color: #6c757d;
-        font-weight: 600;
-        font-size: 1.5rem;
-        transition: all 0.2s ease;
-        position: relative;
+              button {
+          padding: 1.2rem 2.4rem;
+          border: none;
+          border-radius: 0.6rem;
+          cursor: pointer;
+          background: transparent;
+          color: #6c757d;
+          font-weight: 600;
+          font-size: 1.5rem;
+          position: relative;
 
-        @include mo {
-          padding: 1rem 1.8rem;
-          font-size: 1.4rem;
-        }
+          @include mo {
+            padding: 1rem 1.8rem;
+            font-size: 1.4rem;
+          }
 
-        &.active {
-          background: #fff;
-          color: var(--btn-color);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          &.active {
+            background: #fff;
+            color: var(--btn-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          }
         }
-      }
     }
 
     .search_bar {
@@ -84,16 +83,15 @@
 
       input {
         flex: 1;
-        padding: 1.2rem 1.6rem;
-        border: 2px solid #e9ecef;
-        border-radius: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        padding: 0 1rem;
         font-size: 1.5rem;
         background: #fff;
-        transition: border-color 0.2s ease;
+        height: 4.5rem;
 
         @include mo {
           width: 100%;
-          padding: 1rem 1.2rem;
           font-size: 1.4rem;
         }
 
@@ -117,16 +115,11 @@
         cursor: pointer;
         font-weight: 600;
         font-size: 1.5rem;
-        transition: background 0.2s ease;
 
         @include mo {
           width: 100%;
           padding: 1rem 1.2rem;
           font-size: 1.4rem;
-        }
-
-        &:hover {
-          background: var(--sub-btn-color);
         }
       }
     }
@@ -148,16 +141,11 @@
       font-size: 1.5rem;
       text-decoration: none;
       text-align: center;
-      transition: background 0.2s ease;
 
       @include mo {
         width: 100%;
         padding: 1rem 1.2rem;
         font-size: 1.4rem;
-      }
-
-      &:hover {
-        background: var(--sub-btn-color);
       }
 
       &::before {
@@ -219,60 +207,51 @@
         }
       }
 
-      tbody {
-        tr {
-          cursor: pointer;
-          transition: background 0.2s ease;
+              tbody {
+          tr {
+            cursor: pointer;
 
-          &:hover {
-            background: #f8f9fa;
-          }
-
-          &:last-child {
-            td {
-              border-bottom: none;
-            }
-          }
-
-          td {
-            font-size: 1.5rem;
-            color: #495057;
-
-            @include mo {
-              font-size: 1.3rem;
-            }
-
-            &:first-child {
-              color: #6c757d;
-              font-weight: 500;
-            }
-
-            &:nth-child(2) {
-              font-weight: 600;
-              color: #212529;
-
-              &:hover {
-                color: var(--btn-color);
+            &:last-child {
+              td {
+                border-bottom: none;
               }
             }
 
-            &:nth-child(3) {
-              color: var(--btn-color);
-              font-weight: 600;
-              cursor: pointer;
-            }
-
-            &:last-child {
-              color: #6c757d;
-              font-size: 1.4rem;
+            td {
+              font-size: 1.5rem;
+              color: #495057;
 
               @include mo {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
+              }
+
+              &:first-child {
+                color: #6c757d;
+                font-weight: 500;
+              }
+
+              &:nth-child(2) {
+                font-weight: 600;
+                color: #212529;
+              }
+
+              &:nth-child(3) {
+                color: var(--btn-color);
+                font-weight: 600;
+                cursor: pointer;
+              }
+
+              &:last-child {
+                color: #6c757d;
+                font-size: 1.4rem;
+
+                @include mo {
+                  font-size: 1.2rem;
+                }
               }
             }
           }
         }
-      }
 
       .empty_message {
         text-align: center;
@@ -304,19 +283,12 @@
         border-radius: 0.6rem;
         font-weight: 600;
         font-size: 1.4rem;
-        transition: all 0.2s ease;
         min-width: 4.5rem;
 
         @include mo {
           padding: 0.8rem 1.2rem;
           font-size: 1.3rem;
           min-width: 4rem;
-        }
-
-        &:hover:not(:disabled) {
-          background: var(--btn-color);
-          color: #fff;
-          border-color: var(--btn-color);
         }
 
         &:disabled {
@@ -363,9 +335,6 @@
     gap: 2rem;
     background: #fff;
     padding: 3rem;
-    border: 1px solid #e9ecef;
-    border-radius: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
     @include mo {
       padding: 2rem;
@@ -373,16 +342,20 @@
     }
 
     .section_title {
-      font-size: 2.5rem;
+      font-size: 3.5rem;
       font-weight: 700;
       text-align: center;
       margin-bottom: 3rem;
       color: #1a1a1a;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.2rem;
 
       @include mo {
-        font-size: 2rem;
+        font-size: 3rem;
         margin-bottom: 2rem;
+      }
+
+      @include mo_500 {
+        font-size: 2.3rem;
       }
     }
 
@@ -406,15 +379,13 @@
       input,
       textarea {
         width: 100%;
-        padding: 1.2rem 1.6rem;
-        border: 2px solid #e9ecef;
-        border-radius: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        padding: 0 1rem;
         font-size: 1.5rem;
         background: #fff;
-        transition: border-color 0.2s ease;
 
         @include mo {
-          padding: 1rem 1.2rem;
           font-size: 1.4rem;
         }
 
@@ -425,17 +396,25 @@
 
         &::placeholder {
           color: #adb5bd;
+          font-weight: 400;
         }
+      }
+
+      select,
+      input {
+        height: 4.5rem;
       }
 
       textarea {
         height: 18rem;
-        resize: vertical;
+        resize: none;
         line-height: 1.6;
         font-family: inherit;
+        padding: 1.2rem 1.6rem;
 
         @include mo {
           height: 15rem;
+          padding: 1rem 1.2rem;
         }
       }
     }
@@ -459,7 +438,6 @@
         border-radius: 0.8rem;
         cursor: pointer;
         font-weight: 600;
-        transition: all 0.2s ease;
 
         @include mo {
           padding: 1rem 1.2rem;
@@ -469,10 +447,6 @@
         &.submit_btn {
           background: var(--btn-color);
           color: #fff;
-
-          &:hover:not(:disabled) {
-            background: var(--sub-btn-color);
-          }
 
           &:disabled {
             background: #adb5bd;
@@ -485,11 +459,6 @@
           background: #f8f9fa;
           color: #495057;
           border: 2px solid #e9ecef;
-
-          &:hover {
-            background: #e9ecef;
-            border-color: #dee2e6;
-          }
         }
       }
     }

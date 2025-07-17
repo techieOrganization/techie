@@ -50,34 +50,46 @@ export default function PostForm() {
   return (
     <div className="posts_container new_post">
       <div className="inner">
-        <h2 className="section_title">커뮤니티 게시판</h2>
-        <label>카테고리</label>
-        <select
-          value={newPost.category}
-          onChange={(e) => setNewPost({ ...newPost, category: e.target.value as 'FREE' | 'QNA' })}
-        >
-          <option value="FREE">자유게시판</option>
-          <option value="QNA">질문게시판</option>
-        </select>
+        <h2 className="section_title">새 글 작성</h2>
+        
+        <div className="form_group">
+          <label>카테고리</label>
+          <select
+            value={newPost.category}
+            onChange={(e) => setNewPost({ ...newPost, category: e.target.value as 'FREE' | 'QNA' })}
+          >
+            <option value="FREE">자유게시판</option>
+            <option value="QNA">질문게시판</option>
+          </select>
+        </div>
 
-        <input
-          type="text"
-          placeholder="제목"
-          value={newPost.title}
-          onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-        />
-        <textarea
-          placeholder="내용"
-          value={newPost.content}
-          onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-        />
+        <div className="form_group">
+          <label>제목</label>
+          <input
+            type="text"
+            placeholder="제목을 입력하세요"
+            value={newPost.title}
+            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+          />
+        </div>
 
-        <button onClick={handleSubmit} disabled={loading}>
-          {loading ? '작성 중...' : '작성'}
-        </button>
-        <button onClick={() => router.back()} disabled={loading}>
-          취소
-        </button>
+        <div className="form_group">
+          <label>내용</label>
+          <textarea
+            placeholder="내용을 입력하세요"
+            value={newPost.content}
+            onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+          />
+        </div>
+
+        <div className="button_group">
+          <button className="submit_btn" onClick={handleSubmit} disabled={loading}>
+            {loading ? '작성 중...' : '작성하기'}
+          </button>
+          <button className="cancel_btn" onClick={() => router.back()} disabled={loading}>
+            취소
+          </button>
+        </div>
       </div>
     </div>
   );

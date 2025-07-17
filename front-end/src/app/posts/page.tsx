@@ -17,9 +17,11 @@ interface Post {
 
 export default function PostList() {
   const router = useRouter();
-  const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null);
+  const userState = useSelector((state: RootState) => state.user);
+  const isLoggedIn = userState.userInfo !== null;
   const [category, setCategory] = useState<'FREE' | 'QNA'>('FREE');
   const [query, setQuery] = useState<string>('');
+  const [searchType, setSearchType] = useState<'title' | 'author'>('title');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -45,8 +47,14 @@ export default function PostList() {
   };
 
   const handleNewPost = () => {
+    console.log('현재 로그인 상태:', isLoggedIn);
+    console.log('Redux 상태:', userState);
+    
     if (!isLoggedIn) {
-      alert('로그인 후 시도하세요');
+      const shouldLogin = confirm('새 글을 작성하려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?');
+      if (shouldLogin) {
+        router.push('/login');
+      }
       return;
     }
     router.push('/posts/new');
