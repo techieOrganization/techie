@@ -71,9 +71,9 @@ export default function MyPostsSection() {
   if (!userInfo) {
     return (
       <div className="my_posts_section">
-        <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-          <div style={{ fontSize: '2rem', color: '#ff6b6b', marginBottom: '1rem' }}>🔒</div>
-          <p style={{ fontSize: '1.6rem', color: '#495057' }}>로그인이 필요합니다.</p>
+        <div className="error_state">
+          <div className="icon">🔒</div>
+          <p className="message">로그인이 필요합니다.</p>
         </div>
       </div>
     );
@@ -82,9 +82,9 @@ export default function MyPostsSection() {
   if (loading) {
     return (
       <div className="my_posts_section">
-        <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-          <div style={{ fontSize: '2rem', color: '#667eea', marginBottom: '1rem' }}>📝</div>
-          <p style={{ fontSize: '1.6rem', color: '#495057' }}>게시글을 불러오는 중...</p>
+        <div className="loading_state">
+          <div className="icon">📝</div>
+          <p className="message">게시글을 불러오는 중...</p>
         </div>
       </div>
     );
@@ -93,9 +93,9 @@ export default function MyPostsSection() {
   if (error) {
     return (
       <div className="my_posts_section">
-        <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-          <div style={{ fontSize: '2rem', color: '#ff6b6b', marginBottom: '1rem' }}>⚠️</div>
-          <p style={{ fontSize: '1.6rem', color: '#495057' }}>{error}</p>
+        <div className="error_state">
+          <div className="icon">⚠️</div>
+          <p className="message">{error}</p>
         </div>
       </div>
     );
@@ -152,11 +152,11 @@ export default function MyPostsSection() {
               </button>
             ) : showCompletionMessage ? (
               <div className="completion_message">
-                <div style={{ fontSize: '2rem', color: '#28a745', marginBottom: '1rem' }}>🎉</div>
-                <p style={{ fontSize: '1.6rem', color: '#495057', marginBottom: '0.5rem' }}>
+                <div className="completion_icon">🎉</div>
+                <p className="completion_title">
                   모든 게시글을 확인했습니다!
                 </p>
-                <p style={{ fontSize: '1.4rem', color: '#6c757d' }}>
+                <p className="completion_subtitle">
                   총 {allPosts.length}개의 게시글을 작성하셨네요.
                 </p>
               </div>
@@ -165,21 +165,13 @@ export default function MyPostsSection() {
         </>
       ) : (
         <div className="empty_state">
-          <div style={{ fontSize: '3rem', color: '#adb5bd', marginBottom: '1rem' }}>📝</div>
-          <p style={{ fontSize: '1.6rem', color: '#6c757d', marginBottom: '2rem' }}>
+          <div className="empty_icon">📝</div>
+          <p className="empty_message">
             아직 작성한 게시글이 없습니다.
           </p>
           <button 
+            className="empty_button"
             onClick={() => router.push('/posts/new')}
-            style={{
-              padding: '1rem 2rem',
-              background: 'var(--sub-btn-color)',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '1.4rem'
-            }}
           >
             첫 게시글 작성하기
           </button>

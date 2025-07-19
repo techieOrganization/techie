@@ -595,3 +595,68 @@
     }
   }
 }
+
+// 로딩 및 에러 상태 스타일
+.posts_container {
+  .loading_state,
+  .error_state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+    text-align: center;
+
+    @include mo {
+      padding: 3rem 0;
+    }
+
+    .icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+
+      @include mo {
+        font-size: 1.8rem;
+      }
+    }
+
+    .message {
+      font-size: 1.6rem;
+      color: #495057;
+      font-weight: 500;
+
+      @include mo {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .loading_state {
+    .icon {
+      color: #667eea;
+    }
+  }
+
+  .error_state {
+    .icon {
+      color: #ff6b6b;
+    }
+
+    .back_button {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background: var(--btn-color);
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1.4rem;
+      font-weight: 600;
+
+      @include mo {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.3rem;
+      }
+    }
+  }
+}

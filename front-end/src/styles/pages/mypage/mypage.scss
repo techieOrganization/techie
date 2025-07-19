@@ -330,6 +330,36 @@
           @include mo {
             padding: 1.5rem;
           }
+
+          .completion_icon {
+            font-size: 2rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+
+            @include mo {
+              font-size: 1.8rem;
+            }
+          }
+
+          .completion_title {
+            font-size: 1.6rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+
+            @include mo {
+              font-size: 1.4rem;
+            }
+          }
+
+          .completion_subtitle {
+            font-size: 1.4rem;
+            color: #6c757d;
+
+            @include mo {
+              font-size: 1.3rem;
+            }
+          }
         }
       }
 
@@ -339,6 +369,95 @@
 
         @include mo {
           padding: 3rem 1rem;
+        }
+
+        .empty_icon {
+          font-size: 3rem;
+          color: #adb5bd;
+          margin-bottom: 1rem;
+
+          @include mo {
+            font-size: 2.5rem;
+          }
+        }
+
+        .empty_message {
+          font-size: 1.6rem;
+          color: #6c757d;
+          margin-bottom: 2rem;
+          font-weight: 500;
+
+          @include mo {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+          }
+        }
+
+        .empty_button {
+          padding: 1rem 2rem;
+          background: var(--sub-btn-color);
+          color: #fff;
+          border: none;
+          border-radius: 0.5rem;
+          cursor: pointer;
+          font-size: 1.4rem;
+          font-weight: 600;
+          transition: all 0.3s ease;
+
+          @include mo {
+            padding: 0.8rem 1.5rem;
+            font-size: 1.3rem;
+          }
+
+          &:hover {
+            background: var(--btn-color);
+          }
+        }
+      }
+
+      // 로딩 및 에러 상태 스타일
+      .loading_state,
+      .error_state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 0;
+        text-align: center;
+
+        @include mo {
+          padding: 3rem 0;
+        }
+
+        .icon {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+
+          @include mo {
+            font-size: 1.8rem;
+          }
+        }
+
+        .message {
+          font-size: 1.6rem;
+          color: #495057;
+          font-weight: 500;
+
+          @include mo {
+            font-size: 1.4rem;
+          }
+        }
+      }
+
+      .loading_state {
+        .icon {
+          color: #667eea;
+        }
+      }
+
+      .error_state {
+        .icon {
+          color: #ff6b6b;
         }
       }
     }

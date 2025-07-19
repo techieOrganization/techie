@@ -97,9 +97,9 @@ export default function EditPost({ params }: { params: { id: string } }) {
     return (
       <div className="posts_container new_post">
         <div className="inner">
-          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <div style={{ fontSize: '2rem', color: '#667eea', marginBottom: '1rem' }}>📝</div>
-            <p style={{ fontSize: '1.6rem', color: '#495057' }}>게시글을 불러오는 중...</p>
+          <div className="loading_state">
+            <div className="icon">📝</div>
+            <p className="message">게시글을 불러오는 중...</p>
           </div>
         </div>
       </div>
@@ -110,20 +110,12 @@ export default function EditPost({ params }: { params: { id: string } }) {
     return (
       <div className="posts_container new_post">
         <div className="inner">
-          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <div style={{ fontSize: '2rem', color: '#ff6b6b', marginBottom: '1rem' }}>⚠️</div>
-            <p style={{ fontSize: '1.6rem', color: '#495057', marginBottom: '2rem' }}>{error}</p>
+          <div className="error_state">
+            <div className="icon">⚠️</div>
+            <p className="message">{error}</p>
             <button 
+              className="back_button"
               onClick={() => router.push('/posts')}
-              style={{
-                padding: '1rem 2rem',
-                background: 'var(--btn-color)',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '0.5rem',
-                cursor: 'pointer',
-                fontSize: '1.4rem'
-              }}
             >
               목록으로 돌아가기
             </button>

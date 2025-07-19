@@ -72,9 +72,9 @@ export default function PostDetail({ params }: { params: { id: string } }) {
     return (
       <div className="posts_container post_detail">
         <div className="inner">
-          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <div style={{ fontSize: '2rem', color: '#667eea', marginBottom: '1rem' }}>📖</div>
-            <p style={{ fontSize: '1.6rem', color: '#495057' }}>게시글을 불러오는 중...</p>
+          <div className="loading_state">
+            <div className="icon">📖</div>
+            <p className="message">게시글을 불러오는 중...</p>
           </div>
         </div>
       </div>
@@ -85,9 +85,9 @@ export default function PostDetail({ params }: { params: { id: string } }) {
     return (
       <div className="posts_container post_detail">
         <div className="inner">
-          <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <div style={{ fontSize: '2rem', color: '#ff6b6b', marginBottom: '1rem' }}>⚠️</div>
-            <p style={{ fontSize: '1.6rem', color: '#495057' }}>{error}</p>
+          <div className="error_state">
+            <div className="icon">⚠️</div>
+            <p className="message">{error}</p>
           </div>
         </div>
       </div>
