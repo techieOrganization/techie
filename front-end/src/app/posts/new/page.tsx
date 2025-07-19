@@ -51,7 +51,7 @@ export default function PostForm() {
     <div className="posts_container new_post">
       <div className="inner">
         <h2 className="section_title">새 글 작성</h2>
-        
+
         <div className="form_group">
           <label>카테고리</label>
           <select

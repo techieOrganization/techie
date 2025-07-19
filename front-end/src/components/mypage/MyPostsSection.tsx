@@ -22,7 +22,7 @@ export default function MyPostsSection() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [totalPages, setTotalPages] = useState<number>(1);
+
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
 
@@ -33,9 +33,8 @@ export default function MyPostsSection() {
       try {
         const response = await apiClient.get(`/post/my?page=${currentPage}`);
         const newPosts = response.data.content;
-        setAllPosts(prev => [...prev, ...newPosts]);
-        setTotalPages(response.data.totalPages);
-        
+        setAllPosts((prev) => [...prev, ...newPosts]);
+
         // 더 보여줄 게시글이 있는지 확인
         setHasMore(currentPage < response.data.totalPages - 1);
       } catch (error) {
@@ -53,14 +52,14 @@ export default function MyPostsSection() {
 
   const handleLoadMore = async () => {
     if (!hasMore) return;
-    
+
     setLoadingMore(true);
-    setCurrentPage(prev => prev + 1);
+    setCurrentPage((prev) => prev + 1);
     setLoadingMore(false);
   };
 
   const handleShowMore = () => {
-    setDisplayedCount(prev => prev + POSTS_PER_LOAD);
+    setDisplayedCount((prev) => prev + POSTS_PER_LOAD);
   };
 
   // 현재 표시할 게시글들
@@ -104,13 +103,13 @@ export default function MyPostsSection() {
   return (
     <div className="my_posts_section">
       <h2 className="section_title">내가 쓴 글 모음</h2>
-      
+
       {displayedPosts.length > 0 ? (
         <>
           <div className="posts_list">
             {displayedPosts.map((post, index) => (
-              <div 
-                key={post.id} 
+              <div
+                key={post.id}
                 className="post_item"
                 onClick={() => router.push(`/posts/${post.id}`)}
               >
@@ -126,36 +125,27 @@ export default function MyPostsSection() {
                     {new Date(post.writtenAt).toLocaleDateString('ko-KR', {
                       year: 'numeric',
                       month: 'long',
-                      day: 'numeric'
+                      day: 'numeric',
                     })}
                   </span>
                 </div>
               </div>
             ))}
           </div>
-          
+
           <div className="load_more_section">
             {canShowMore ? (
-              <button 
-                className="load_more_btn"
-                onClick={handleShowMore}
-              >
+              <button className="load_more_btn" onClick={handleShowMore}>
                 더보기
               </button>
             ) : hasMore ? (
-              <button 
-                className="load_more_btn"
-                onClick={handleLoadMore}
-                disabled={loadingMore}
-              >
+              <button className="load_more_btn" onClick={handleLoadMore} disabled={loadingMore}>
                 {loadingMore ? '불러오는 중...' : '더보기'}
               </button>
             ) : showCompletionMessage ? (
               <div className="completion_message">
                 <div className="completion_icon">🎉</div>
-                <p className="completion_title">
-                  모든 게시글을 확인했습니다!
-                </p>
+                <p className="completion_title">모든 게시글을 확인했습니다!</p>
                 <p className="completion_subtitle">
                   총 {allPosts.length}개의 게시글을 작성하셨네요.
                 </p>
@@ -166,13 +156,8 @@ export default function MyPostsSection() {
       ) : (
         <div className="empty_state">
           <div className="empty_icon">📝</div>
-          <p className="empty_message">
-            아직 작성한 게시글이 없습니다.
-          </p>
-          <button 
-            className="empty_button"
-            onClick={() => router.push('/posts/new')}
-          >
+          <p className="empty_message">아직 작성한 게시글이 없습니다.</p>
+          <button className="empty_button" onClick={() => router.push('/posts/new')}>
             첫 게시글 작성하기
           </button>
         </div>

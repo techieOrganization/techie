@@ -21,7 +21,7 @@ export default function PostList() {
   const isLoggedIn = userState.userInfo !== null;
   const [category, setCategory] = useState<'FREE' | 'QNA'>('FREE');
   const [query, setQuery] = useState<string>('');
-  const [searchType, setSearchType] = useState<'title' | 'author'>('title');
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -49,9 +49,11 @@ export default function PostList() {
   const handleNewPost = () => {
     console.log('현재 로그인 상태:', isLoggedIn);
     console.log('Redux 상태:', userState);
-    
+
     if (!isLoggedIn) {
-      const shouldLogin = confirm('새 글을 작성하려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?');
+      const shouldLogin = confirm(
+        '새 글을 작성하려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+      );
       if (shouldLogin) {
         router.push('/login');
       }
@@ -99,7 +101,9 @@ export default function PostList() {
           <button onClick={handleSearch}>검색</button>
         </div>
 
-        <button className="new_post_btn" onClick={handleNewPost}>새 글 작성</button>
+        <button className="new_post_btn" onClick={handleNewPost}>
+          새 글 작성
+        </button>
 
         <table className="posts_table">
           <thead>

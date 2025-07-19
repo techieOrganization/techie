@@ -22,7 +22,7 @@ export default function EditPost({ params }: { params: { id: string } }) {
   const router = useRouter();
   const userState = useSelector((state: RootState) => state.user);
   const currentUser = userState.userInfo;
-  
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function EditPost({ params }: { params: { id: string } }) {
           foundPost = response.data.content.find((post: Post) => post.id.toString() === params.id);
           if (foundPost) break;
         }
-        
+
         if (!foundPost) {
           throw new Error('게시글을 찾을 수 없습니다.');
         }
@@ -69,7 +69,7 @@ export default function EditPost({ params }: { params: { id: string } }) {
       alert('제목을 입력해주세요.');
       return;
     }
-    
+
     if (!content.trim()) {
       alert('내용을 입력해주세요.');
       return;
@@ -113,10 +113,7 @@ export default function EditPost({ params }: { params: { id: string } }) {
           <div className="error_state">
             <div className="icon">⚠️</div>
             <p className="message">{error}</p>
-            <button 
-              className="back_button"
-              onClick={() => router.push('/posts')}
-            >
+            <button className="back_button" onClick={() => router.push('/posts')}>
               목록으로 돌아가기
             </button>
           </div>
@@ -129,7 +126,7 @@ export default function EditPost({ params }: { params: { id: string } }) {
     <div className="posts_container new_post">
       <div className="inner">
         <h2 className="section_title">게시글 수정</h2>
-        
+
         <div className="form_group">
           <label htmlFor="title">제목</label>
           <input
