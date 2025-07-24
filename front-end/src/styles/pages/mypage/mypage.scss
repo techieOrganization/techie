@@ -170,6 +170,298 @@
         margin-bottom: 1rem;
       }
     }
+
+    // 내가 쓴 글 모음 섹션 스타일
+    .my_posts_section {
+      .section_title {
+        font-size: 2.4rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 3rem;
+
+        @include mo {
+          font-size: 2rem;
+          margin-bottom: 2rem;
+        }
+      }
+
+      .posts_list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+
+        @include mo {
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+
+        .post_item {
+          background: #fff;
+          border: 1px solid #e9ecef;
+          border-radius: 1rem;
+          padding: 2rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+
+
+
+          &:hover {
+            border-color: var(--sub-btn-color);
+          }
+
+          @include mo {
+            padding: 1.5rem;
+          }
+
+          .post_header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+
+            @include mo {
+              flex-direction: column;
+              gap: 0.5rem;
+            }
+
+            .post_title {
+              font-size: 1.6rem;
+              font-weight: 600;
+              color: #1a1a1a;
+              line-height: 1.4;
+              flex: 1;
+              transition: color 0.3s ease;
+
+              @include mo {
+                font-size: 1.4rem;
+              }
+            }
+
+            .post_category {
+              background: var(--sub-btn-color);
+              color: #fff;
+              padding: 0.4rem 1rem;
+              border-radius: 2rem;
+              font-size: 1.2rem;
+              font-weight: 600;
+              white-space: nowrap;
+
+              @include mo {
+                font-size: 1.1rem;
+                padding: 0.3rem 0.8rem;
+              }
+            }
+          }
+
+          .post_meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+            color: #6c757d;
+
+            @include mo {
+              font-size: 1.2rem;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 0.5rem;
+            }
+
+            .post_number {
+              color: var(--sub-btn-color);
+              font-weight: 600;
+            }
+
+            .post_date {
+              color: #6c757d;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+
+      .load_more_section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 3rem;
+
+        @include mo {
+          margin-top: 2rem;
+        }
+
+        .load_more_btn {
+          padding: 1.2rem 3rem;
+          border: 2px solid var(--sub-btn-color);
+          background: #fff;
+          color: var(--sub-btn-color);
+          cursor: pointer;
+          border-radius: 0.8rem;
+          font-weight: 600;
+          font-size: 1.5rem;
+          transition: all 0.3s ease;
+
+          @include mo {
+            padding: 1rem 2.5rem;
+            font-size: 1.4rem;
+          }
+
+
+
+          &:disabled {
+            background: #f8f9fa;
+            color: #adb5bd;
+            cursor: not-allowed;
+            border-color: #e9ecef;
+          }
+        }
+
+        .completion_message {
+          text-align: center;
+          padding: 2rem;
+          background: #f8f9fa;
+          border-radius: 1rem;
+          border: 1px solid #e9ecef;
+
+          @include mo {
+            padding: 1.5rem;
+          }
+
+          .completion_icon {
+            font-size: 2rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+
+            @include mo {
+              font-size: 1.8rem;
+            }
+          }
+
+          .completion_title {
+            font-size: 1.6rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+
+            @include mo {
+              font-size: 1.4rem;
+            }
+          }
+
+          .completion_subtitle {
+            font-size: 1.4rem;
+            color: #6c757d;
+
+            @include mo {
+              font-size: 1.3rem;
+            }
+          }
+        }
+      }
+
+      .empty_state {
+        text-align: center;
+        padding: 4rem 2rem;
+
+        @include mo {
+          padding: 3rem 1rem;
+        }
+
+        .empty_icon {
+          font-size: 3rem;
+          color: #adb5bd;
+          margin-bottom: 1rem;
+
+          @include mo {
+            font-size: 2.5rem;
+          }
+        }
+
+        .empty_message {
+          font-size: 1.6rem;
+          color: #6c757d;
+          margin-bottom: 2rem;
+          font-weight: 500;
+
+          @include mo {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+          }
+        }
+
+        .empty_button {
+          padding: 1rem 2rem;
+          background: var(--sub-btn-color);
+          color: #fff;
+          border: none;
+          border-radius: 0.5rem;
+          cursor: pointer;
+          font-size: 1.4rem;
+          font-weight: 600;
+          transition: all 0.3s ease;
+
+          @include mo {
+            padding: 0.8rem 1.5rem;
+            font-size: 1.3rem;
+          }
+
+          &:hover {
+            background: var(--btn-color);
+          }
+        }
+      }
+
+      // 로딩 및 에러 상태 스타일
+      .loading_state,
+      .error_state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 0;
+        text-align: center;
+
+        @include mo {
+          padding: 3rem 0;
+        }
+
+        .icon {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+
+          @include mo {
+            font-size: 1.8rem;
+          }
+        }
+
+        .message {
+          font-size: 1.6rem;
+          color: #495057;
+          font-weight: 500;
+
+          @include mo {
+            font-size: 1.4rem;
+          }
+        }
+      }
+
+      .loading_state {
+        .icon {
+          color: #667eea;
+        }
+      }
+
+      .error_state {
+        .icon {
+          color: #ff6b6b;
+        }
+      }
+    }
+
     .video-title {
       font-size: 2rem;
       font-weight: bold;
