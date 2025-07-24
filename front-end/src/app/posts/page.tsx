@@ -17,9 +17,11 @@ interface Post {
 
 export default function PostList() {
   const router = useRouter();
-  const isLoggedIn = useSelector((state: RootState) => state.user.userInfo !== null);
+  const userState = useSelector((state: RootState) => state.user);
+  const isLoggedIn = userState.userInfo !== null;
   const [category, setCategory] = useState<'FREE' | 'QNA'>('FREE');
   const [query, setQuery] = useState<string>('');
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -45,8 +47,16 @@ export default function PostList() {
   };
 
   const handleNewPost = () => {
+    console.log('현재 로그인 상태:', isLoggedIn);
+    console.log('Redux 상태:', userState);
+
     if (!isLoggedIn) {
-      alert('로그인 후 시도하세요');
+      const shouldLogin = confirm(
+        '새 글을 작성하려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?',
+      );
+      if (shouldLogin) {
+        router.push('/login');
+      }
       return;
     }
     router.push('/posts/new');
@@ -91,9 +101,11 @@ export default function PostList() {
           <button onClick={handleSearch}>검색</button>
         </div>
 
-        <button onClick={handleNewPost}>새 글 작성</button>
+        <button className="new_post_btn" onClick={handleNewPost}>
+          새 글 작성
+        </button>
 
-        <table>
+        <table className="posts_table">
           <thead>
             <tr>
               <th>번호</th>
@@ -116,7 +128,7 @@ export default function PostList() {
               ))
             ) : (
               <tr>
-                <td colSpan={4} style={{ textAlign: 'center' }}>
+                <td colSpan={4} className="empty_message">
                   게시글이 없습니다.
                 </td>
               </tr>
@@ -131,7 +143,7 @@ export default function PostList() {
           >
             이전
           </button>
-          <span>
+          <span className="page_info">
             {currentPage + 1} / {totalPages}
           </span>
           <button
