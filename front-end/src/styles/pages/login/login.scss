@@ -134,4 +134,10 @@
     font-weight: bold;
     border-radius: 2rem;
   }
+  .error-message {
+    color: red;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
 }

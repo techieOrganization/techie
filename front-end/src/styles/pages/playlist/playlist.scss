@@ -58,30 +58,43 @@
       margin-bottom: 1rem;
       justify-content: space-between;
       .remove-video-button {
-        color: white;
-        font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        margin-left: 0.8rem;
-        background-color: red;
-        width: 1.5rem;
-        justify-content: center;
-        height: 1.5rem;
-        border-radius: 5px;
-        padding: 10px;
-      }
-      .add-video-button {
-        color: white;
         font-size: 1.5rem;
         display: flex;
         align-items: center;
         margin-left: 0.8rem;
-        width: 1.5rem;
+        width: 2.2rem;
+        height: 2.2rem;
+        background-color: red;
+        justify-content: center;
+        border-radius: 5px;
+        span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          position: relative;
+          top: -6%;
+        }
+      }
+      .add-video-button {
+        color: white;
+        height: 2.2rem;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        margin-left: 0.8rem;
+        width: 2.2rem;
         background-color: var(--btn-color);
         justify-content: center;
         border-radius: 5px;
-        height: 1.5rem;
-        padding: 10px;
+        span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          position: relative;
+          top: -5%;
+        }
       }
       input {
         width: 2rem;
@@ -221,9 +234,9 @@
     }
   }
 
-  .inner {
-    // padding: 10rem 0;
-  }
+  // .inner {
+  //   // padding: 10rem 0;
+  // }
   .dev_list_cont {
     width: 100%;
     @include pc_1280 {
