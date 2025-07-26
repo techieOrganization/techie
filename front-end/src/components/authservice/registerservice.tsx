@@ -6,8 +6,5 @@ export const registerUser = async (userData: {
   password: string;
   confirmPassword: string;
 }) => {
-  const response = await fetchRegisterUser(userData);
-  if (response.status === 200 || response.status === 201) {
-    alert('회원가입 완료');
-  }
+  await fetchRegisterUser(userData);
 };

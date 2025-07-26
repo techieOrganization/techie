@@ -87,7 +87,7 @@ const Modal: React.FC<ModalProps> = ({
     } finally {
       setLoadingPlaylists(false);
     }
-  }, [token, setPlaylists, getVideo, detailPlaylist]);
+  }, [token, setPlaylists]);
 
   const handleSaveVideo = async () => {
     if (!selectVideo) {
@@ -211,7 +211,7 @@ const Modal: React.FC<ModalProps> = ({
                     }}
                     className={isVideoInPlaylist ? 'remove-video-button' : 'add-video-button'}
                   >
-                    {isVideoInPlaylist ? 'X' : '+'}
+                    <span>{isVideoInPlaylist ? '-' : '+'}</span>
                   </button>
 
                   <h3>{playlist.playlistName}</h3>
