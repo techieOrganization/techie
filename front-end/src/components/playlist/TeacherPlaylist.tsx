@@ -1,15 +1,12 @@
-+91
--237
-Lines changed: 91 additions & 237 deletions
-Original file line number	Original file line	Diff line number	Diff line change
-@@ -1,314 +1,168 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+
 import { useQuery } from '@tanstack/react-query';
 import { getAllVideos, getLatestVideos } from '@/app/api/teacherAPI';
 import { Video } from '@/types/video';
+
 import { deletePlaylist, getVideo, detailPlaylist } from '@/app/api/playlistApi';
 import Cookies from 'js-cookie';
 import instructorData from '@/data/instructorData';
@@ -19,6 +16,7 @@ import { devConsoleError } from '@/utils/logger';
 import TeacherTabs from './TeacherTap';
 import TeacherVideoList from './TeacherVideolist';
 import Modal from './Modal';
+
 const TeacherPlaylistPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,6 +28,7 @@ const TeacherPlaylistPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectVideo, setSelectVideo] = useState<string | null>(null);
   const [playlists, setPlaylists] = useState<PlayLists | undefined>(undefined);
+
   const token = Cookies.get('token');
 
   const handleTeacherSelect = (inst: (typeof instructorData)[number]) => {
@@ -82,6 +81,7 @@ const TeacherPlaylistPage = () => {
             const detail = await detailPlaylist(playlist.playlistId, token);
             return {
               ...playlist,
+
               videos: detail && detail.videos && Array.isArray(detail.videos) ? detail.videos : [],
             };
           } catch (detailError) {
@@ -112,9 +112,11 @@ const TeacherPlaylistPage = () => {
     }
 
     if (!token) return;
+
     try {
       await deletePlaylist(playlistId, token);
       alert('재생목록이 삭제되었습니다.');
+
       setPlaylists((prevPlaylists: PlayLists | undefined) =>
         prevPlaylists
           ? {
@@ -140,6 +142,7 @@ const TeacherPlaylistPage = () => {
         selected={selected}
         onSelectTeacher={handleTeacherSelect}
       />
+
       <TeacherVideoList
         videos={videos}
         isLoading={allQuery.isLoading || instQuery.isLoading}
@@ -148,3 +151,18 @@ const TeacherPlaylistPage = () => {
         token={token}
         onOpenModal={openModal}
       />
+
+      {showModal && (
+        <Modal
+          playlists={playlists}
+          setPlaylists={setPlaylists}
+          onClose={closeModal}
+          selectVideo={selectVideo}
+          onClickDelete={onClickDeletePlaylist}
+        />
+      )}
+    </div>
+  );
+};
+
+export default TeacherPlaylistPage;

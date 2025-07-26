@@ -87,7 +87,7 @@ const Modal: React.FC<ModalProps> = ({
     } finally {
       setLoadingPlaylists(false);
     }
-  }, [token, setPlaylists, getVideo, detailPlaylist]);
+  }, [token, setPlaylists]);
 
   const handleSaveVideo = async () => {
     if (!selectVideo) {
