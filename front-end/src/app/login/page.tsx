@@ -1,21 +1,26 @@
 'use client';
 
 import React, { useState } from 'react';
+
+import { AxiosError } from 'axios';
+
+import '@/styles/pages/login/login.scss';
+
+import { devConsoleError } from '@/utils/logger';
+import { performLogin, decodeJWT } from '@/components/authservice/AuthLogin';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { AxiosError } from 'axios';
-import Cookies from 'js-cookie';
-
-import { loginUser } from '@/app/api/loginUserApi';
-import '@/styles/pages/login/login.scss';
 import { setUserInfo } from '@/redux/reducer';
-import { devConsoleError } from '@/utils/logger';
+import { loginWithGoogle, loginWithNaver } from '../api/socialLoginApi';
+import Image from 'next/image';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const router = useRouter();
+
   const dispatch = useDispatch();
 
   // 입력값 변경 시 formData 업데이트
@@ -31,57 +36,19 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      await performLogin();
+      const token = await performLogin(formData);
+      window.dispatchEvent(new Event('loginStatusChanged'));
+      router.push('/'); // 로그인 성공 시 메인 페이지로 이동
+
+      // JWT 디코딩
+      const decodedJWT = decodeJWT(token);
+      dispatch(setUserInfo(decodedJWT));
     } catch (loginError) {
       handleLoginError(loginError);
     } finally {
       setIsLoading(false);
     }
   };
-
-  // 로그인 요청 전송 함수
-  const performLogin = async () => {
-    try {
-      const res = await loginUser(formData);
-      if (res.status === 200) {
-        const token = res.headers['authorization']?.split(' ')[1];
-        if (token) {
-          // 쿠키에 토큰을 저장
-          Cookies.set('token', token, { expires: 1, path: '/' });
-          window.dispatchEvent(new Event('loginStatusChanged'));
-          router.push('/'); // 로그인 성공 시 메인 페이지로 이동
-
-          // JWT 디코딩
-          const decodedJWT = decodeJWT(token);
-          dispatch(setUserInfo(decodedJWT));
-        } else {
-          devConsoleError('Token is undefined in the response headers');
-        }
-      } else {
-        devConsoleError('Failed to log in, unexpected response status');
-      }
-    } catch (error) {
-      handleLoginError(error);
-    }
-  };
-
-  // JWT 디코딩 함수
-  const decodeJWT = (token: string) => {
-    const base64Payload = token.split('.')[1];
-    const base64 = base64Payload.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(
-      decodeURIComponent(
-        window
-          .atob(base64)
-          .split('')
-          .map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join(''),
-      ),
-    );
-  };
-
   // 로그인 오류 처리 함수
   const handleLoginError = (error: unknown) => {
     const axiosError = error as AxiosError;
@@ -120,6 +87,19 @@ const Login = () => {
           </button>
         </div>
       </form>
+      <button onClick={loginWithGoogle} className="googleLogin">
+        <Image
+          src="/assets/images/main/googleIcon.png"
+          alt="구글 아이콘"
+          className="googleIcon"
+          width={25}
+          height={25}
+        />
+        Google 로그인
+      </button>
+      <button onClick={loginWithNaver} className="naverLogin">
+        Naver 로그인
+      </button>
     </div>
   );
 };

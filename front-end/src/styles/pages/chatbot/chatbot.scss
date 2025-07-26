@@ -1,6 +1,9 @@
+@import '../../common/abstracts/responsive';
+@import '../../common/abstracts/mixins';
+
 .chatbot {
-  width: 50px;
-  height: 50px;
+  width: 5rem;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,16 +12,37 @@
   user-select: none;
   z-index: 1000;
   cursor: pointer;
+  @include mo {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  @include mo_500 {
+    width: 4rem;
+    height: 4rem;
+  }
+  @include mo_330 {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
 }
 
 .icon {
   font-size: 1.5rem;
+  @include mo {
+    font-size: 1.3rem;
+  }
+  @include mo_500 {
+    font-size: 1.1rem;
+  }
+  @include mo_330 {
+    font-size: 1rem;
+  }
 }
 
 .chatbot-content_login {
-  width: 50rem;
+  width: 55rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   position: fixed;
   opacity: 0;
   transform: scale(0) translateY(-10px);
@@ -27,19 +51,25 @@
     opacity 0.3s ease,
     transform 0.3s ease;
   gap: 10px;
-  min-width: 620px;
 
   &.isOpen {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+  @include mo {
+    width: 30rem;
+    margin-left: 25rem;
+  }
+  @include mo_500 {
+    width: 20rem;
+    margin-left: 35rem;
+  }
 
   textarea {
-    width: 50%;
-    border: 1px solid #c9c9c9;
+    width: 100%;
+    border: 1px solid gainsboro;
     border-radius: 10px;
-    min-width: 300px;
-    min-height: 300px;
+    min-height: 100px;
     resize: none;
     padding: 10px;
     scrollbar-width: thin;
@@ -49,10 +79,17 @@
     :focus {
       outline: none;
     }
+    @include mo {
+      font-size: 1.3rem;
+    }
+    @include mo_500 {
+      font-size: 1.1rem;
+      min-height: 50px;
+    }
   }
 
   .chatbot-response {
-    width: 50%;
+    width: 100%;
     background-color: #2c3e50;
     border-radius: 10px;
     padding: 10px;
@@ -64,9 +101,72 @@
     scrollbar-width: thin;
     scrollbar-color: var(--btn-color) #f1f1f1;
     cursor: auto;
-    p {
-      color: white;
+
+    .log-container {
       cursor: text;
+      color: white;
+      flex-direction: column;
+      display: flex;
+      gap: 8rem;
+      span {
+        color: var(--btn-color);
+        padding: 1rem;
+      }
+      .chatbot-log {
+        display: grid;
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        color: white;
+        .bot-name {
+          color: white;
+          @include mo {
+            font-size: 1.2rem;
+          }
+          @include mo_500 {
+            font-size: 1rem;
+          }
+        }
+
+        .user-req {
+          justify-self: end;
+          text-align: right;
+
+          background-color: var(--btn-color);
+          color: white;
+          border-radius: 2rem;
+          max-width: fit-content;
+          margin-right: 1rem;
+          @include mo {
+            font-size: 1.2rem;
+          }
+          @include mo_500 {
+            font-size: 1rem;
+          }
+        }
+        .bot-res {
+          text-align: left;
+          justify-self: start;
+          background-color: white;
+          border-radius: 2rem;
+          margin-left: 2rem;
+          @include mo {
+            font-size: 1.2rem;
+          }
+          @include mo_500 {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+    @include mo {
+      max-height: 250px;
+      min-height: 250px;
+      margin-top: 50px;
+    }
+    @include mo_500 {
+      max-height: 220px;
+      min-height: 220px;
+      margin-top: 130px; // textarea 의 height 감소로 추가 50px
     }
   }
 
@@ -75,15 +175,78 @@
     top: 85%;
     right: 2%;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 3rem;
+    height: 3rem;
     background-color: var(--btn-color);
     border-radius: 50%;
+    text-align: center;
+    line-height: 3rem;
     color: white;
+    font-size: 1.5rem;
+    @include mo {
+      width: 2.4rem;
+      height: 2.4rem;
+      line-height: 2.4rem;
+      font-size: 1.2rem;
+    }
+    @include mo_500 {
+      width: 2.2rem;
+      height: 2.2rem;
+      line-height: 2.2rem;
+      font-size: 1rem;
+      top: 90%;
+    }
+    @include mo_330 {
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+      font-size: 0.8rem;
+      top: 80%;
+    }
+    p {
+      @include mo {
+        font-size: 1rem;
+      }
+      @include mo_500 {
+        font-size: 0.7rem;
+      }
+      @include mo_330 {
+        font-size: 0.6rem;
+      }
+    }
   }
 }
 
 /// 로그아웃
+.chatbot {
+  width: 5rem;
+  height: 5rem;
+  @include mo {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  @include mo_500 {
+    width: 4rem;
+    height: 4rem;
+  }
+  @include mo_330 {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  .icon {
+    font-size: 1.5rem;
+    @include mo {
+      font-size: 1.3rem;
+    }
+    @include mo_500 {
+      font-size: 1.1rem;
+    }
+    @include mo_330 {
+      font-size: 1rem;
+    }
+  }
+}
+
 .chatbot-content_logout {
   width: 25vw;
   display: flex;
@@ -101,13 +264,37 @@
     background-color: var(--btn-color);
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 10px;
     border-radius: 10px;
     color: white;
     font-weight: 700;
     width: 38rem;
+    margin-left: auto;
+    margin-top: auto;
+    @include mo {
+      width: 30rem;
+      font-size: 1.2rem;
+    }
+    @include mo_500 {
+      width: 25rem;
+      font-size: 1rem;
+    }
+    @include mo_330 {
+      width: 20rem;
+      font-size: 0.8rem;
+    }
     .logout-link {
       color: rgb(255, 235, 59);
+      @include mo {
+        font-size: 1.2rem;
+      }
+      @include mo_500 {
+        font-size: 1rem;
+      }
+      @include mo_330 {
+        font-size: 0.8rem;
+      }
     }
   }
 

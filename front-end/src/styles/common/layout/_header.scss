@@ -5,6 +5,14 @@
     display: flex;
     justify-content: space-between;
     padding: 1.5rem 0;
+
+    @include pc_1680 {
+      padding: 1.5rem 2rem;
+    }
+
+    @include mo_989 {
+      align-items: center;
+    }
   }
   .header_menu {
     display: flex;
@@ -20,6 +28,9 @@
     display: flex;
     align-items: center;
     gap: 2.7rem;
+    @include mo_989 {
+      display: none;
+    }
     .menu_item {
       a {
         font-size: 1.55rem;
@@ -31,6 +42,9 @@
     display: flex;
     align-items: center;
     gap: 2.7rem;
+    @include mo_989 {
+      display: none;
+    }
     .auth_list {
       display: flex;
       align-items: center;
@@ -55,6 +69,15 @@
     position: relative;
     display: flex;
     gap: 1rem;
+
+    @include pc_1280 {
+      width: 40%;
+    }
+
+    @include mo_989 {
+      display: none;
+    }
+
     select {
       border-radius: 1rem;
       border: 1px solid #ccc;
@@ -72,6 +95,92 @@
       top: calc(50% - -3px);
       transform: translateY(-50%);
       right: 2rem;
+    }
+  }
+}
+
+.header_menu_mo {
+  .menu_icon {
+    display: none;
+
+    @include mo_989 {
+      display: block;
+    }
+  }
+  .header_menu_mo_list {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background: #fff;
+    z-index: -1;
+    padding: 5rem 2rem;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      transform 0.5s ease,
+      opacity 0.5s ease;
+
+    &.active {
+      transform: translateX(0);
+      opacity: 1;
+      z-index: 9999;
+      visibility: visible;
+    }
+  }
+  .close_button {
+    position: absolute;
+    width: 1.6rem;
+    height: 1.6rem;
+    top: 28px;
+    right: 24px;
+  }
+  .menu_list_mo {
+    .menu_item {
+      border-bottom: 1px solid #ccc;
+
+      a {
+        font-size: 1.6rem;
+        padding: 1rem 0;
+        display: block;
+      }
+    }
+  }
+  .search_box_mo {
+    margin-top: 5rem;
+    position: relative;
+
+    select {
+      display: flex;
+      width: 100%;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      padding: 1rem 0.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    input {
+      border: 1px solid #ccc;
+      width: 100%;
+      border-radius: 0.5rem;
+      padding: 1rem 0.5rem;
+    }
+
+    button {
+      position: absolute;
+      top: 6.8rem;
+      right: 12px;
+    }
+  }
+
+  .auth_box_mo {
+    .auth_list {
+      display: flex;
+      gap: 1rem;
+      margin-top: 5rem;
     }
   }
 }

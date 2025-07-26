@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import { devConsoleError } from '@/utils/logger';
-import { fetchRegisterUser } from '@/app/api/registerUserApi';
+
+import { registerUser } from '@/components/authservice/registerservice';
 import '@/styles/pages/register/register.scss';
 
 const Signup = () => {
@@ -43,19 +44,6 @@ const Signup = () => {
     }
   };
 
-  // 회원가입 요청 전송 함수
-  const registerUser = async (userData: {
-    nickname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }) => {
-    const response = await fetchRegisterUser(userData);
-    if (response.status === 200 || response.status === 201) {
-      alert('회원가입 완료');
-    }
-  };
-
   // 회원가입 오류 처리 함수
   const handleSignupError = (error: unknown) => {
     if (error instanceof AxiosError && error.response) {
@@ -81,7 +69,7 @@ const Signup = () => {
           type="text"
           name="nickname"
           className="input"
-          placeholder="Techie Project 에서 사용하실 닉네임을 입력해주세요"
+          placeholder="Techie Project 에서 사용하실 닉네임을 입력해주세요."
           onChange={handleChange}
           value={formData.nickname}
           required

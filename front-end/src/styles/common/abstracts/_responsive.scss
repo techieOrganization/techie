@@ -1,6 +1,7 @@
 /*반응형 화면 크기*/
 $pc: 1921px;
 $pc_1800: 1800px;
+$pc_1680: 1680px;
 $pc_1550: 1550px;
 $pc_1440: 1440px;
 $pc_1280: 1280px;
@@ -9,7 +10,7 @@ $mo_989: 989px;
 $mo_600: 600px;
 $mo: 767px;
 $mo_500: 500px;
-$mo_350: 350px;
+$mo_330: 330px;
 
 /* pc 사이즈만 */
 @mixin only_pc {
@@ -32,6 +33,13 @@ $mo_350: 350px;
   }
 }
 
+/* 1680px 이상일때 */
+@mixin pc_1680 {
+  @media (max-width: $pc_1680) {
+    @content;
+  }
+}
+
 /* 1550px 이상일때 */
 @mixin pc_1550 {
   @media (max-width: $pc_1550) {
@@ -45,7 +53,7 @@ $mo_350: 350px;
     @content;
   }
 }
-
+// pc
 /* 1280px 이상일때 */
 @mixin pc_1280 {
   @media (max-width: $pc_1280) {
@@ -67,16 +75,17 @@ $mo_350: 350px;
   }
 }
 
-/* 600px 이상일때 */
-@mixin mo_600 {
-  @media (max-width: $mo_600) {
+// 태블릿
+/* 767px 이상일때 */
+@mixin mo {
+  @media (max-width: $mo) {
     @content;
   }
 }
 
-/* 767px 이상일때 */
-@mixin mo {
-  @media (max-width: $mo) {
+/* 600px 이상일때 */
+@mixin mo_600 {
+  @media (max-width: $mo_600) {
     @content;
   }
 }
@@ -87,6 +96,8 @@ $mo_350: 350px;
     @content;
   }
 }
+
+// 모바일
 
 /* 330px 이상일때 */
 @mixin mo_330 {

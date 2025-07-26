@@ -2,6 +2,7 @@ export interface PlayList {
   playlistId: string;
   playlistName: string;
   videoCount: number;
+  videos: { videoId: string; title: string }[];
 }
 export interface PlayLists {
   playlists: PlayList[];

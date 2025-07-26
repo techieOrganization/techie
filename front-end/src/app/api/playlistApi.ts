@@ -79,7 +79,7 @@ export const addVideo = async (
 // 재생 목록에 영상 삭제
 
 export const deleteVideos = async (
-  videoId: string,
+  videoId: string | null,
   playlistId: string,
   token: string | undefined,
 ) => {
@@ -108,7 +108,7 @@ export const deleteVideos = async (
 
 // 재생목록 삭제
 
-export const deletepPlaylist = async (playlistId: string, token: string | undefined) => {
+export const deletePlaylist = async (playlistId: string, token: string | undefined) => {
   try {
     const response = await axios.delete(`${baseUrl}/api/playlists/${playlistId}`, {
       headers: {

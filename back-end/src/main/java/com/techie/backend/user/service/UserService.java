@@ -1,14 +1,128 @@
 package com.techie.backend.user.service;
 
+import com.techie.backend.global.exception.user.*;
 import com.techie.backend.global.security.UserDetailsCustom;
 import com.techie.backend.user.domain.User;
 import com.techie.backend.user.dto.UserRequest;
 import com.techie.backend.user.dto.UserResponse;
+import com.techie.backend.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
-    Boolean joinProcess(UserRequest.Register request);
-    UserResponse.Information getUser(UserDetailsCustom userDetails);
-    Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request);
-    User getUserFromSecurityContext(UserDetailsCustom userDetailsCustom);
-    Boolean deleteUser(UserDetailsCustom userDetails, UserRequest.Delete request);
+@Service
+@RequiredArgsConstructor
+public class UserService {
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public User getUserFromSecurityContext(UserDetailsCustom userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        return user;
+    }
+
+    public Boolean joinProcess(UserRequest.Register request) {
+        String email = request.getEmail();
+        String password = request.getPassword();
+        String confirmPassword = request.getConfirmPassword();
+        String nickname = request.getNickname();
+
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            throw new InvalidEmailFormatException();
+        }
+        if (password.length() < 8) {
+            throw new PasswordTooShortException();
+        }
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordMismatchException();
+        }
+        Boolean isExist = userRepository.existsByEmail(email);
+        if (isExist) {
+            throw new UserAlreadyExistsException();
+        } else {
+            User data = User.builder()
+                    .email(email)
+                    .password(bCryptPasswordEncoder.encode(password))
+                    .nickname(nickname)
+                    .role("ROLE_USER")
+                    .build();
+            userRepository.save(data);
+
+            return true;
+        }
+    }
+
+    public UserResponse.Information getUser(UserDetailsCustom userDetails) {
+        User user = getUserFromSecurityContext(userDetails);
+        return new UserResponse.Information(user.getEmail(), user.getNickname());
+    }
+
+    public Boolean updateUser(UserDetailsCustom userDetails, UserRequest.Update request) {
+        User user = getUserFromSecurityContext(userDetails);
+
+        String newNickname = request.getNickname();
+        String oldPassword = request.getOldPassword();
+        String newPassword = request.getNewPassword();
+
+        if (isRequestEmpty(request)) {
+            throw new NoChangesException();
+        }
+
+        boolean isUpdated = false;
+
+        if (newNickname != null && !newNickname.isEmpty() && !newNickname.equals(user.getNickname())) {
+            user = user.toBuilder()
+                    .nickname(newNickname)
+                    .build();
+            isUpdated = true;
+        }
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            if (oldPassword == null || !bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+                throw new InvalidOldPasswordException();
+            }
+
+            if (bCryptPasswordEncoder.matches(newPassword, user.getPassword())) {
+                throw new NewPasswordMisMatchException();
+            }
+            if (newPassword.length() < 8 || !isPasswordValid(newPassword)) {
+                throw new PasswordTooShortException();
+            }
+            user = user.toBuilder()
+                    .password(bCryptPasswordEncoder.encode(newPassword))
+                    .build();
+            isUpdated = true;
+        }
+        if (isUpdated) {
+            userRepository.save(user);
+            return true;
+        }
+        throw new NoChangesException();
+    }
+
+    private boolean isPasswordValid(String password) {
+        String passwordRegex = "^(?=.*[0-9]).{8,}$";
+        return password.matches(passwordRegex);
+    }
+
+    private boolean isRequestEmpty(UserRequest.Update request) {
+        return (request.getNickname() == null || request.getNickname().isEmpty()) &&
+                (request.getNewPassword() == null || request.getNewPassword().isEmpty());
+    }
+
+    public Boolean deleteUser(UserDetailsCustom userDetails, UserRequest.Delete request) {
+        User user = getUserFromSecurityContext(userDetails);
+        if (!bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        userRepository.delete(user);
+        return true;
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    }
 }

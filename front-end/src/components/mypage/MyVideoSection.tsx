@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { DetailPlayList, PlayLists } from '@/types/playlist'; // 인터페이스 임포트
 import { useRouter } from 'next/navigation';
-import { getVideo, detailPlaylist, deletepPlaylist } from '@/app/api/playlistApi';
+import { getVideo, detailPlaylist, deletePlaylist } from '@/app/api/playlistApi';
 import Cookies from 'js-cookie';
 import { devConsoleError } from '@/utils/logger';
 
@@ -52,7 +52,7 @@ const MyVideoSection: React.FC = () => {
     }
     const token = Cookies.get('token');
     try {
-      await deletepPlaylist(playlistId, token);
+      await deletePlaylist(playlistId, token);
       fetchPlaylists();
     } catch (error) {
       devConsoleError('Failed to delete playlist', error);
